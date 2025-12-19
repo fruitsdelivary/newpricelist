@@ -9,8 +9,25 @@
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; }
         .static-row, .interactive-row { transition: background-color 0.2s; }
         .static-row:hover, .interactive-row:hover { background-color: #f3f4f6; }
-        .quantity-select { height: 40px; text-align-last: center; border: 1px solid #ccc; border-radius: 0.375rem; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 0.5rem center; background-size: 1em; padding-left: 2rem; }
-        /* تحسين ملصق العرض ليكون في سطر منفصل */
+        
+        /* تحسين القائمة المنسدلة وتوسيع الخانة */
+        .quantity-select { 
+            height: 40px; 
+            min-width: 110px; 
+            text-align-last: center; 
+            border: 2px solid #22c55e; 
+            border-radius: 0.375rem; 
+            appearance: none; 
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2315803d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
+            background-repeat: no-repeat; 
+            background-position: left 0.5rem center; 
+            background-size: 1em; 
+            padding-left: 1.5rem; 
+            font-weight: bold;
+            background-color: #fff;
+        }
+
+        /* تنسيق ملصق العرض في سطر منفصل */
         .offer-badge { 
             display: inline-block;
             background: linear-gradient(to right, #ef4444, #b91c1c); 
@@ -184,7 +201,13 @@
                 const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-xs ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج.م</span>` : `<span>${p.price} ج.م</span>`;
                 
                 const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg">${p.name} ${badge}</td><td class="px-4 py-3 text-xl font-bold text-right align-middle">${priceHTML}</td></tr>`;
-                const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}"><td class="px-4 py-3 text-lg">${p.name} ${badge}</td><td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td><td class="px-4 py-3 align-middle"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td></tr>`;
+                
+                // تعديل خانة الاختيار لتكون أوسع (w-[120px])
+                const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}">
+                    <td class="px-4 py-3 text-lg">${p.name} ${badge}</td>
+                    <td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td>
+                    <td class="px-4 py-3 align-middle w-[120px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
+                </tr>`;
                 
                 if (p.category === 'vegetable') { sVeg += sRow; iVeg += iRow; } else { sFruit += sRow; iFruit += iRow; }
             });
@@ -196,8 +219,18 @@
 
         function generateWeightOptions(unit) {
             let opts = '<option value="0" selected>-- طلب --</option>';
-            if (unit === 'كجم') { [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5].forEach(v => { let txt = v < 1 ? (v==0.25?'¼':v==0.5?'½':'¾') + ' ك' : v + ' ك'; opts += `<option value="${v}">${txt}</option>`; });
-            } else { for(let i=1; i<=10; i++) opts += `<option value="${i}">${i} ${unit}</option>`; }
+            if (unit === 'كجم') {
+                // تبدأ الكميات من 1/8 ك صعوداً إلى 15 ك
+                opts += `<option value="0.125">1/8 ك</option>`;
+                opts += `<option value="0.25">1/4 ك</option>`;
+                opts += `<option value="0.5">1/2 ك</option>`;
+                opts += `<option value="0.75">3/4 ك</option>`;
+                for(let i=1; i<=15; i++) {
+                    opts += `<option value="${i}">${i} ك</option>`;
+                }
+            } else {
+                for(let i=1; i<=15; i++) opts += `<option value="${i}">${i} ${unit}</option>`;
+            }
             return opts;
         }
 
@@ -212,9 +245,13 @@
             let vegStr = '', fruitStr = '', count = 0;
             document.querySelectorAll('.interactive-row').forEach(row => {
                 const sel = row.querySelector('.quantity-select');
-                if (parseFloat(sel.value) > 0) { count++; const line = `- ${sel.options[sel.selectedIndex].text} ${row.getAttribute('data-name')}\n`; if (row.closest('table').id.includes('vegetables')) vegStr += line; else fruitStr += line; }
+                if (parseFloat(sel.value) > 0) { 
+                    count++; 
+                    const line = `- ${sel.options[sel.selectedIndex].text} ${row.getAttribute('data-name')}\n`; 
+                    if (row.closest('table').id.includes('vegetables')) vegStr += line; else fruitStr += line; 
+                }
             });
-            if (count === 0) return alert('الرجاء اختيار صنف');
+            if (count === 0) return alert('الرجاء اختيار صنف واحد على الأقل');
             let msg = `📝 طلب جديد عبر قائمة الأسعار التفاعلية:\n------------------\n${vegStr ? '🥬 *خضروات:*\n' + vegStr : ''}${fruitStr ? '\n🍎 *فواكه:*\n' + fruitStr : ''}\n------------------\n📌 *العنوان والملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
