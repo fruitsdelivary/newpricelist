@@ -10,36 +10,34 @@
         .static-row, .interactive-row { transition: background-color 0.2s; border-bottom: 1px solid #f0f0f0; }
         .static-row:hover, .interactive-row:hover { background-color: #f3f4f6; }
         
-        /* تنسيق خانة الكميات المطور */
+        /* تصغير خانة الكميات إلى النصف تقريباً */
         .quantity-select { 
-            height: 40px; 
-            min-width: 145px; 
+            height: 34px; 
+            min-width: 85px; 
             text-align-last: center; 
             border: 2px solid #22c55e; 
-            border-radius: 8px; 
+            border-radius: 6px; 
             appearance: none; 
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2315803d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
             background-repeat: no-repeat; 
-            background-position: left 0.5rem center; 
-            background-size: 1em; 
-            padding-left: 1.5rem; 
+            background-position: left 0.3rem center; 
+            background-size: 0.8em; 
+            padding-left: 1.2rem; 
             font-weight: bold;
             background-color: #fff;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             cursor: pointer;
         }
 
-        /* تنسيق كلمة عرض في سطر تالي بحجم صغير جداً */
+        /* إعادة تفعيل وميض كلمة عرض في سطر تالي */
         .offer-badge { 
             display: inline-block;
-            background: #ef4444; 
-            color: white; 
-            padding: 1px 6px; 
-            border-radius: 4px; 
-            font-size: 10px; 
-            font-weight: bold; 
-            margin-top: 2px;
+            background: linear-gradient(to right, #ef4444, #b91c1c); 
+            color: white; padding: 1px 8px; border-radius: 9999px; 
+            font-size: 10px; font-weight: bold; 
+            margin-top: 2px; animation: pulse 1.5s infinite; 
         }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -76,6 +74,10 @@
                 <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">🍌🍎 فواكه 🍉🍇</h2>
                 <div class="p-2"><table class="min-w-full"><tbody id="fruits-tbody-static" class="bg-white divide-y"></tbody></table></div>
             </section>
+
+            <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">
+                 🛒 ابدأ طلبك الآن! (نموذج الطلب السريع)
+            </button>
         </div>
 
         <div id="order-form-view" style="display: none;">
@@ -85,15 +87,15 @@
             </div>
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
-                    <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center text-lg">تحديد كميات الخضروات</h2>
+                    <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الخضروات</h2>
                     <table class="min-w-full"><tbody id="vegetables-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
-                    <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center text-lg">تحديد كميات الفواكه</h2>
+                    <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الفواكه</h2>
                     <table class="min-w-full"><tbody id="fruits-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mt-8">
-                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى،أو أصناف غير موجودة في القائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right shadow-inner" dir="rtl"></textarea>
+                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى،أو الاستفسار عن أصناف غير موجودة بالقائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right" dir="rtl"></textarea>
                 </div>
                 <button type="submit" class="w-full mt-10 bg-green-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">إرسال الطلب عبر واتساب</button>
             </form>
@@ -113,7 +115,6 @@
     </div>
 
     <script>
-        // كافة الأصناف مأخوذة من الكود الخاص بك
         const productsData = [
             { name: "بصل أحمر 1", price: 17.5, unit: "كجم", category: "vegetable" },
             { name: "بصل أحمر 2", price: 15.0, unit: "كجم", category: "vegetable" },
@@ -161,7 +162,6 @@
             { name: "كرنب أبيض (سلطة)", price: 40.0, unit: "حبة", category: "vegetable" },
             { name: "ذرة أصفر (طبق 3 حبة)", price: 60.0, unit: "طبق", category: "vegetable" },
             { name: "شيكارة أرز رويزق 10ك", price: 290.0, unit: "شيكارة", category: "vegetable" },
-            // الفواكه
             { name: "موز 1", price: 40.0, unit: "كجم", category: "fruit" },
             { name: "موز 2", price: 35.0, unit: "كجم", category: "fruit" },
             { name: "تفاح أحمر مستورد", price: 80.0, oldPrice: 90, unit: "كجم", category: "fruit" },
@@ -194,13 +194,13 @@
             let sVeg = '', sFruit = '', iVeg = '', iFruit = '';
             productsData.forEach(p => {
                 const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
-                const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-[10px] ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج</span>` : `<span>${p.price} ج</span>`;
+                const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-xs ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج</span>` : `<span>${p.price} ج</span>`;
                 
                 const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td><td class="px-4 py-3 text-xl font-bold text-right">${priceHTML}</td></tr>`;
                 const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}">
                     <td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td>
                     <td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td>
-                    <td class="px-4 py-3 align-middle w-[150px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
+                    <td class="px-4 py-3 align-middle w-[100px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
                 </tr>`;
                 
                 if (p.category === 'vegetable') { sVeg += sRow; iVeg += iRow; } else { sFruit += sRow; iFruit += iRow; }
@@ -215,12 +215,13 @@
             let kilo = Math.floor(val);
             let fraction = val - kilo;
             let fText = "";
-            if (fraction === 0.125) fText = "و1/8";
-            else if (fraction === 0.25) fText = "و1/4";
-            else if (fraction === 0.5) fText = "و1/2";
-            else if (fraction === 0.75) fText = "و3/4";
-            if (kilo === 0) return fText.replace("و", "") + " كيلو";
-            return kilo + " كيلو" + (fText ? " " + fText : "");
+            if (fraction === 0.125) fText = "و 1/8";
+            else if (fraction === 0.25) fText = "و 1/4";
+            else if (fraction === 0.5) fText = "و 1/2";
+            else if (fraction === 0.75) fText = "و 3/4";
+
+            if (kilo === 0) return fText.replace("و ", "") + "ك";
+            return kilo + " ك " + fText;
         }
 
         function generateWeightOptions(unit) {
@@ -255,17 +256,14 @@
                     if (row.closest('table').id.includes('vegetables')) vegStr += line; else fruitStr += line; 
                 }
             });
-            if (count === 0) return alert('الرجاء اختيار صنف واحد على الأقل');
+            if (count === 0) return alert('الرجاء اختيار صنف');
             let msg = `📝 طلب جديد عبر قائمة الأسعار التفاعلية:\n------------------\n${vegStr ? '🥬 *خضروات:*\n' + vegStr : ''}${fruitStr ? '\n🍎 *فواكه:*\n' + fruitStr : ''}\n------------------\n📌 *الملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function filterItems(type) {
             const val = document.getElementById(type === 'static' ? 'search-input-static' : 'search-input-interactive').value.toLowerCase();
-            document.querySelectorAll(type === 'static' ? '.static-row' : '.interactive-row').forEach(row => {
-                const name = row.getAttribute('data-name').toLowerCase();
-                row.style.display = name.includes(val) ? 'table-row' : 'none';
-            });
+            document.querySelectorAll(type === 'static' ? '.static-row' : '.interactive-row').forEach(row => { row.style.display = row.getAttribute('data-name').toLowerCase().includes(val) ? 'table-row' : 'none'; });
         }
 
         document.addEventListener('DOMContentLoaded', () => { 
