@@ -7,15 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; }
-        .static-row, .interactive-row { transition: background-color 0.2s; }
+        .static-row, .interactive-row { transition: background-color 0.2s; border-bottom: 1px solid #f0f0f0; }
         .static-row:hover, .interactive-row:hover { background-color: #f3f4f6; }
         
+        /* تنسيق خانة الكميات المطور */
         .quantity-select { 
-            height: 42px; 
-            min-width: 130px; /* تم زيادة العرض لتناسب الأوزان الجديدة */
+            height: 40px; 
+            min-width: 145px; 
             text-align-last: center; 
             border: 2px solid #22c55e; 
-            border-radius: 0.375rem; 
+            border-radius: 8px; 
             appearance: none; 
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2315803d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
             background-repeat: no-repeat; 
@@ -24,17 +25,21 @@
             padding-left: 1.5rem; 
             font-weight: bold;
             background-color: #fff;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            cursor: pointer;
         }
 
+        /* تنسيق كلمة عرض في سطر تالي بحجم صغير جداً */
         .offer-badge { 
             display: inline-block;
-            background: linear-gradient(to right, #ef4444, #b91c1c); 
-            color: white; padding: 2px 10px; border-radius: 9999px; 
-            font-size: 0.75rem; font-weight: bold; 
-            margin-top: 4px; animation: pulse 1.5s infinite; 
+            background: #ef4444; 
+            color: white; 
+            padding: 1px 6px; 
+            border-radius: 4px; 
+            font-size: 10px; 
+            font-weight: bold; 
+            margin-top: 2px;
         }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -71,10 +76,6 @@
                 <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">🍌🍎 فواكه 🍉🍇</h2>
                 <div class="p-2"><table class="min-w-full"><tbody id="fruits-tbody-static" class="bg-white divide-y"></tbody></table></div>
             </section>
-
-            <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">
-                 🛒 ابدأ طلبك الآن!
-            </button>
         </div>
 
         <div id="order-form-view" style="display: none;">
@@ -84,15 +85,15 @@
             </div>
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
-                    <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الخضروات</h2>
+                    <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center text-lg">تحديد كميات الخضروات</h2>
                     <table class="min-w-full"><tbody id="vegetables-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
-                    <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الفواكه</h2>
+                    <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center text-lg">تحديد كميات الفواكه</h2>
                     <table class="min-w-full"><tbody id="fruits-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mt-8">
-                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى،أو أصناف غير موجودة في القائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right" dir="rtl"></textarea>
+                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى،أو أصناف غير موجودة في القائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right shadow-inner" dir="rtl"></textarea>
                 </div>
                 <button type="submit" class="w-full mt-10 bg-green-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">إرسال الطلب عبر واتساب</button>
             </form>
@@ -102,20 +103,17 @@
             <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mb-6 font-bold text-gray-700">
                 🕒 مواعيد العمل من 10 ص إلى 5 م يومياً ما عدا الجمعة
             </div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-4"> للتواصل المباشر 🛵</h3>
             <a href="http://wa.me/201032872750" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition shadow-md mb-6 mx-auto max-w-sm">
                 اضغط هنا للمحادثة عبر واتساب
             </a>
             <a href="https://www.facebook.com/pg/3oroadtawfeer" target="_blank" class="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition shadow-md mx-auto max-w-sm">
                 زيارة صفحة الفيسبوك
             </a>
-            <div class="mt-8 p-2 text-center">
-                <a href="https://www.freecounterstat.com"><img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=4c8kqkxygt8km1fw7qfsjmr2ktzj1qwf" border="0" title="web hit counter"></a>
-            </div>
         </footer>
     </div>
 
     <script>
+        // كافة الأصناف مأخوذة من الكود الخاص بك
         const productsData = [
             { name: "بصل أحمر 1", price: 17.5, unit: "كجم", category: "vegetable" },
             { name: "بصل أحمر 2", price: 15.0, unit: "كجم", category: "vegetable" },
@@ -196,13 +194,13 @@
             let sVeg = '', sFruit = '', iVeg = '', iFruit = '';
             productsData.forEach(p => {
                 const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
-                const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-xs ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج.م</span>` : `<span>${p.price} ج.م</span>`;
+                const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-[10px] ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج</span>` : `<span>${p.price} ج</span>`;
                 
-                const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg">${p.name} ${badge}</td><td class="px-4 py-3 text-xl font-bold text-right align-middle">${priceHTML}</td></tr>`;
+                const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td><td class="px-4 py-3 text-xl font-bold text-right">${priceHTML}</td></tr>`;
                 const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}">
-                    <td class="px-4 py-3 text-lg">${p.name} ${badge}</td>
+                    <td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td>
                     <td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td>
-                    <td class="px-4 py-3 align-middle w-[140px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
+                    <td class="px-4 py-3 align-middle w-[150px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
                 </tr>`;
                 
                 if (p.category === 'vegetable') { sVeg += sRow; iVeg += iRow; } else { sFruit += sRow; iFruit += iRow; }
@@ -213,30 +211,26 @@
             document.getElementById('fruits-tbody-interactive').innerHTML = iFruit;
         }
 
-        // دالة جديدة لتوليد الأوزان بزيادة ثمن كيلو (0.125)
         function formatWeight(val) {
-            let integerPart = Math.floor(val);
-            let fractionalPart = val - integerPart;
-            let fractionText = "";
-            
-            if (fractionalPart === 0.125) fractionText = "⅛";
-            else if (fractionalPart === 0.25) fractionText = "¼";
-            else if (fractionalPart === 0.375) fractionText = "⅜";
-            else if (fractionalPart === 0.5) fractionText = "½";
-            else if (fractionalPart === 0.625) fractionText = "⅝";
-            else if (fractionalPart === 0.75) fractionText = "¾";
-            else if (fractionalPart === 0.875) fractionText = "⅞";
-
-            if (integerPart === 0) return fractionText + " ك";
-            return integerPart + (fractionText ? " " + fractionText : "") + " ك";
+            let kilo = Math.floor(val);
+            let fraction = val - kilo;
+            let fText = "";
+            if (fraction === 0.125) fText = "و1/8";
+            else if (fraction === 0.25) fText = "و1/4";
+            else if (fraction === 0.5) fText = "و1/2";
+            else if (fraction === 0.75) fText = "و3/4";
+            if (kilo === 0) return fText.replace("و", "") + " كيلو";
+            return kilo + " كيلو" + (fText ? " " + fText : "");
         }
 
         function generateWeightOptions(unit) {
             let opts = '<option value="0" selected>-- طلب --</option>';
             if (unit === 'كجم') {
-                // زيادة بمقدار ثمن كيلو (0.125) من البداية وحتى 15 ك
                 for (let i = 0.125; i <= 15; i += 0.125) {
-                    opts += `<option value="${i}">${formatWeight(i)}</option>`;
+                    let fr = i - Math.floor(i);
+                    if (i < 1 || fr === 0 || fr === 0.125 || fr === 0.25 || fr === 0.5 || fr === 0.75) {
+                        opts += `<option value="${i}">${formatWeight(i)}</option>`;
+                    }
                 }
             } else {
                 for (let i = 1; i <= 15; i++) opts += `<option value="${i}">${i} ${unit}</option>`;
@@ -262,13 +256,16 @@
                 }
             });
             if (count === 0) return alert('الرجاء اختيار صنف واحد على الأقل');
-            let msg = `📝 طلب جديد عبر قائمة الأسعار التفاعلية:\n------------------\n${vegStr ? '🥬 *خضروات:*\n' + vegStr : ''}${fruitStr ? '\n🍎 *فواكه:*\n' + fruitStr : ''}\n------------------\n📌 *العنوان والملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
+            let msg = `📝 طلب جديد عبر قائمة الأسعار التفاعلية:\n------------------\n${vegStr ? '🥬 *خضروات:*\n' + vegStr : ''}${fruitStr ? '\n🍎 *فواكه:*\n' + fruitStr : ''}\n------------------\n📌 *الملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function filterItems(type) {
             const val = document.getElementById(type === 'static' ? 'search-input-static' : 'search-input-interactive').value.toLowerCase();
-            document.querySelectorAll(type === 'static' ? '.static-row' : '.interactive-row').forEach(row => { row.style.display = row.getAttribute('data-name').toLowerCase().includes(val) ? 'table-row' : 'none'; });
+            document.querySelectorAll(type === 'static' ? '.static-row' : '.interactive-row').forEach(row => {
+                const name = row.getAttribute('data-name').toLowerCase();
+                row.style.display = name.includes(val) ? 'table-row' : 'none';
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => { 
