@@ -10,7 +10,14 @@
         .static-row, .interactive-row { transition: background-color 0.2s; }
         .static-row:hover, .interactive-row:hover { background-color: #f3f4f6; }
         .quantity-select { height: 40px; text-align-last: center; border: 1px solid #ccc; border-radius: 0.375rem; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 0.5rem center; background-size: 1em; padding-left: 2rem; }
-        .offer-badge { background: linear-gradient(to right, #ef4444, #b91c1c); color: white; padding: 2px 8px; border-radius: 9999px; font-size: 0.7rem; font-weight: bold; margin-right: 5px; animation: pulse 1.5s infinite; }
+        /* تحسين ملصق العرض ليكون في سطر منفصل */
+        .offer-badge { 
+            display: inline-block;
+            background: linear-gradient(to right, #ef4444, #b91c1c); 
+            color: white; padding: 2px 10px; border-radius: 9999px; 
+            font-size: 0.75rem; font-weight: bold; 
+            margin-top: 4px; animation: pulse 1.5s infinite; 
+        }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     </style>
 </head>
@@ -48,6 +55,10 @@
                 <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">🍌🍎 فواكه 🍉🍇</h2>
                 <div class="p-2"><table class="min-w-full"><tbody id="fruits-tbody-static" class="bg-white divide-y"></tbody></table></div>
             </section>
+
+            <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">
+                 🛒 ابدأ طلبك الآن! (نموذج الطلب السريع)
+            </button>
         </div>
 
         <div id="order-form-view" style="display: none;">
@@ -65,7 +76,7 @@
                     <table class="min-w-full"><tbody id="fruits-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mt-8">
-                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات..." class="w-full p-4 border border-gray-300 rounded-lg text-right" dir="rtl"></textarea>
+                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات، أو أصناف غير موجودة بالقائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right" dir="rtl"></textarea>
                 </div>
                 <button type="submit" class="w-full mt-10 bg-green-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">إرسال الطلب عبر واتساب</button>
             </form>
@@ -77,7 +88,7 @@
             </div>
             <h3 class="text-xl font-semibold text-gray-800 mb-4">🔘 للتواصل المباشر 🛵</h3>
             <a href="http://wa.me/201032872750" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition shadow-md mb-6 mx-auto max-w-sm">
-                اضغط هنا للطلب عبر واتساب
+                اضغط هنا للمحادثة عبر واتساب
             </a>
             <a href="https://www.facebook.com/pg/3oroadtawfeer" target="_blank" class="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition shadow-md mx-auto max-w-sm">
                 زيارة صفحة الفيسبوك
@@ -169,12 +180,11 @@
         function generatePriceList() {
             let sVeg = '', sFruit = '', iVeg = '', iFruit = '';
             productsData.forEach(p => {
-                const badge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
+                const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
                 const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-xs ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج.م</span>` : `<span>${p.price} ج.م</span>`;
-                const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg">${p.name} ${badge}</td><td class="px-4 py-3 text-xl font-bold text-right">${priceHTML}</td></tr>`;
                 
-                // إضافة العروض في صفحة الطلب أيضاً
-                const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}"><td class="px-4 py-3 text-lg">${p.name} ${badge}</td><td class="px-4 py-3 text-center font-bold text-green-700 text-sm">${priceHTML}</td><td class="px-4 py-3"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td></tr>`;
+                const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg">${p.name} ${badge}</td><td class="px-4 py-3 text-xl font-bold text-right align-middle">${priceHTML}</td></tr>`;
+                const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}"><td class="px-4 py-3 text-lg">${p.name} ${badge}</td><td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td><td class="px-4 py-3 align-middle"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td></tr>`;
                 
                 if (p.category === 'vegetable') { sVeg += sRow; iVeg += iRow; } else { sFruit += sRow; iFruit += iRow; }
             });
@@ -205,7 +215,7 @@
                 if (parseFloat(sel.value) > 0) { count++; const line = `- ${sel.options[sel.selectedIndex].text} ${row.getAttribute('data-name')}\n`; if (row.closest('table').id.includes('vegetables')) vegStr += line; else fruitStr += line; }
             });
             if (count === 0) return alert('الرجاء اختيار صنف');
-            let msg = `📝 طلب جديد:\n------------------\n${vegStr ? '🥬 *خضروات:*\n' + vegStr : ''}${fruitStr ? '\n🍎 *فواكه:*\n' + fruitStr : ''}\n------------------\n📌 *العنوان والملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
+            let msg = `📝 طلب جديد عبر قائمة الأسعار التفاعلية:\n------------------\n${vegStr ? '🥬 *خضروات:*\n' + vegStr : ''}${fruitStr ? '\n🍎 *فواكه:*\n' + fruitStr : ''}\n------------------\n📌 *العنوان والملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
