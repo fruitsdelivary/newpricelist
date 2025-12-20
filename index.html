@@ -212,34 +212,43 @@
             document.getElementById('fruits-tbody-interactive').innerHTML = iFruit;
         }
 
-        // دالة الأوزان المعدلة لتستخدم "ك"
-        function formatWeight(val) {
-            let kilo = Math.floor(val);
-            let fraction = val - kilo;
-            let fText = "";
-            if (fraction === 0.125) fText = " ⅛";
-            else if (fraction === 0.25) fText = " ¼";
-            else if (fraction === 0.5) fText = " ½";
-            else if (fraction === 0.75) fText = " ¾";
+     function generateWeightOptions(unit) {
+    let options = '<option value="0" selected>-- طلب --</option>';
+    
+    if (unit === 'كجم') {
+        const weights = [];
+        
+        // الأوزان أقل من 1 كيلو
+        weights.push({ val: 0.125, text: '⅛ ك' });
+        weights.push({ val: 0.25, text: '¼ ك' });
+        weights.push({ val: 0.5, text: '½ ك' });
+        weights.push({ val: 0.75, text: '¾ ك' });
 
-            if (kilo === 0) return fText.trim() + " كيلو";
-            return kilo + fText + " كيلو";
-        }
-
-        function generateWeightOptions(unit) {
-            let opts = '<option value="0" selected>-- طلب --</option>';
-            if (unit === 'كجم') {
-                for (let i = 0.125; i <= 15; i += 0.125) {
-                    let fr = i - Math.floor(i);
-                    if (i < 1 || fr === 0 || fr === 0.125 || fr === 0.25 || fr === 0.5 || fr === 0.75) {
-                        opts += `<option value="${i}">${formatWeight(i)}</option>`;
-                    }
-                }
-            } else {
-                for (let i = 1; i <= 15; i++) opts += `<option value="${i}">${i} ${unit}</option>`;
+        // الأوزان من 1 كيلو إلى 15 كيلو بالتسلسل المطلوب
+        for (let i = 1; i <= 15; i++) {
+            weights.push({ val: i, text: i + ' ك' });
+            
+            // إضافة الكسور بعد كل كيلو حتى يصل لـ 15 (إلا إذا كنت تريد الكسور لأول كيلو فقط)
+            // سأضيفها هنا كما طلبت في المثال (1 وربع، 1 ونصف...)
+            if (i < 15) { // توقف عن إضافة الكسور بعد الـ 15 ك
+                weights.push({ val: i + 0.125, text: i + ' و⅛ ك' });
+                weights.push({ val: i + 0.25, text: i + ' و¼ ك' });
+                weights.push({ val: i + 0.5, text: i + ' و½ ك' });
+                weights.push({ val: i + 0.75, text: i + ' و¾ ك' });
             }
-            return opts;
         }
+
+        weights.forEach(w => {
+            options += `<option value="${w.val}">${w.text}</option>`;
+        });
+    } else {
+        // للوحدات الأخرى (حبة، حزمة، شيكارة)
+        for (let i = 1; i <= 15; i++) {
+            options += `<option value="${i}">${i} ${unit}</option>`;
+        }
+    }
+    return options;
+}
 
         function toggleView(v) {
             document.getElementById('price-list-view').style.display = v === 'order-form-view' ? 'none' : 'block';
@@ -289,5 +298,6 @@
     </script>
 </body>
 </html>
+
 
 
