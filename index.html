@@ -104,7 +104,7 @@
                 🕒 مواعيد العمل من 10 ص إلى 5 م يومياً ما عدا الجمعة
             </div>
             <a href="http://wa.me/201032872750" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition shadow-md mb-6 mx-auto max-w-sm">
-                 🟢✅ اضغط هنا للمحادثة عبر واتساب
+                📨 اضغط هنا للمحادثة عبر واتساب
             </a>
              <a href="https://www.facebook.com/pg/3oroadtawfeer" target="_blank" class="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 shadow-md transform hover:scale-105 mx-auto max-w-sm">
                 زيارة صفحة الفيسبوك
@@ -151,8 +151,8 @@
             { name: "زنجبيل فريش", price: 280.0, unit: "كجم", category: "vegetable" },
             { name: "قلقاس", price: 25.0, unit: "كجم", category: "vegetable" },
             { name: "ورق سلق", price: 40.0, unit: "كجم", category: "vegetable" },
-            { name: "بسلة 1", price: 30.0, unit: "كجم", category: "vegetable" },
-            { name: "بسلة 2", price: 25.0, unit: "كجم", category: "vegetable" },
+            { name: "بسلة 1", price: 25.0, unit: "كجم", category: "vegetable" },
+            { name: "بسلة 2", price: 15.0,oldPrice: 20.0, unit: "كجم", category: "vegetable" },
             { name: "باذنجان حشو", price: 20.0, unit: "كجم", category: "vegetable" },
             { name: "بنجر", price: 30.0, unit: "كجم", category: "vegetable" },
             { name: "خس كابوتشا", price: 25.0, unit: "حبة", category: "vegetable" },
@@ -278,7 +278,7 @@
 
             if (count === 0) return alert('الرجاء اختيار صنف واحد على الأقل');
 
-            let msg = `📝 *طلب جديد عبر قائمة الأسعار التفاعلية*:\n------------------\n`;
+            let msg = `📝 *طلب جديد من قائمة الأسعار التفاعلية*:\n------------------\n`;
             if (vegStr) msg += `🥬 *الخضروات:*\n${vegStr}\n`;
             if (fruitStr) msg += `🍎 *الفواكه:*\n${fruitStr}\n`;
             msg += `------------------\n📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
@@ -298,6 +298,7 @@
     </script>
 </body>
 </html>
+
 
 
 
