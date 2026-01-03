@@ -47,6 +47,7 @@
             <div class="mb-6">
                 <img src="https://i.ibb.co/3yfhVHXj/1764874410467.png" alt="الشعار" class="mx-auto w-24 h-24 rounded-full border-4 border-green-300 shadow-xl object-cover">
                 <p class="text-lg font-bold text-gray-600 mt-2">خُبراء الخضار والفاكهة</p>
+                <p id="date-display" class="text-md font-bold text-blue-600 mt-3 bg-blue-50 inline-block px-4 py-1 rounded-full border border-blue-200"></p>
             </div>
         </header>
         
@@ -128,7 +129,7 @@
             { name: "خيار 2", price: 25.0, unit: "كجم", category: "vegetable" },
             { name: "كوسة", price: 30.0, unit: "كجم", category: "vegetable" },
             { name: "جزر", price: 20.0, unit: "كجم", category: "vegetable" },
-            { name: "طماطم جامدة", price: 15.0, unit: "كجم", category: "vegetable" },
+            { name: "طماطم جامدة 1", price: 15.0, unit: "كجم", category: "vegetable" },
             { name: "طماطم طبخ سليمة", price: 12.5, unit: "كجم", category: "vegetable" },
             { name: "طماطم طبخ2", price: 10.0, unit: "كجم", category: "vegetable" },
             { name: "ليمون 1", price: 60.0, unit: "كجم", category: "vegetable" },
@@ -146,6 +147,166 @@
             { name: "جرجير", price: 5.0, unit: "ربطة", category: "vegetable" },
             { name: "سريس", price: 5.0, unit: "ربطة", category: "vegetable" },
             { name: "بصل أخضر", price: 10.0, unit: "ربطة", category: "vegetable" },
+            { name: "كرات مصري", price: 5.0, unit: "ربطة", category: "vegetable" },
+            { name: "نعناع", price: 10.0, unit: "ربطة", category: "vegetable" },
+            { name: "زنجبيل فريش", price: 280.0, unit: "كجم", category: "vegetable" },
+            { name: "قلقاس", price: 25.0, unit: "كجم", category: "vegetable" },
+            { name: "ورق سلق", price: 40.0, unit: "كجم", category: "vegetable" },
+            { name: "بسلة", price: 25.0, unit: "كجم", category: "vegetable" },
+            { name: "باذنجان حشو", price: 20.0, unit: "كجم", category: "vegetable" },
+            { name: "بنجر", price: 30.0, unit: "كجم", category: "vegetable" },
+            { name: "خس كابوتشا", price: 25.0, unit: "حبة", category: "vegetable" },
+            { name: "مشروم فريش", price: 50.0, oldPrice: 60, unit: "طبق", category: "vegetable" },
+            { name: "فاصوليا خضراء", price: 25.0, unit: "كجم", category: "vegetable" },
+            { name: "ثوم صيني (٢٠٠جم)", price: 35.0, unit: "حبة", category: "vegetable" },
+            { name: "كرنب أحمر (سلطة)", price: 35.0, unit: "حبة", category: "vegetable" },
+            { name: "كرنب أبيض (سلطة)", price: 40.0, unit: "حبة", category: "vegetable" },
+            { name: "ذرة أصفر (طبق 3 حبة)", price: 60.0, unit: "طبق", category: "vegetable" },
+            { name: " أرز رويزق 10ك", price: 285.0, unit: "شيكارة", category: "vegetable" },
+            { name: "موز 1", price: 40.0, unit: "كجم", category: "fruit" },
+            { name: "موز 2", price: 35.0, unit: "كجم", category: "fruit" },
+            { name: "تفاح أحمر", price: 90.0, unit: "كجم", category: "fruit" },
+            { name: "تفاح أصفر", price: 90.0, unit: "كجم", category: "fruit" },
+            { name: "تفاح سكري", price: 100.0, unit: "كجم", category: "fruit" },
+            { name: "تفاح أحمر سوري", price: 120.0, unit: "كجم", category: "fruit" },
+            { name: "تفاح أصفر سوري", price: 100.0, unit: "كجم", category: "fruit" },
+            { name: "فراولة", price: 40.0, unit: "كجم", category: "fruit" },
+            { name: "برقوق", price: 120.0, unit: "كجم", category: "fruit" },
+            { name: "كيوي", price: 150.0, unit: "كجم", category: "fruit" },
+            { name: "برتقال بصره 1", price: 30.0, unit: "كجم", category: "fruit" },
+            { name: "برتقال بصره 2", price: 25.0, unit: "كجم", category: "fruit" },
+            { name: "برتقال سكري", price: 25.0, unit: "كجم", category: "fruit" },
+            { name: "جوافة", price: 35.0, unit: "كجم", category: "fruit" },
+            { name: "رمان", price: 70.0, unit: "كجم", category: "fruit" },
+            { name: "مندولينا", price: 15.0, unit: "كجم", category: "fruit" },
+            { name: "يوسفي بلدي 1", price: 25.0, unit: "كجم", category: "fruit" },
+            { name: "يوسفي بلدي 2", price: 15.0, oldPrice: 20, unit: "كجم", category: "fruit" },
+            { name: "كنتالوب", price: 35.0, oldPrice: 40, unit: "كجم", category: "fruit" },
+            { name: "تمر القصيم (١ك)", price: 130.0, unit: "علبة", category: "fruit" },
+            { name: "أفوكادو مستورد", price: 280.0,  unit: "كجم", category: "fruit" }
+        ];
+
+        const WHATSAPP_NUMBER = '201032872750';
+
+        // وظيفة عرض الوقت الحالي في الواجهة
+        function displayCurrentDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            const formatter = new Intl.DateTimeFormat('ar-EG', options);
+            document.getElementById('date-display').textContent = formatter.format(now);
+        }
+
+        function generatePriceList() {
+            let sVeg = '', sFruit = '', iVeg = '', iFruit = '';
+            productsData.forEach(p => {
+                const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
+                const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-xs ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج</span>` : `<span>${p.price} ج</span>`;
+                
+                const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td><td class="px-4 py-3 text-xl font-bold text-right">${priceHTML}</td></tr>`;
+                const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}">
+                    <td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td>
+                    <td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td>
+                    <td class="px-4 py-3 align-middle w-[100px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
+                </tr>`;
+                
+                if (p.category === 'vegetable') { sVeg += sRow; iVeg += iRow; } else { sFruit += sRow; iFruit += iRow; }
+            });
+            document.getElementById('vegetables-tbody-static').innerHTML = sVeg;
+            document.getElementById('fruits-tbody-static').innerHTML = sFruit;
+            document.getElementById('vegetables-tbody-interactive').innerHTML = iVeg;
+            document.getElementById('fruits-tbody-interactive').innerHTML = iFruit;
+        }
+
+     function generateWeightOptions(unit) {
+    let options = '<option value="0" selected>-- طلب --</option>';
+    
+    if (unit === 'كجم') {
+        const weights = [];
+        
+        weights.push({ val: 0.125, text: '⅛ ك' });
+        weights.push({ val: 0.25, text: '¼ ك' });
+        weights.push({ val: 0.5, text: '½ ك' });
+        weights.push({ val: 0.75, text: '¾ ك' });
+
+        for (let i = 1; i <= 15; i++) {
+            weights.push({ val: i, text: i + ' ك' });
+            
+            if (i < 15) { 
+                weights.push({ val: i + 0.125, text: i + ' و⅛ ك' });
+                weights.push({ val: i + 0.25, text: i + ' و¼ ك' });
+                weights.push({ val: i + 0.5, text: i + ' و½ ك' });
+                weights.push({ val: i + 0.75, text: i + ' و¾ ك' });
+            }
+        }
+
+        weights.forEach(w => {
+            options += `<option value="${w.val}">${w.text}</option>`;
+        });
+    } else {
+        for (let i = 1; i <= 15; i++) {
+            options += `<option value="${i}">${i} ${unit}</option>`;
+        }
+    }
+    return options;
+}
+
+        function toggleView(v) {
+            document.getElementById('price-list-view').style.display = v === 'order-form-view' ? 'none' : 'block';
+            document.getElementById('order-form-view').style.display = v === 'order-form-view' ? 'block' : 'none';
+            document.getElementById('main-title').textContent = v === 'order-form-view' ? '🛒 نموذج طلب واتساب السريع' : '💰أسعار اليوم💰';
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+
+        function generateWhatsAppOrder() {
+            let vegStr = '', fruitStr = '', count = 0;
+            
+            document.querySelectorAll('#vegetables-tbody-interactive .interactive-row').forEach(row => {
+                const sel = row.querySelector('.quantity-select');
+                if (parseFloat(sel.value) > 0) { 
+                    count++; 
+                    vegStr += `- ${sel.options[sel.selectedIndex].text} ${row.getAttribute('data-name')}\n`; 
+                }
+            });
+
+            document.querySelectorAll('#fruits-tbody-interactive .interactive-row').forEach(row => {
+                const sel = row.querySelector('.quantity-select');
+                if (parseFloat(sel.value) > 0) { 
+                    count++; 
+                    fruitStr += `- ${sel.options[sel.selectedIndex].text} ${row.getAttribute('data-name')}\n`; 
+                }
+            });
+
+            if (count === 0) return alert('الرجاء اختيار صنف واحد على الأقل');
+
+            let msg = `📝 *طلب جديد من قائمة الأسعار التفاعلية*:\n------------------\n`;
+            if (vegStr) msg += `🥬 *الخضروات:*\n${vegStr}\n`;
+            if (fruitStr) msg += `🍎 *الفواكه:*\n${fruitStr}\n`;
+            msg += `------------------\n📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
+            
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function filterItems(type) {
+            const val = document.getElementById(type === 'static' ? 'search-input-static' : 'search-input-interactive').value.toLowerCase();
+            document.querySelectorAll(type === 'static' ? '.static-row' : '.interactive-row').forEach(row => { row.style.display = row.getAttribute('data-name').toLowerCase().includes(val) ? 'table-row' : 'none'; });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            displayCurrentDateTime(); // تحديث الوقت عند التحميل
+            generatePriceList(); 
+            document.querySelectorAll('.quantity-select').forEach(s => s.innerHTML = generateWeightOptions(s.getAttribute('data-unit')));
+        });
+    </script>
+</body>
+</html>
+ "ربطة", category: "vegetable" },
             { name: "كرات مصري", price: 5.0, unit: "ربطة", category: "vegetable" },
             { name: "نعناع", price: 10.0, unit: "ربطة", category: "vegetable" },
             { name: "زنجبيل فريش", price: 280.0, unit: "كجم", category: "vegetable" },
@@ -294,6 +455,7 @@
     </script>
 </body>
 </html>
+
 
 
 
