@@ -2,43 +2,30 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دليفري الخضار والفاكهة..قائمة الأسعار ونموذج الطلب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* تحسين الخطوط لتعمل بشكل مثالي على iOS */
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #f7f9fb; 
-            -webkit-font-smoothing: antialiased;
-        }
-        
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; }
         .static-row, .interactive-row { transition: background-color 0.2s; border-bottom: 1px solid #f0f0f0; }
         .static-row:hover, .interactive-row:hover { background-color: #f3f4f6; }
         
         .quantity-select { 
-            height: 38px; /* زيادة الطول قليلاً لسهولة اللمس في iPhone */
-            min-width: 90px; 
+            height: 34px; 
+            min-width: 85px; 
             text-align-last: center; 
             border: 2px solid #22c55e; 
-            border-radius: 8px; 
+            border-radius: 6px; 
             appearance: none; 
-            -webkit-appearance: none; /* خاص بمتصفح Safari على iOS */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2315803d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
             background-repeat: no-repeat; 
-            background-position: left 0.5rem center; 
-            background-size: 0.9em; 
-            padding-left: 1.5rem; 
+            background-position: left 0.3rem center; 
+            background-size: 0.8em; 
+            padding-left: 1.2rem; 
             font-weight: bold;
-            background-color: #ffffff;
-            font-size: 0.85rem;
+            background-color: #fff;
+            font-size: 0.75rem;
             cursor: pointer;
-            color: #000;
-        }
-
-        /* منع التكبير التلقائي في آيفون عند الضغط على الحقول */
-        input[type="text"], textarea, select {
-            font-size: 16px !important;
         }
 
         .offer-badge { 
@@ -53,7 +40,7 @@
 </head>
 <body class="p-4 md:p-8">
 
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/50">
+    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-6 md:p-10 border-4 border-green-500/50">
 
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-extrabold text-green-700 mb-4" id="main-title">💰أسعار اليوم💰</h1>
@@ -74,17 +61,17 @@
             </div>
 
             <div class="mb-8 p-4 bg-gray-50 rounded-xl shadow-inner text-center">
-                <input type="text" id="search-input-static" onkeyup="filterItems('static')" placeholder="ابحث عن خضروات أو فواكه..." class="w-full p-3 border border-gray-300 rounded-lg text-right" dir="rtl">
+                <input type="text" id="search-input-static" onkeyup="filterItems('static')" placeholder="ابحث عن خضروات أو فواكه..." class="w-full p-3 border border-gray-300 rounded-lg text-right text-lg" dir="rtl">
             </div>
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
                 <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center">🥬🥦 خضروات 🥦🥬</h2>
-                <div class="p-2 overflow-x-auto"><table class="min-w-full"><tbody id="vegetables-tbody-static" class="bg-white divide-y"></tbody></table></div>
+                <div class="p-2"><table class="min-w-full"><tbody id="vegetables-tbody-static" class="bg-white divide-y"></tbody></table></div>
             </section>
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
                 <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">🍌🍎 فواكه 🍉🍇</h2>
-                <div class="p-2 overflow-x-auto"><table class="min-w-full"><tbody id="fruits-tbody-static" class="bg-white divide-y"></tbody></table></div>
+                <div class="p-2"><table class="min-w-full"><tbody id="fruits-tbody-static" class="bg-white divide-y"></tbody></table></div>
             </section>
 
             <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">
@@ -95,16 +82,16 @@
         <div id="order-form-view" style="display: none;">
             <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-3 px-6 rounded-xl transition text-lg text-center">🔙 العودة لقائمة الأسعار</button>
             <div class="mb-8 p-4 bg-gray-50 rounded-xl shadow-inner text-center">
-                <input type="text" id="search-input-interactive" onkeyup="filterItems('interactive')" placeholder="ابحث لتحديد الكمية..." class="w-full p-3 border border-gray-300 rounded-lg text-right" dir="rtl">
+                <input type="text" id="search-input-interactive" onkeyup="filterItems('interactive')" placeholder="ابحث لتحديد الكمية..." class="w-full p-3 border border-gray-300 rounded-lg text-right text-lg" dir="rtl">
             </div>
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
                     <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الخضروات</h2>
-                    <div class="overflow-x-auto"><table class="min-w-full"><tbody id="vegetables-tbody-interactive" class="bg-white divide-y"></tbody></table></div>
+                    <table class="min-w-full"><tbody id="vegetables-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
                     <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الفواكه</h2>
-                    <div class="overflow-x-auto"><table class="min-w-full"><tbody id="fruits-tbody-interactive" class="bg-white divide-y"></tbody></table></div>
+                    <table class="min-w-full"><tbody id="fruits-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mt-8">
                     <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى،أو الاستفسار عن صنف غير موجود بالقائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right" dir="rtl"></textarea>
@@ -117,7 +104,7 @@
             <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mb-6 font-bold text-gray-700">
                 🕒 مواعيد العمل من 10 ص إلى 5 م يومياً ما عدا الجمعة
             </div>
-            <a href="https://wa.me/201032872750" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition shadow-md mb-6 mx-auto max-w-sm">
+            <a href="http://wa.me/201032872750" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition shadow-md mb-6 mx-auto max-w-sm">
                 📨 اضغط هنا للمحادثة عبر واتساب
             </a>
              <a href="https://www.facebook.com/pg/3oroadtawfeer" target="_blank" class="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 shadow-md transform hover:scale-105 mx-auto max-w-sm">
@@ -131,8 +118,8 @@
 
     <script>
         const productsData = [
-            { name: "بصل أحمر", price: 20.0, unit: "كجم", category: "vegetable" },
-            { name: "ثوم جديد", price: 20.0, unit: "كجم", category: "vegetable" },
+            { name: "بصل أحمر", price: 20.0, unit: "كجم", category: "vegetable" }
+{ name:    "ثوم جديد", price: 20.0, unit: "كجم", category: "vegetable" },
             { name: "بطاطس تحمير", price: 17.5, unit: "كجم", category: "vegetable" },
             { name: "بطاطس صغيرة", price: 12.5, unit: "كجم", category: "vegetable" },
             { name: "باذنجان مكبب", price: 30.0, unit: "كجم", category: "vegetable" },
@@ -208,11 +195,11 @@
                 const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
                 const priceHTML = p.oldPrice ? `<span class="text-gray-400 line-through text-xs ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج</span>` : `<span>${p.price} ج</span>`;
                 
-                const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td><td class="px-4 py-3 text-xl font-bold text-left">${priceHTML}</td></tr>`;
+                const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td><td class="px-4 py-3 text-xl font-bold text-right">${priceHTML}</td></tr>`;
                 const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}">
                     <td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td>
                     <td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td>
-                    <td class="px-4 py-3 align-middle w-[110px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
+                    <td class="px-4 py-3 align-middle w-[100px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
                 </tr>`;
                 
                 if (p.category === 'vegetable') { sVeg += sRow; iVeg += iRow; } else { sFruit += sRow; iFruit += iRow; }
@@ -274,10 +261,7 @@
             if (vegStr) msg += `🥬 *الخضروات:*\n${vegStr}\n`;
             if (fruitStr) msg += `🍎 *الفواكه:*\n${fruitStr}\n`;
             msg += `------------------\n📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
-            
-            // رابط واتساب محسّن ليعمل على جميع الأجهزة
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-            window.open(waUrl, '_blank');
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function filterItems(type) {
@@ -295,3 +279,6 @@
     </script>
 </body>
 </html>
+
+
+
