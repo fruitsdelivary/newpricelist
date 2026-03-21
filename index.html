@@ -2,31 +2,44 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>دليفري الخضار والفاكهة..قائمة الأسعار ونموذج الطلب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; }
+        body { 
+            font-family: system-ui, -apple-system, sans-serif; 
+            background-color: #f7f9fb; 
+            -webkit-font-smoothing: antialiased;
+        }
         .static-row, .interactive-row { transition: background-color 0.2s; border-bottom: 1px solid #f0f0f0; }
         .static-row:hover, .interactive-row:hover { background-color: #f3f4f6; }
         
+        /* تحسين القوائم المنسدلة لتعمل بشكل مثالي على iOS Safari */
         .quantity-select { 
-            height: 34px; 
-            min-width: 85px; 
+            height: 38px; /* زيادة الارتفاع قليلاً لسهولة اللمس */
+            min-width: 90px; 
             text-align-last: center; 
             border: 2px solid #22c55e; 
-            border-radius: 6px; 
-            appearance: none; 
+            border-radius: 8px; 
+            /* إلغاء تنسيقات Safari الافتراضية */
+            -webkit-appearance: none; 
+            -moz-appearance: none;
+            appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2315803d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
             background-repeat: no-repeat; 
-            background-position: left 0.3rem center; 
+            background-position: left 0.5rem center; 
             background-size: 0.8em; 
-            padding-left: 1.2rem; 
+            padding-left: 1.5rem; 
             font-weight: bold;
             background-color: #fff;
-            font-size: 0.75rem;
+            font-size: 14px;
             cursor: pointer;
+            touch-action: manipulation;
         }
+
+        /* إصلاح الجداول في iOS لمنع تداخل النصوص */
+        table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+        td { overflow-wrap: break-word; word-wrap: break-word; }
 
         .offer-badge { 
             display: inline-block;
@@ -36,6 +49,8 @@
             margin-top: 2px; animation: pulse 1.5s infinite; 
         }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+        
+        button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -74,7 +89,7 @@
                 <div class="p-2"><table class="min-w-full"><tbody id="fruits-tbody-static" class="bg-white divide-y"></tbody></table></div>
             </section>
 
-            <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">
+            <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 px-6 rounded-2xl shadow-2xl transform hover:scale-105 text-xl transition border-b-4 border-blue-900">
                   🛒 ابدأ طلبك الآن! (نموذج الطلب السريع)
             </button>
         </div>
@@ -94,7 +109,7 @@
                     <table class="min-w-full"><tbody id="fruits-tbody-interactive" class="bg-white divide-y"></tbody></table>
                 </div>
                 <div class="mt-8">
-                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى،أو الاستفسار عن صنف غير موجود بالقائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right" dir="rtl"></textarea>
+                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى،أو الاستفسار عن صنف غير موجود بالقائمة..." class="w-full p-4 border border-gray-300 rounded-lg text-right shadow-inner" dir="rtl"></textarea>
                 </div>
                 <button type="submit" class="w-full mt-10 bg-green-700 text-white font-bold py-4 px-6 rounded-xl shadow-2xl transform hover:scale-105 text-xl transition">إرسال الطلب عبر واتساب ✅</button>
             </form>
@@ -104,12 +119,14 @@
             <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mb-6 font-bold text-gray-700">
                 🕒 مواعيد العمل من 10 ص إلى 5 م يومياً ما عدا الجمعة
             </div>
-            <a href="http://wa.me/201032872750" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition shadow-md mb-6 mx-auto max-w-sm">
-                📨 اضغط هنا للمحادثة عبر واتساب
-            </a>
-             <a href="https://www.facebook.com/pg/3oroadtawfeer" target="_blank" class="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 shadow-md transform hover:scale-105 mx-auto max-w-sm">
-                زيارة صفحة الفيسبوك
-            </a>
+            <div class="flex flex-col gap-4">
+                <a href="http://wa.me/201032872750" target="_blank" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition shadow-md mx-auto w-full max-w-sm">
+                    📨 اضغط هنا للمحادثة عبر واتساب
+                </a>
+                 <a href="https://www.facebook.com/pg/3oroadtawfeer" target="_blank" class="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 shadow-md transform hover:scale-105 mx-auto w-full max-w-sm">
+                    زيارة صفحة الفيسبوك
+                </a>
+            </div>
             <div class="mt-8 p-2 text-center">
                 <a href="https://www.freecounterstat.com"><img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=4c8kqkxygt8km1fw7qfsjmr2ktzj1qwf" border="0" title="web hit counter"></a>
             </div>
@@ -118,20 +135,20 @@
 
     <script>
         const productsData = [
-            { name: "بصل أحمر", price: 20.0, unit: "كجم", category: "vegetable" }
-{ name:    "ثوم جديد", price: 20.0, unit: "كجم", category: "vegetable" },
+            { name: "بصل أحمر", price: 20.0, unit: "كجم", category: "vegetable" },
+            { name: "ثوم جديد", price: 20.0, unit: "كجم", category: "vegetable" },
             { name: "بطاطس تحمير", price: 17.5, unit: "كجم", category: "vegetable" },
             { name: "بطاطس صغيرة", price: 12.5, unit: "كجم", category: "vegetable" },
             { name: "باذنجان مكبب", price: 30.0, unit: "كجم", category: "vegetable" },
             { name: "خيار", price: 35.0, unit: "كجم", category: "vegetable" },
             { name: "كوسة", price: 30.0, unit: "كجم", category: "vegetable" },
             { name: "جزر", price: 20.0, unit: "كجم", category: "vegetable" },
-            { name: "طماطم جامدة", price: 50.0, unit: "كجم", category: "vegetable" },
+            { name: "طماطم جامدة", price: 50.0, unit: "كجم", category: "vegetable" },
             { name: "ليمون 1", price: 50.0, unit: "كجم", category: "vegetable" },
             { name: "ليمون 2", price: 40.0, unit: "كجم", category: "vegetable" },
             { name: "فلفل أخضر بارد", price: 40.0, unit: "كجم", category: "vegetable" },
             { name: "فلفل أخضر حار", price: 40.0, unit: "كجم", category: "vegetable" },
-            { name: "فلفل أحمر بارد", price: 50.0, unit: "كجم", category: "vegetable" },
+            { name: "فلفل أحمر بارد", price: 50.0, unit: "كجم", category: "vegetable" },
             { name: "فلفل ألوان", price: 100.0, unit: "كجم", category: "vegetable" },
             { name: "سبانخ", price: 10.0, oldPrice: 12.5, unit: "حزمة", category: "vegetable" },
             { name: "خس بلدي", price: 10.0, unit: "حزمة", category: "vegetable" },
@@ -150,7 +167,7 @@
             { name: "باذنجان حشو", price: 35.0, unit: "كجم", category: "vegetable" },
             { name: "بنجر", price: 30.0, unit: "كجم", category: "vegetable" },
             { name: "بصل أبيض ", price: 15.0, unit: "كيلو", category: "vegetable" },
-            { name: "فول أخضر", price: 20.0, unit: "كجم", category: "vegetable" },
+            { name: "فول أخضر", price: 20.0, unit: "كجم", category: "vegetable" },
             { name: "كرنب أحمر (سلطة)", price: 35.0, unit: "حبة", category: "vegetable" },
             { name: "كرنب أبيض (سلطة)", price: 40.0, unit: "حبة", category: "vegetable" },
             { name: " أرز رويزق 10ك", price: 295.0, unit: "شيكارة", category: "vegetable" },
@@ -160,7 +177,7 @@
             { name: "تفاح أصفر", price: 90.0, unit: "كجم", category: "fruit" },
             { name: "تفاح سكري", price: 100.0, unit: "كجم", category: "fruit" },
             { name: "تفاح أحمر إيطالي", price: 130.0, unit: "كجم", category: "fruit" },
-            { name: "فراولة", price: 40.0, unit: "كجم", category: "fruit" },
+            { name: "فراولة", price: 40.0, unit: "كجم", category: "fruit" },
             { name: "كيوي", price: 200.0, unit: "كجم", category: "fruit" },
             { name: "كيوي وسط", price: 150.0, unit: "كجم", category: "fruit" },
             { name: "برتقال بصره 1", price: 25.0, unit: "كجم", category: "fruit" },
@@ -170,7 +187,7 @@
             { name: "يوسفي بلدي 1", price: 25.0, unit: "كجم", category: "fruit" },
             { name: "يوسفي بلدي 2", price: 20.0, unit: "كجم", category: "fruit" },
             { name: "كنتالوب", price: 40.0, unit: "كجم", category: "fruit" },
-            { name: "تمر القصيم (١ك)", price: 125.0, unit: "علبة", category: "fruit" },
+            { name: "تمر القصيم (١ك)", price: 125.0, unit: "علبة", category: "fruit" },
             { name: "عجوة (٤٠٠جم)", price: 25.0, unit: "قطعة", category: "fruit" },
             { name: "كبيس", price: 50.0, unit: "كيلو", category: "fruit" },
             { name: "برتقال بلدي", price: 20.0, unit: "كيلو", category: "fruit" }, 
@@ -181,12 +198,9 @@
 
         function displayCurrentDateTime() {
             const now = new Date();
-            const options = { 
-                weekday: 'long', year: 'numeric', month: 'long', 
-                day: 'numeric', hour: '2-digit', minute: '2-digit'
-            };
-            const formatter = new Intl.DateTimeFormat('ar-EG', options);
-            document.getElementById('date-display').textContent = formatter.format(now);
+            // استخدام تنسيق متوافق مع كافة المتصفحات بما فيها Safari
+            const options = { weekday: 'long', day: 'numeric', month: 'long' };
+            document.getElementById('date-display').textContent = now.toLocaleDateString('ar-EG', options);
         }
 
         function generatePriceList() {
@@ -197,7 +211,7 @@
                 
                 const sRow = `<tr class="static-row" data-name="${p.name}"><td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td><td class="px-4 py-3 text-xl font-bold text-right">${priceHTML}</td></tr>`;
                 const iRow = `<tr class="interactive-row" data-name="${p.name}" data-unit="${p.unit}">
-                    <td class="px-4 py-3 text-lg font-medium">${p.name}${badge}</td>
+                    <td class="px-4 py-3 text-lg font-medium text-right">${p.name}${badge}</td>
                     <td class="px-4 py-3 text-center font-bold text-green-700 text-sm align-middle">${priceHTML}</td>
                     <td class="px-4 py-3 align-middle w-[100px]"><select class="quantity-select w-full" data-unit="${p.unit}"></select></td>
                 </tr>`;
@@ -279,33 +293,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
