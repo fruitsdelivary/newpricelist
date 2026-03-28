@@ -57,7 +57,7 @@
             </button>
 
             <div class="bg-red-100 text-red-800 font-extrabold p-3 rounded-xl shadow-lg border-4 border-red-500 mb-8 text-center text-xl animate-pulse">
-                🔴 كل عام وأنتم بخير،، إجازة عيد الفطر المبارك 🎈 🔴
+               🔴الأسعار قابلة للتغيير خلال اليوم،، برجاء تخديث الصفحة قبل الطلب🔴
             </div>
 
             <div class="mb-8 p-4 bg-gray-50 rounded-xl shadow-inner text-center">
@@ -118,22 +118,21 @@
 
     <script>
         const productsData = [
-            { name: "بصل أحمر", price: 20.0, unit: "كجم", category: "vegetable" }
-{ name:    "ثوم جديد", price: 20.0, unit: "كجم", category: "vegetable" },
-            { name: "بطاطس تحمير", price: 17.5, unit: "كجم", category: "vegetable" },
-            { name: "بطاطس صغيرة", price: 12.5, unit: "كجم", category: "vegetable" },
+            { name: "بصل أحمر", price: 20.0, unit: "كجم", category: "vegetable" }, 
+{ name:    "ثوم بلدي", price: 40.0, unit: "كجم", category: "vegetable" },
+            { name: "بطاطس تحمير", price: 20.0, unit: "كجم", category: "vegetable" },
+            { name: "بطاطس صغيرة", price: 15.0, unit: "كجم", category: "vegetable" },
             { name: "باذنجان مكبب", price: 30.0, unit: "كجم", category: "vegetable" },
-            { name: "خيار", price: 35.0, unit: "كجم", category: "vegetable" },
-            { name: "كوسة", price: 30.0, unit: "كجم", category: "vegetable" },
+            { name: "خيار", price: 30.0, unit: "كجم", category: "vegetable" },
+            { name: "كوسة", price: 20.0, unit: "كجم", category: "vegetable" },
             { name: "جزر", price: 20.0, unit: "كجم", category: "vegetable" },
             { name: "طماطم جامدة", price: 50.0, unit: "كجم", category: "vegetable" },
             { name: "ليمون 1", price: 50.0, unit: "كجم", category: "vegetable" },
             { name: "ليمون 2", price: 40.0, unit: "كجم", category: "vegetable" },
-            { name: "فلفل أخضر بارد", price: 40.0, unit: "كجم", category: "vegetable" },
+            { name: "فلفل أخضر بارد", price: 50.0, unit: "كجم", category: "vegetable" },
             { name: "فلفل أخضر حار", price: 40.0, unit: "كجم", category: "vegetable" },
-            { name: "فلفل أحمر بارد", price: 50.0, unit: "كجم", category: "vegetable" },
             { name: "فلفل ألوان", price: 100.0, unit: "كجم", category: "vegetable" },
-            { name: "سبانخ", price: 10.0, oldPrice: 12.5, unit: "حزمة", category: "vegetable" },
+            { name: "سبانخ", price: 10.0, unit: "حزمة", category: "vegetable" },
             { name: "خس بلدي", price: 10.0, unit: "حزمة", category: "vegetable" },
             { name: "شبت وكسبرة", price: 10.0, unit: "ربطة", category: "vegetable" },
             { name: "بقدونس", price: 10.0, unit: "ربطة", category: "vegetable" },
@@ -143,38 +142,29 @@
             { name: "بصل أخضر", price: 10.0, unit: "ربطة", category: "vegetable" },
             { name: "كرات مصري", price: 5.0, unit: "ربطة", category: "vegetable" },
             { name: "خس كابوتشا", price: 30.0, unit: "حبة", category: "vegetable" },
-            { name: "زنجبيل فريش", price: 280.0, unit: "كجم", category: "vegetable" },
-            { name: "قلقاس", price: 25.0, unit: "كجم", category: "vegetable" },
-            { name: "مشروم فريش", price: 60.0, unit: "طبق", category: "vegetable" },
-            { name: "بسلة", price: 35.0, unit: "كجم", category: "vegetable" },
-            { name: "باذنجان حشو", price: 35.0, unit: "كجم", category: "vegetable" },
+            { name: "زنجبيل فريش", price: 280.0, unit: "كجم", category: "vegetable" }, 
             { name: "بنجر", price: 30.0, unit: "كجم", category: "vegetable" },
             { name: "بصل أبيض ", price: 15.0, unit: "كيلو", category: "vegetable" },
-            { name: "فول أخضر", price: 20.0, unit: "كجم", category: "vegetable" },
             { name: "كرنب أحمر (سلطة)", price: 35.0, unit: "حبة", category: "vegetable" },
             { name: "كرنب أبيض (سلطة)", price: 40.0, unit: "حبة", category: "vegetable" },
-            { name: " أرز رويزق 10ك", price: 295.0, unit: "شيكارة", category: "vegetable" },
-            { name: "موز 1", price: 35.0, unit: "كجم", category: "fruit" },
-            { name: "موز 2", price: 30.0, unit: "كجم", category: "fruit" },
+            { name: " أرز رويزق 10ك", price: 300.0, unit: "شيكارة", category: "vegetable" },
+            { name: "موز 1", price: 35.0, unit: "كجم", category: "fruit" }, 
             { name: "تفاح أحمر", price: 90.0, unit: "كجم", category: "fruit" },
             { name: "تفاح أصفر", price: 90.0, unit: "كجم", category: "fruit" },
             { name: "تفاح سكري", price: 100.0, unit: "كجم", category: "fruit" },
             { name: "تفاح أحمر إيطالي", price: 130.0, unit: "كجم", category: "fruit" },
-            { name: "فراولة", price: 40.0, unit: "كجم", category: "fruit" },
+            { name: "فراولة", price: 30.0, unit: "كجم", category: "fruit" },
             { name: "كيوي", price: 200.0, unit: "كجم", category: "fruit" },
             { name: "كيوي وسط", price: 150.0, unit: "كجم", category: "fruit" },
-            { name: "برتقال بصره 1", price: 25.0, unit: "كجم", category: "fruit" },
-            { name: "برتقال بصره 2", price: 20.0, unit: "كجم", category: "fruit" },
+            { name: "برتقال بصره 1", price: 30.0, unit: "كجم", category: "fruit" },
+            { name: "برتقال بصره 2", price: 25.0, unit: "كجم", category: "fruit" },
             { name: "برتقال سكري", price: 20.0, unit: "كجم", category: "fruit" },
-            { name: "جوافة", price: 40.0, unit: "كجم", category: "fruit" },
+            { name: "جوافة", price: 35.0, unit: "كجم", category: "fruit" },
             { name: "يوسفي بلدي 1", price: 25.0, unit: "كجم", category: "fruit" },
-            { name: "يوسفي بلدي 2", price: 20.0, unit: "كجم", category: "fruit" },
             { name: "كنتالوب", price: 40.0, unit: "كجم", category: "fruit" },
             { name: "تمر القصيم (١ك)", price: 125.0, unit: "علبة", category: "fruit" },
-            { name: "عجوة (٤٠٠جم)", price: 25.0, unit: "قطعة", category: "fruit" },
-            { name: "كبيس", price: 50.0, unit: "كيلو", category: "fruit" },
-            { name: "برتقال بلدي", price: 20.0, unit: "كيلو", category: "fruit" }, 
-            { name: "أفوكادو", price: 300.0,  unit: "كجم", category: "fruit" }
+            { name: "برتقال عصير", price: 20.0, unit: "كيلو", category: "fruit" }, 
+            
         ];
 
         const WHATSAPP_NUMBER = '201032872750';
