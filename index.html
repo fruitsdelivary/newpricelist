@@ -7,31 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; }
-        
         .flex-row-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 16px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;
         }
-        .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; min-width: 0; }
+        .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
         
-        /* التعديل الجوهري لمنع تداخل الأسعار على الآيفون */
+        /* حل نهائي لتداخل الأسعار على الآيفون */
         .item-price-part { 
             flex: 1; display: flex; align-items: center; justify-content: flex-end; 
-            gap: 12px; flex-wrap: nowrap; min-width: 110px; text-align: left;
+            gap: 15px; min-width: 120px;
         }
-        
         .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.8rem; white-space: nowrap; }
         .current-price { color: #dc2626; font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
 
-        .item-action-part { flex: 0.8; display: flex; justify-content: flex-end; }
+        .item-action-part { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
 
         .quantity-select { 
-            height: 40px; width: 100%; max-width: 100px; border: 2px solid #22c55e; border-radius: 8px; 
-            font-weight: bold; background-color: #fff; font-size: 0.85rem; text-align: center;
+            height: 38px; width: 95px; border: 2px solid #22c55e; border-radius: 8px; 
+            font-weight: bold; background-color: #fff; font-size: 0.8rem; text-align: center;
         }
 
-        .offer-badge { background: #ef4444; color: white; padding: 1px 6px; border-radius: 99px; font-size: 10px; font-weight: bold; margin-top: 2px; }
-        .not-available { opacity: 0.5; }
+        .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
+        .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
+        .offer-badge { background: #ef4444; color: white; padding: 1px 6px; border-radius: 99px; font-size: 10px; font-weight: bold; }
     </style>
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
@@ -49,10 +48,10 @@
         
         <div id="price-list-view">
             <button onclick="toggleView('order-form-view')" class="w-full mb-6 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-xl active:scale-95 transition">
-                🛒 ابدأ طلبك الآن! (نموذج الطلب)
+                🛒 ابدأ طلبك الآن! (نموذج الطلب السريع)
             </button>
 
-            <div class="bg-red-50 text-red-700 font-bold p-3 rounded-xl border-2 border-red-200 mb-8 text-center animate-pulse">
+            <div class="bg-red-50 text-red-700 font-bold p-3 rounded-xl border-2 border-red-200 mb-8 text-center animate-pulse text-lg">
                 🔴 يُرجى تحديث الصفحة قبل الطلب 🔴 
             </div>
 
@@ -74,19 +73,19 @@
         <div id="order-form-view" style="display: none;">
             <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-3 rounded-xl">🔙 العودة للأسعار</button>
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
-                <div id="vegetables-list-interactive" class="border rounded-xl mb-6 overflow-hidden"></div>
-                <div id="fruits-list-interactive" class="border rounded-xl mb-6 overflow-hidden"></div>
-                <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border rounded-xl text-right"></textarea>
+                <div class="mb-6 border rounded-xl overflow-hidden shadow-md">
+                    <h2 class="bg-green-600 text-white p-3 text-center font-bold">تحديد الأصناف المطلوبة</h2>
+                    <div id="interactive-lists-combined"></div>
+                </div>
+                <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none"></textarea>
                 <button type="submit" class="w-full mt-8 bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl">إرسال الطلب عبر واتساب ✅</button>
             </form>
         </div>
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
-            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm">🕒 العمل من 11 ص إلى 5 م (عدا الجمعة)</div>
-            
-            <a href="http://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4">📨 مراسلة واتساب مباشرة</a>
-            
-            <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8">🔵 زيارة صفحة الفيسبوك</a>
+            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 العمل من 11 ص إلى 5 م يومياً عدا الجمعة</div>
+            <a href="http://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg">📨 مراسلة واتساب مباشرة</a>
+            <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg">🔵 زيارة صفحة الفيسبوك</a>
             
             <div class="mt-6 flex justify-center opacity-70">
                 <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=4c8kqkxygt8km1fw7qfsjmr2ktzj1qwf" border="0" title="عداد الزيارات">
@@ -149,7 +148,7 @@
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
             document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
 
-            let sVeg = '', sFruit = '', iVeg = '', iFruit = '';
+            let sVeg = '', sFruit = '', iAll = '';
             productsData.forEach(p => {
                 const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
                 const priceDiv = `<div class="item-price-part">
@@ -157,25 +156,28 @@
                                     <span class="current-price">${p.price} ج</span>
                                   </div>`;
                 
+                // نسخة قائمة الأسعار
                 const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                                <div class="item-name-part">${p.name}${badge}</div>
-                                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">غير متوفر</div>'}
+                                <div class="item-name-part">${p.name}${badge} ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div>
+                                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
                               </div>`;
                 
-                const iRow = `<div class="flex-row-item">
-                                <div class="item-name-part text-sm">${p.name}</div>
+                // نسخة صفحة الطلب (مع السعر)
+                const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                                <div class="item-name-part text-sm">${p.name} <br> <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span></div>
                                 <div class="item-action-part">
-                                    <select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>
+                                    ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
                                 </div>
                               </div>`;
 
-                if (p.category === 'veg') { sVeg += sRow; iVeg += iRow; } else { sFruit += sRow; iFruit += iRow; }
+                if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
+                iAll += iRow;
             });
             document.getElementById('vegetables-list-static').innerHTML = sVeg;
             document.getElementById('fruits-list-static').innerHTML = sFruit;
-            document.getElementById('vegetables-list-interactive').innerHTML = iVeg;
-            document.getElementById('fruits-list-interactive').innerHTML = iFruit;
+            document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
+            // توليد خيارات الكمية
             document.querySelectorAll('.quantity-select').forEach(s => {
                 let opts = '<option value="0">-- طلب --</option>';
                 const unit = s.dataset.unit;
@@ -191,15 +193,21 @@
         function toggleView(v) {
             document.getElementById('price-list-view').style.display = v === 'order-form-view' ? 'none' : 'block';
             document.getElementById('order-form-view').style.display = v === 'order-form-view' ? 'block' : 'none';
+            document.getElementById('main-title').textContent = v === 'order-form-view' ? '🛒 نموذج طلب واتساب' : '💰أسعار اليوم💰';
             window.scrollTo(0,0);
         }
 
         function generateWhatsAppOrder() {
-            let msg = '📝 *طلب جديد*:\n';
+            let msg = '📝 *طلب جديد*:\n------------------\n';
+            let count = 0;
             document.querySelectorAll('.quantity-select').forEach(s => {
-                if (s.value != "0") msg += `- ${s.options[s.selectedIndex].text} ${s.dataset.name}\n`;
+                if (s.value != "0") {
+                    msg += `- ${s.options[s.selectedIndex].text} ${s.dataset.name}\n`;
+                    count++;
+                }
             });
-            msg += `\n📌 *الملاحظات:* ${document.getElementById('notes').value}`;
+            if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
+            msg += `\n📌 *الملاحظات:* ${document.getElementById('notes').value || 'لا يوجد'}`;
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
         }
 
