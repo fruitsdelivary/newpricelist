@@ -31,6 +31,24 @@
             padding: 0 0.5rem 0 1.5rem; font-weight: bold; background-color: #fff; font-size: 0.85rem; cursor: pointer;
         }
 
+      /* حل مشكلة تداخل الأرقام على الآيفون */
+        .item-price-part { flex: 1.5; text-align: left; display: flex; align-items: center; justify-content: flex-end; gap: 10px; white-space: nowrap; }
+        .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.85rem; }
+        .current-price { color: #dc2626; font-weight: 800; font-size: 1.2rem; }
+        .quantity-select { 
+            height: 38px; min-width: 90px; border: 2px solid #22c55e; border-radius: 8px; 
+            font-weight: bold; background-color: #fff; font-size: 0.85rem;
+        }
+        .offer-badge { background: #ef4444; color: white; padding: 1px 6px; border-radius: 99px; font-size: 10px; font-weight: bold; margin-right: 5px; }
+    </style>
+</head>
+<body class="p-2 md:p-8">
+
+    <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl p-4 border-4 border-green-500/20">
+
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-extrabold text-green-700
+
         /* تنسيق الأصناف غير المتوفرة */
         .not-available { opacity: 0.5; position: relative; }
         .not-available .item-name-part { text-decoration: line-through; color: #9ca3af; }
