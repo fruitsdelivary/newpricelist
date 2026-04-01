@@ -51,9 +51,10 @@
                 🛒 ابدأ طلبك الآن! (نموذج الطلب السريع)
             </button>
 
-            <div class="bg-red-50 text-red-700 font-bold p-3 rounded-xl border-2 border-red-200 mb-8 text-center animate-pulse text-lg">
-                🔴 يُرجى تحديث الصفحة قبل الطلب 🔴 
-            </div>
+          <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
+    <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
+    <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
+</div>
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
                 <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬 خضروات 🥦</h2>
