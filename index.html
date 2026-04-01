@@ -8,21 +8,15 @@
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; }
         
-        /* نظام Flexbox البديل للجداول لضمان ثبات العرض على الآيفون */
         .flex-row-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background-color 0.2s;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;
         }
         .flex-row-item:hover { background-color: #f9fafb; }
         .item-name-part { flex: 2; text-align: right; font-weight: 600; font-size: 1.1rem; }
         .item-price-part { flex: 1; text-align: left; font-weight: 800; font-size: 1.2rem; }
         .item-action-part { flex: 1; display: flex; justify-content: flex-end; }
 
-        /* تنسيق خاص للآيفون Safari */
         .quantity-select { 
             height: 40px; min-width: 95px; border: 2px solid #22c55e; border-radius: 8px; 
             -webkit-appearance: none; appearance: none;
@@ -31,8 +25,7 @@
             padding: 0 0.5rem 0 1.5rem; font-weight: bold; background-color: #fff; font-size: 0.85rem; cursor: pointer;
         }
 
-        /* تنسيق الأصناف غير المتوفرة */
-        .not-available { opacity: 0.5; position: relative; }
+        .not-available { opacity: 0.5; }
         .not-available .item-name-part { text-decoration: line-through; color: #9ca3af; }
         .out-of-stock-label { color: #dc2626; font-size: 0.75rem; font-weight: bold; display: block; text-decoration: none !important; }
 
@@ -67,7 +60,7 @@
             </div>
 
             <div class="mb-8 p-4 bg-gray-50 rounded-xl shadow-inner">
-                <input type="text" id="search-input-static" onkeyup="filterItems('static')" placeholder="ابحث عن خضروات أو فواكه..." class="w-full p-3 border border-gray-300 rounded-lg text-right text-lg outline-none focus:ring-2 focus:ring-green-500">
+                <input type="text" id="search-input-static" onkeyup="filterItems('static')" placeholder="ابحث عن صنف..." class="w-full p-3 border border-gray-300 rounded-lg text-right text-lg">
             </div>
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
@@ -75,46 +68,45 @@
                 <div id="vegetables-list-static"></div>
             </section>
 
-            <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
+            <section class="border rounded-xl overflow-hidden shadow-lg mb-6">
                 <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">🍌🍎 فواكه 🍉🍇</h2>
                 <div id="fruits-list-static"></div>
             </section>
+
+            <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-8 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-xl active:scale-95 transition">
+                🛒 ابدأ طلبك الآن! (نموذج الطلب السريع)
+            </button>
         </div>
 
         <div id="order-form-view" style="display: none;">
             <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-3 rounded-xl text-lg text-center">🔙 العودة لقائمة الأسعار</button>
-            <div class="mb-8 p-4 bg-gray-50 rounded-xl shadow-inner">
-                <input type="text" id="search-input-interactive" onkeyup="filterItems('interactive')" placeholder="ابحث لتحديد الكمية..." class="w-full p-3 border border-gray-300 rounded-lg text-right text-lg outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
-                    <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الخضروات</h2>
+                    <h2 class="bg-green-600 text-white text-2xl font-bold p-4 text-center">تحديد الخضروات</h2>
                     <div id="vegetables-list-interactive"></div>
                 </div>
                 <div class="mb-10 border rounded-xl overflow-hidden shadow-lg">
-                    <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">تحديد كميات الفواكه</h2>
+                    <h2 class="bg-yellow-600 text-white text-2xl font-bold p-4 text-center">تحديد الفواكه</h2>
                     <div id="fruits-list-interactive"></div>
                 </div>
-                <div class="mt-8">
-                    <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل وأي ملاحظات أخرى..." class="w-full p-4 border border-gray-300 rounded-lg text-right focus:ring-2 focus:ring-green-500 outline-none"></textarea>
-                </div>
-                <button type="submit" class="w-full mt-10 bg-green-700 text-white font-bold py-4 rounded-xl shadow-2xl active:scale-95 text-xl transition">إرسال الطلب عبر واتساب ✅</button>
+                <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border border-gray-300 rounded-lg text-right"></textarea>
+                <button type="submit" class="w-full mt-10 bg-green-700 text-white font-bold py-4 rounded-xl shadow-2xl active:scale-95 text-xl">إرسال عبر واتساب ✅</button>
             </form>
         </div>
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
-            <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mb-6 font-bold text-gray-700 italic">
-                🕒 مواعيد العمل من 11 ص إلى 5 م يومياً ما عدا الجمعة
-            </div>
+            <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mb-6 font-bold text-gray-700">🕒 مواعيد العمل من 11 ص إلى 5 م يومياً عدا الجمعة</div>
             <a href="http://wa.me/201032872750" target="_blank" class="bg-green-500 text-white font-bold py-4 px-8 rounded-full inline-block shadow-lg mb-6">📨 مراسلة واتساب مباشرة</a>
             <br>
-            <a href="https://www.facebook.com/share/1HkZeEoRr3/" target="_blank" class="text-blue-600 font-bold underline">زيارة صفحة الفيسبوك</a>
+            <a href="https://www.facebook.com/share/1HkZeEoRr3/" target="_blank" class="bg-blue-600 text-white font-bold py-3 px-10 rounded-full inline-block shadow-lg mb-6 active:scale-95 transition">زيارة صفحة الفيسبوك</a>
+            
+            <div class="mt-8 p-2 text-center">
+                <a href="https://www.freecounterstat.com"><img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=4c8kqkxygt8km1fw7qfsjmr2ktzj1qwf" border="0" title="web hit counter"></a>
+            </div>
         </footer>
     </div>
 
     <script>
-        // مصفوفة المنتجات كاملة (أضفت خاصية available لكل صنف)
-        // لتغيير التوفر: اجعل available: false للصنف غير الموجود
         const productsData = [
             { name: "بصل أحمر", price: 20.0, unit: "كجم", category: "vegetable", available: true },
             { name: "ثوم بلدي", price: 40.0, unit: "كجم", category: "vegetable", available: true },
@@ -164,11 +156,12 @@
             { name: "خوخ سكري", price: 100.0, unit: "كجم", category: "fruit", available: true }
         ];
 
-        const WHATSAPP_NUMBER = '201032872750';
-
         function displayCurrentDateTime() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const options = { 
+                weekday: 'long', year: 'numeric', month: 'long', 
+                day: 'numeric', hour: '2-digit', minute: '2-digit' 
+            };
             document.getElementById('date-display').textContent = now.toLocaleDateString('ar-EG', options);
         }
 
@@ -176,28 +169,23 @@
             let sVeg = '', sFruit = '', iVeg = '', iFruit = '';
             productsData.forEach(p => {
                 const isAvail = p.available !== false;
-                const availClass = isAvail ? '' : 'not-available';
-                const statusLabel = isAvail ? '' : '<span class="out-of-stock-label">غير متوفر حالياً</span>';
-                
                 const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
                 const priceHTML = p.oldPrice 
                     ? `<span class="text-gray-400 line-through text-xs ml-1">${p.oldPrice}</span><span class="text-red-600 font-bold">${p.price} ج</span>` 
                     : `<span>${p.price} ج</span>`;
                 
-                // نسخة العرض (Flexbox)
                 const sRow = `
-                    <div class="flex-row-item ${availClass}" data-name="${p.name}">
-                        <div class="item-name-part">${p.name}${badge}${statusLabel}</div>
+                    <div class="flex-row-item ${isAvail ? '' : 'not-available'}" data-name="${p.name}">
+                        <div class="item-name-part">${p.name}${badge}${isAvail ? '' : '<span class="out-of-stock-label">غير متوفر حالياً</span>'}</div>
                         <div class="item-price-part text-left">${isAvail ? priceHTML : '---'}</div>
                     </div>`;
                 
-                // نسخة الطلب (Flexbox)
                 const iRow = `
-                    <div class="flex-row-item ${availClass}" data-name="${p.name}" data-unit="${p.unit}">
-                        <div class="item-name-part">${p.name}${statusLabel}</div>
+                    <div class="flex-row-item ${isAvail ? '' : 'not-available'}" data-name="${p.name}">
+                        <div class="item-name-part">${p.name}</div>
                         <div class="item-price-part text-center text-green-700 text-sm">${isAvail ? priceHTML : ''}</div>
                         <div class="item-action-part">
-                            ${isAvail ? `<select class="quantity-select" data-unit="${p.unit}"></select>` : '<span class="text-red-500 font-bold text-xs">اعتذر</span>'}
+                            ${isAvail ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">اعتذر</span>'}
                         </div>
                     </div>`;
                 
@@ -212,15 +200,15 @@
 
         function generateWeightOptions(unit) {
             let options = '<option value="0" selected>-- طلب --</option>';
-            if (unit === 'كجم' || unit === 'كيلو') {
+            if (unit === 'كجم') {
                 const weights = [{ val: 0.25, text: '¼ كيلو' }, { val: 0.5, text: '½ كيلو' }, { val: 0.75, text: '¾ كيلو' }];
                 for (let i = 1; i <= 10; i++) {
                     weights.push({ val: i, text: i + ' كيلو' });
-                    if (i < 10) { weights.push({ val: i + 0.5, text: i + ' ونصف' }); }
+                    if (i < 10) weights.push({ val: i + 0.5, text: i + ' ونصف' });
                 }
-                weights.forEach(w => { options += `<option value="${w.val}">${w.text}</option>`; });
+                weights.forEach(w => options += `<option value="${w.val}">${w.text}</option>`);
             } else {
-                for (let i = 1; i <= 10; i++) { options += `<option value="${i}">${i} ${unit}</option>`; }
+                for (let i = 1; i <= 10; i++) options += `<option value="${i}">${i} ${unit}</option>`;
             }
             return options;
         }
@@ -228,22 +216,20 @@
         function toggleView(v) {
             document.getElementById('price-list-view').style.display = v === 'order-form-view' ? 'none' : 'block';
             document.getElementById('order-form-view').style.display = v === 'order-form-view' ? 'block' : 'none';
-            document.getElementById('main-title').textContent = v === 'order-form-view' ? '🛒 نموذج طلب واتساب' : '💰أسعار اليوم💰';
             window.scrollTo({top:0, behavior:'smooth'});
         }
 
         function generateWhatsAppOrder() {
             let orderStr = '', count = 0;
-            document.querySelectorAll('#order-form-view .flex-row-item').forEach(row => {
-                const sel = row.querySelector('.quantity-select');
-                if (sel && parseFloat(sel.value) > 0) { 
+            document.querySelectorAll('#order-form-view .quantity-select').forEach(sel => {
+                if (parseFloat(sel.value) > 0) { 
                     count++; 
-                    orderStr += `- ${sel.options[sel.selectedIndex].text} ${row.getAttribute('data-name')}\n`; 
+                    orderStr += `- ${sel.options[sel.selectedIndex].text} ${sel.getAttribute('data-name')}\n`; 
                 }
             });
-            if (count === 0) return alert('الرجاء اختيار صنف واحد على الأقل');
+            if (count === 0) return alert('الرجاء اختيار صنف واحد');
             let msg = `📝 *طلب جديد*:\n------------------\n${orderStr}------------------\n📌 *الملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function filterItems(type) {
