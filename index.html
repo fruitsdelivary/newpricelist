@@ -57,12 +57,12 @@
 </div>
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
-                <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬 خضروات 🥦</h2>
+                <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️ 🥦</h2>
                 <div id="vegetables-list-static"></div>
             </section>
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
-                <h2 class="bg-yellow-500 text-white text-2xl font-bold p-3 text-center">🍎 فواكه 🍌</h2>
+                <h2 class="bg-yellow-500 text-white text-2xl font-bold p-3 text-center">🍎🍒 فواكه 🥝 🍇 </h2>
                 <div id="fruits-list-static"></div>
             </section>
 
@@ -238,7 +238,7 @@ document.querySelectorAll('.quantity-select').forEach(s => {
                 }
             });
             if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-            msg += `\n📌 *الملاحظات:* ${document.getElementById('notes').value || 'لا يوجد'}`;
+            msg += `\n📌 *الملاحظات والعنوان:* ${document.getElementById('notes').value || 'لا يوجد'}`;
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
         }
 
