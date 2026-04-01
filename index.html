@@ -177,35 +177,47 @@
             document.getElementById('fruits-list-static').innerHTML = sFruit;
             document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
-            // توليد خيارات الكمية بدون مسافة بين الكسر والوحدة
+            // توليد خيارات الكمية: كسور، ثم (من 1 لـ 10 بالكسور)، ثم (من 11 لـ 25 صحيح)
 document.querySelectorAll('.quantity-select').forEach(s => {
     let opts = '<option value="0">-- طلب --</option>';
     const unit = s.dataset.unit;
     
     if (unit === 'كجم') {
-        const weights = [
-            { val: 0.125, text: '⅛ك' },
-            { val: 0.25,  text: '¼ك' },
-            { val: 0.5,   text: '½ك' },
-            { val: 0.75,  text: '¾ك' },
-            { val: 1,     text: '1ك' },
-            { val: 1.5,   text: '1.5ك' },
-            { val: 2,     text: '2ك' },
-            { val: 3,     text: '3ك' },
-            { val: 4,     text: '4ك' },
-            { val: 5,     text: '5ك' }
-        ];
+        const weights = [];
+        
+        // 1. الكسور الأقل من كيلو
+        weights.push({ val: 0.125, text: '⅛ك' });
+        weights.push({ val: 0.25,  text: '¼ك' });
+        weights.push({ val: 0.5,   text: '½ك' });
+        weights.push({ val: 0.75,  text: '¾ك' });
+
+        // 2. من 1 كيلو إلى 10 كيلو مع الكسور (1، 1و¼، 1و½، 1و¾...)
+        for (let i = 1; i <= 10; i++) {
+            weights.push({ val: i, text: i + 'ك' });
+            if (i < 10) { // إضافة الكسور حتى نصل للرقم 10
+                weights.push({ val: i + 0.25, text: i + 'و¼ك' });
+                weights.push({ val: i + 0.5,  text: i + 'و½ك' });
+                weights.push({ val: i + 0.75, text: i + 'و¾ك' });
+            }
+        }
+
+        // 3. من 11 كيلو إلى 25 كيلو (أرقام صحيحة فقط)
+        for (let i = 11; i <= 25; i++) {
+            weights.push({ val: i, text: i + 'ك' });
+        }
         
         weights.forEach(w => {
             opts += `<option value="${w.val}">${w.text}</option>`;
         });
     } else {
-        for(let i=1; i<=10; i++) {
+        // للوحدات الأخرى (ربطة، قطعة، إلخ)
+        for(let i=1; i<=20; i++) {
             opts += `<option value="${i}">${i} ${unit}</option>`;
         }
     }
     s.innerHTML = opts;
 });
+
         }
 
         function toggleView(v) {
