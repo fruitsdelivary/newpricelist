@@ -177,17 +177,35 @@
             document.getElementById('fruits-list-static').innerHTML = sFruit;
             document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
-            // توليد خيارات الكمية
-            document.querySelectorAll('.quantity-select').forEach(s => {
-                let opts = '<option value="0">-- طلب --</option>';
-                const unit = s.dataset.unit;
-                if (unit === 'كجم') {
-                    [⅛, ¼, ½, ¾, 1, 1.5, 2, 3, 4, 5].forEach(v => opts += `<option value="${v}">${v} ك</option>`);
-                } else {
-                    for(let i=1; i<=10; i++) opts += `<option value="${i}">${i} ${unit}</option>`;
-                }
-                s.innerHTML = opts;
-            });
+            // توليد خيارات الكمية بدون مسافة بين الكسر والوحدة
+document.querySelectorAll('.quantity-select').forEach(s => {
+    let opts = '<option value="0">-- طلب --</option>';
+    const unit = s.dataset.unit;
+    
+    if (unit === 'كجم') {
+        const weights = [
+            { val: 0.125, text: '⅛ك' },
+            { val: 0.25,  text: '¼ك' },
+            { val: 0.5,   text: '½ك' },
+            { val: 0.75,  text: '¾ك' },
+            { val: 1,     text: '1ك' },
+            { val: 1.5,   text: '1.5ك' },
+            { val: 2,     text: '2ك' },
+            { val: 3,     text: '3ك' },
+            { val: 4,     text: '4ك' },
+            { val: 5,     text: '5ك' }
+        ];
+        
+        weights.forEach(w => {
+            opts += `<option value="${w.val}">${w.text}</option>`;
+        });
+    } else {
+        for(let i=1; i<=10; i++) {
+            opts += `<option value="${i}">${i} ${unit}</option>`;
+        }
+    }
+    s.innerHTML = opts;
+});
         }
 
         function toggleView(v) {
