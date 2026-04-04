@@ -257,15 +257,12 @@ document.querySelectorAll('.quantity-select').forEach(s => {
     // بناء نص الرسالة بنفس تنسيق الصورة
     let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
     msg += '------------------\n\n';
-
     if (vegItems) {
         msg += '🥬 *الخضروات:*\n' + vegItems + '\n';
     }
-
     if (fruitItems) {
-        msg += '🍎 *الفواكه:*\n' + fruitItems + '\n';
+        msg += '🍏 *الفواكه:*\n' + fruitItems + '\n';
     }
-
     msg += '------------------\n';
     const notes = document.getElementById('notes').value;
     msg += `📌 *الملاحظات والعنوان:*\n${notes || 'لا يوجد'}`;
