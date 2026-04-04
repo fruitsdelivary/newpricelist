@@ -229,19 +229,49 @@ document.querySelectorAll('.quantity-select').forEach(s => {
         }
 
         function generateWhatsAppOrder() {
-            let msg = '📝 *طلب جديد من قائمة الأسعار التفاعلية*:\n------------------\n';
-            let count = 0;
-            document.querySelectorAll('.quantity-select').forEach(s => {
-                if (s.value != "0") {
-                    msg += `- ${s.options[s.selectedIndex].text} ${s.dataset.name}\n`;
-                    count++;
-                }
-            });
-            if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-            msg += `\n📌 *الملاحظات والعنوان:* ${document.getElementById('notes').value || 'لا يوجد'}`;
-            window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
-        }
+    let vegItems = '';
+    let fruitItems = '';
+    let count = 0;
 
+    // المرور على جميع القوائم المنسدلة
+    document.querySelectorAll('.quantity-select').forEach(s => {
+        if (s.value != "0") {
+            const itemName = s.dataset.name;
+            const quantityText = s.options[s.selectedIndex].text;
+            const itemLine = `• ${quantityText} ${itemName}\n`;
+            
+            // البحث عن نوع الصنف (خضار أم فاكهة) من البيانات الأصلية
+            const product = productsData.find(p => p.name === itemName);
+            if (product && product.category === 'veg') {
+                vegItems += itemLine;
+            } else {
+                fruitItems += itemLine;
+            }
+            count++;
+        }
+    });
+
+    if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
+
+    // بناء نص الرسالة بنفس تنسيق الصورة
+    let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
+    msg += '------------------\n\n';
+
+    if (vegItems) {
+        msg += '🥬 *الخضروات:*\n' + vegItems + '\n';
+    }
+
+    if (fruitItems) {
+        msg += '🍎 *الفواكه:*\n' + fruitItems + '\n';
+    }
+
+    msg += '------------------\n';
+    const notes = document.getElementById('notes').value;
+    msg += `📌 *الملاحظات والعنوان:*\n${notes || 'لا يوجد'}`;
+
+    // إرسال للواتساب
+    window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
+}
         window.onload = init;
     </script>
 </body>
