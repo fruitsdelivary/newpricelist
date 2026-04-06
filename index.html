@@ -253,56 +253,21 @@ document.querySelectorAll('.quantity-select').forEach(s => {
     });
 
     if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
+let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
+            msg += '------------------\n\n';
+            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems + '\n';
+            if (fruitItems) msg += '🍎 *الفواكه:*\n' + fruitItems + '\n';
 
-    function generateWhatsAppOrder() {
-    let vegItems = '';
-    let fruitItems = '';
-    let count = 0;
+            msg += '------------------\n';
+            msg += '🚚 *التوصيل:* \n';
+            msg += '💰 *الإجمالي:* \n';
+            msg += '------------------\n\n';
 
-    // المرور على جميع القوائم المنسدلة
-    document.querySelectorAll('.quantity-select').forEach(s => {
-        if (s.value != "0") {
-            const itemName = s.dataset.name;
-            const quantityText = s.options[s.selectedIndex].text;
-            // استبدلنا النقطة العريضة بشرطة عادية - ليتعرف عليها واتساب كقائمة
-            const itemLine = `- ${quantityText} ${itemName}\n`;
-            
-            const product = productsData.find(p => p.name === itemName);
-            if (product && product.category === 'veg') {
-                vegItems += itemLine;
-            } else {
-                fruitItems += itemLine;
-            }
-            count++;
+            const notes = document.getElementById('notes').value;
+            msg += `📌 *الملاحظات والعنوان:*\n${notes || 'لا يوجد'}`;
+
+            window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
         }
-    });
-
-    if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-
-    // بناء نص الرسالة
-    let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
-    msg += '------------------\n\n';
-
-    if (vegItems) {
-        msg += '🥬 *الخضروات:*\n' + vegItems + '\n';
-    }
-
-    if (fruitItems) {
-        msg += '🍉 *الفواكه:*\n' + fruitItems + '\n';
-    }
-
-    // إضافة التوصيل والإجمالي بعد الأصناف مباشرة
-    msg += '------------------\n';
-    msg += '🚚 *التوصيل:* \n';
-    msg += '💰 *الإجمالي:* \n';
-    msg += '------------------\n\n';
-
-    const notes = document.getElementById('notes').value;
-    msg += `📌 *الملاحظات والعنوان:*\n${notes || 'لا يوجد'}`;
-
-    // إرسال للواتساب
-    window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
-}
         window.onload = init;
     </script>
 </body>
