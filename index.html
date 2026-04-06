@@ -126,7 +126,7 @@
             { name: "بصل أبيض ", price: 15, unit: "كجم", category: "veg", available: true },
             { name: "كرنب أحمر (سلطة)", price: 35, unit: "حبة", category: "veg", available: true },
             { name: "كرنب أبيض (سلطة)", price: 40, unit: "حبة", category: "veg", available: true },
-            { name: "مشروم فريش", price: 50, oldPrice: 60, unit: "طبق", category: "veg", available: false },
+            { name: "مشروم فريش", price: 50, oldPrice: 60, unit: "طبق", category: "veg", available: true },
             { name: " أرز رويزق 10ك", price: 315, oldPrice: 320, unit: "شيكارة", category: "veg", available: true },
             { name: "مـوز", price: 35, unit: "كجم", category: "fruit", available: true },
             { name: "تفاح أصفر", price: 100, unit: "كجم", category: "fruit", available: true },
@@ -254,16 +254,49 @@ document.querySelectorAll('.quantity-select').forEach(s => {
 
     if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
 
-    // بناء نص الرسالة بنفس تنسيق الصورة
+    function generateWhatsAppOrder() {
+    let vegItems = '';
+    let fruitItems = '';
+    let count = 0;
+
+    // المرور على جميع القوائم المنسدلة
+    document.querySelectorAll('.quantity-select').forEach(s => {
+        if (s.value != "0") {
+            const itemName = s.dataset.name;
+            const quantityText = s.options[s.selectedIndex].text;
+            // استبدلنا النقطة العريضة بشرطة عادية - ليتعرف عليها واتساب كقائمة
+            const itemLine = `- ${quantityText} ${itemName}\n`;
+            
+            const product = productsData.find(p => p.name === itemName);
+            if (product && product.category === 'veg') {
+                vegItems += itemLine;
+            } else {
+                fruitItems += itemLine;
+            }
+            count++;
+        }
+    });
+
+    if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
+
+    // بناء نص الرسالة
     let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
     msg += '------------------\n\n';
+
     if (vegItems) {
         msg += '🥬 *الخضروات:*\n' + vegItems + '\n';
     }
+
     if (fruitItems) {
-        msg += '🍏 *الفواكه:*\n' + fruitItems + '\n';
+        msg += '🍎 *الفواكه:*\n' + fruitItems + '\n';
     }
+
+    // إضافة التوصيل والإجمالي بعد الأصناف مباشرة
     msg += '------------------\n';
+    msg += '🚚 *التوصيل:* \n';
+    msg += '💰 *الإجمالي:* \n';
+    msg += '------------------\n\n';
+
     const notes = document.getElementById('notes').value;
     msg += `📌 *الملاحظات والعنوان:*\n${notes || 'لا يوجد'}`;
 
