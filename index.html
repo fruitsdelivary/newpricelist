@@ -253,21 +253,22 @@ document.querySelectorAll('.quantity-select').forEach(s => {
     });
 
     if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
-            msg += '------------------\n\n';
-            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems + '\n';
-            if (fruitItems) msg += '🍎 *الفواكه:*\n' + fruitItems + '\n';
+
+            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
+            msg += '------------------\n'; // إزالة السطر الفارغ هنا
+            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems; // إزالة \n الإضافية
+            if (fruitItems) msg += '🍎 *الفواكه:*\n' + fruitItems; // إزالة \n الإضافية
 
             msg += '------------------\n';
-            msg += '🚚 *التوصيل:* \n';
-            msg += '💰 *الإجمالي:* \n';
-            msg += '------------------\n\n';
-
+            msg += '🚚 *التوصيل:*\n'; // إزالة المسافة بعد النقطتين
+            msg += '💰 *الإجمالي:*\n'; // إزالة المسافة بعد النقطتين
+            msg += '------------------\n'; // إزالة السطور الفارغة هنا
+            
             const notes = document.getElementById('notes').value;
             msg += `📌 *الملاحظات والعنوان:*\n${notes || 'لا يوجد'}`;
 
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
-        }
+
         window.onload = init;
     </script>
 </body>
