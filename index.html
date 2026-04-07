@@ -13,35 +13,41 @@
         }
         .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
 
-/* تنسيق النجوم التفاعلية */
-.star-rating {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: center;
-    gap: 10px;
-}
-.star-rating input { display: none; }
-.star-rating label {
-    font-size: 2.5rem;
-    color: #e5e7eb; /* لون رمادي فاتح */
-    cursor: pointer;
-    transition: transform 0.2s, color 0.2s;
-}
-.star-rating label:hover { transform: scale(1.2); }
-.star-rating input:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: #fbbf24; /* لون ذهبي */
-}
-.rating-card {
-    background: white;
-    border: 2px dashed #fbbf24;
-    border-radius: 20px;
-    padding: 20px;
-    margin-top: 30px;
-    text-align: center;
-}
-        
+function handleRating(stars) {
+    // 1. إظهار رسالة الشكر وتجميد النجوم في الصفحة
+    const feedback = document.getElementById('rating-feedback');
+    if(feedback) feedback.classList.remove('hidden');
+    
+    const starContainer = document.querySelector('.star-rating');
+    if(starContainer) {
+        starContainer.style.pointerEvents = 'none';
+        starContainer.style.opacity = '0.5';
+    }
+
+    // 2. تجهيز إيموجي النجوم
+    let starEmojis = '';
+    for(let i=0; i<stars; i++) { starEmojis += '⭐'; }
+    
+    // 3. نص رسالة التقييم للواتساب
+    let ratingMsg = `🌟 *تقييم جديد للخدمة* 🌟\n`;
+    ratingMsg += `------------------\n`;
+    ratingMsg += `العميل قيم الخدمة بـ: ${stars} نجوم\n`;
+    ratingMsg += `التقييم: ${starEmojis}\n`;
+    ratingMsg += `------------------\n`;
+    ratingMsg += `شكراً لاهتمامكم بتطوير الخدمة ❤️`;
+
+    // 4. رقم الواتساب الخاص بك
+    const myNumber = "201032872750";
+    const waUrl = `https://wa.me/${myNumber}?text=${encodeURIComponent(ratingMsg)}`;
+
+    // 5. تأكيد الإرسال للزبون
+    setTimeout(() => {
+        if(confirm(`شكراً لتقييمك بـ ${stars} نجوم! ⭐\n\nهل تود إرسال تقييمك لنا عبر واتساب لمساعدتنا على تطوير خدماتنا؟`)) {
+            window.open(waUrl, '_blank');
+        }
+    }, 400);
+}  
+   
         /* حل نهائي لتداخل الأسعار على الآيفون */
         .item-price-part { 
             flex: 1; display: flex; align-items: center; justify-content: flex-end; 
