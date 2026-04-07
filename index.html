@@ -117,20 +117,25 @@
                 <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none"></textarea>
                 <button type="submit" class="w-full mt-8 bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl">إرسال الطلب عبر واتساب ✅</button>
             </form>
+
         </div>
-<div class="rating-card shadow-sm border-2 border-dashed border-yellow-400 p-6 rounded-2xl text-center my-8 bg-white">
-    <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
-    <div class="star-rating mb-4">
-        <input type="radio" id="star5" name="rating" value="5" onclick="handleRating(5)"><label for="star5" class="text-3xl cursor-pointer">★</label>
-        <input type="radio" id="star4" name="rating" value="4" onclick="handleRating(4)"><label for="star4" class="text-3xl cursor-pointer">★</label>
-        <input type="radio" id="star3" name="rating" value="3" onclick="handleRating(3)"><label for="star3" class="text-3xl cursor-pointer">★</label>
-        <input type="radio" id="star2" name="rating" value="2" onclick="handleRating(2)"><label for="star2" class="text-3xl cursor-pointer">★</label>
-        <input type="radio" id="star1" name="rating" value="1" onclick="handleRating(1)"><label for="star1" class="text-3xl cursor-pointer">★</label>
+<div class="rating-card shadow-sm">
+    <h3 class="text-xl font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
+    <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا اليوم لمساعدتنا على تطوير خدماتنا</p>
+    
+    <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5" onclick="handleRating(5)"><label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4" onclick="handleRating(4)"><label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3" onclick="handleRating(3)"><label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2" onclick="handleRating(2)"><label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1" onclick="handleRating(1)"><label for="star1">★</label>
     </div>
-    <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">
-        شكراً لاختياركم خدماتنا! ❤️ نعدكم بالأفضل دائماً بإذن الله. .
+
+    <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden animate-pulse">
+        شكراً لك! ❤️ تم تسجيل تقييمك في الصفحة.
     </div>
 </div>
+
 
 </div>
 
@@ -148,18 +153,42 @@
 
     <script>
 function handleRating(stars) {
+    // 1. إظهار رسالة الشكر وتجميد النجوم في الصفحة
     const feedback = document.getElementById('rating-feedback');
-    feedback.classList.remove('hidden');
+    if (feedback) feedback.classList.remove('hidden');
     
-    // تأثير بصري بسيط: إخفاء النجوم بعد التقييم لمنع التكرار
-    document.querySelector('.star-rating').style.pointerEvents = 'none';
-    document.querySelector('.star-rating').style.opacity = '0.6';
+    const starContainer = document.querySelector('.star-rating');
+    if (starContainer) {
+        starContainer.style.pointerEvents = 'none'; // منع الضغط مرة أخرى
+        starContainer.style.opacity = '0.5'; // تغيير الشفافية للتأكيد على الإرسال
+    }
+
+    // 2. تجهيز إيموجي النجوم حسب العدد المختار
+    let starEmojis = '';
+    for (let i = 0; i < stars; i++) {
+        starEmojis += '⭐';
+    }
     
-    // رسالة تنبيه سريعة
+    // 3. بناء نص الرسالة للواتساب
+    let ratingMsg = `🌟 *تقييم جديد للخدمة* 🌟\n`;
+    ratingMsg += `------------------\n`;
+    ratingMsg += `العميل قيم الخدمة بـ: ${stars} نجوم\n`;
+    ratingMsg += `التقييم: ${starEmojis}\n`;
+    ratingMsg += `------------------\n`;
+    ratingMsg += `شكراً لاهتمامكم بتطوير الخدمة ❤️`;
+
+    // 4. رقم الواتساب الخاص بك
+    const myNumber = "201032872750";
+    const waUrl = `https://wa.me/${myNumber}?text=${encodeURIComponent(ratingMsg)}`;
+
+    // 5. نافذة تأكيد اختيارية لإرسال التقييم للواتساب
     setTimeout(() => {
-        alert(`شكراً لتقييمك بـ ${stars} نجوم! رأيك يساعدنا على التميز.`);
-    }, 500);
+        if (confirm(`شكراً لتقييمك بـ ${stars} نجوم! ⭐\n\nهل تود إرسال تقييمك لنا عبر واتساب لمساعدتنا على التحسن؟`)) {
+            window.open(waUrl, '_blank');
+        }
+    }, 400);
 }
+
 
         const productsData = [
             { name: "بصل أحمر", price: 20, unit: "كجم", category: "veg", available: true },
