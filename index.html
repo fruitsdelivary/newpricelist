@@ -152,6 +152,7 @@
     </div>
 
     <script>
+
 function handleRating(stars) {
     // 1. إظهار رسالة الشكر وتجميد النجوم في الصفحة
     const feedback = document.getElementById('rating-feedback');
@@ -159,35 +160,29 @@ function handleRating(stars) {
     
     const starContainer = document.querySelector('.star-rating');
     if (starContainer) {
-        starContainer.style.pointerEvents = 'none'; // منع الضغط مرة أخرى
-        starContainer.style.opacity = '0.5'; // تغيير الشفافية للتأكيد على الإرسال
+        starContainer.style.pointerEvents = 'none';
+        starContainer.style.opacity = '0.5';
     }
 
-    // 2. تجهيز إيموجي النجوم حسب العدد المختار
-    let starEmojis = '';
-    for (let i = 0; i < stars; i++) {
-        starEmojis += '⭐';
+    // 2. رابط صفحة الفيسبوك الخاصة بك (تم وضعه بناءً على الرابط السابق في كودك)
+    const facebookPageUrl = "https://www.facebook.com/3oroadtawfeer/reviews";
+
+    // 3. رسالة تشجيعية للعميل
+    let cheersMsg = "";
+    if (stars >= 4) {
+        cheersMsg = `شكراً لثقتك الغالية! ⭐\nبما أنك راضي عن الخدمة، هل يمكنك مشاركة رأيك الجميل على صفحتنا على فيسبوك؟`;
+    } else {
+        cheersMsg = `شكراً لتقييمك! ⭐\nنطمح دائماً للأفضل، هل يمكنك إخبارنا بمقترحاتك على صفحتنا لنطور من خدمتنا؟`;
     }
-    
-    // 3. بناء نص الرسالة للواتساب
-    let ratingMsg = `🌟 *تقييم جديد للخدمة* 🌟\n`;
-    ratingMsg += `------------------\n`;
-    ratingMsg += `العميل قيم الخدمة بـ: ${stars} نجوم\n`;
-    ratingMsg += `التقييم: ${starEmojis}\n`;
-    ratingMsg += `------------------\n`;
-    ratingMsg += `شكراً لاهتمامكم بتطوير الخدمة ❤️`;
 
-    // 4. رقم الواتساب الخاص بك
-    const myNumber = "201032872750";
-    const waUrl = `https://wa.me/${myNumber}?text=${encodeURIComponent(ratingMsg)}`;
-
-    // 5. نافذة تأكيد اختيارية لإرسال التقييم للواتساب
+    // 4. نافذة التأكيد للتوجه للفيسبوك
     setTimeout(() => {
-        if (confirm(`شكراً لتقييمك بـ ${stars} نجوم! ⭐\n\nهل تود إرسال تقييمك لنا عبر واتساب لمساعدتنا على تطوير خدماتنا؟`)) {
-            window.open(waUrl, '_blank');
+        if (confirm(cheersMsg)) {
+            window.open(facebookPageUrl, '_blank');
         }
     }, 400);
 }
+
 
 
         const productsData = [
@@ -202,8 +197,8 @@ function handleRating(stars) {
             { name: "طماطم جامدة", price: 35, unit: "كجم", category: "veg", available: true },
             { name: "ليمون 1", price: 40, unit: "كجم", category: "veg", available: true },
             { name: "ليمون 2", price: 30, unit: "كجم", category: "veg", available: true },
-            { name: "فلفل أخضر بارد", price: 40, oldPrice: 50, unit: "كجم", category: "veg", available: true },
-            { name: "فلفل أخضر حار", price: 40, unit: "كجم", category: "veg", available: true },
+            { name: "فلفل أخضر بارد", price: 30, unit: "كجم", category: "veg", available: true },
+            { name: "فلفل أخضر حار", price: 30, unit: "كجم", category: "veg", available: true },
             { name: "فلفل أحمر بارد", price: 60, unit: "كجم", category: "veg", available: true },
             { name: "فلفل ألوان", price: 80,oldPrice: 100, unit: "كجم", category: "veg", available: true },
             { name: "سبانخ", price: 10, unit: "حزمة", category: "veg", available: true },
