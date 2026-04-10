@@ -167,22 +167,9 @@ function confirmMyRating() {
     if (stars >= 4) {
         if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على صفحة فيسبوك؟`)) {
             finalizeRating(); // قفل التقييم فقط عند الموافقة
-        // رابط الصفحة (ID الصفحة الخاص بك) ورابط المراجعات
-            // ملاحظة: رابط reviews قد لا يفتح مباشرة في كل النسخ، لذا سنوجههم للصفحة أو للرابط الذكي
-            const fbPageId = "3oroadtawfeer"; // اسم صفحتك
-            const fbAppUrl = `fb://facewebmodal/f?href=https://www.facebook.com/${fbPageId}/reviews/`;
-            const fbWebUrl = `https://www.facebook.com/${fbPageId}/reviews/`;
 
-            // محاولة فتح التطبيق مباشرة
-            window.location.href = fbAppUrl;
-
-            // إذا لم يفتح التطبيق خلال ثانية (مثلاً على كمبيوتر)، يفتح الرابط العادي
-            setTimeout(() => {
-                if (document.hasFocus()) {
-                    window.location.href = fbWebUrl;
-                }
-            }, 1000);
-        }  
+        window.open(facebookPageUrl, '_blank');
+        }
    
 } else {
 
