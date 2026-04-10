@@ -173,7 +173,7 @@ function confirmMyRating() {
         if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف سبب التقييم ونقدم الحل المناسب بإذن الله`)) {
             finalizeRating(); // قفل التقييم فقط عند الموافقة
             let starEmojis = '⭐'.repeat(stars);
-            let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم ${starEmojis}`; (من فضلك اكتب ملاحظاتك هنا)
+            let msg = `⚠️ ملاحظة عميل: تقييم (من فضلك اكتب ملاحظاتك هنا) ${stars} نجوم ${starEmojis}`;
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     }
