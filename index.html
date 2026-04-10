@@ -119,22 +119,23 @@
             </form>
 
         </div>
-<div class="rating-card shadow-sm">
-    <h3 class="text-xl font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
-    <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار) </p>
+<div class="rating-card shadow-sm border-2 border-dashed border-yellow-400 p-6 rounded-2xl text-center my-8 bg-white">
+    <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
+    <p class="text-sm text-gray-500 mb-4">يمكنك اختيار عدد النجوم وتعديلها قبل التأكيد</p>
     
-    <div class="star-rating">
-        <input type="radio" id="star5" name="rating" value="5" onclick="handleRating(5)"><label for="star5">★</label>
-        <input type="radio" id="star4" name="rating" value="4" onclick="handleRating(4)"><label for="star4">★</label>
-        <input type="radio" id="star3" name="rating" value="3" onclick="handleRating(3)"><label for="star3">★</label>
-        <input type="radio" id="star2" name="rating" value="2" onclick="handleRating(2)"><label for="star2">★</label>
-        <input type="radio" id="star1" name="rating" value="1" onclick="handleRating(1)"><label for="star1">★</label>
+    <div class="star-rating mb-4">
+        <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
     </div>
 
-    <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden animate-pulse">
-        شكراً لاهتمامك! ❤️ تم تسجيل تقييمك، نعدكم بالأفضل دائماً بإذن الله. 
-    </div>
+    <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
+
+    <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك! ❤️</div>
 </div>
+
 
 
 </div>
@@ -153,32 +154,40 @@
 
     <script>
 
-function handleRating(stars) {
-    // 1. إظهار رسالة الشكر وتجميد النجوم في الصفحة
-    const feedback = document.getElementById('rating-feedback');
-    if (feedback) feedback.classList.remove('hidden');
+function confirmMyRating() {
+    // 1. الحصول على القيمة المختارة من النجوم
+    const selectedStar = document.querySelector('input[name="rating"]:checked');
     
+    if (!selectedStar) {
+        return alert("من فضلك اختر عدد النجوم أولاً! 😊");
+    }
+
+    const stars = parseInt(selectedStar.value);
+    const feedback = document.getElementById('rating-feedback');
+    const confirmBtn = document.getElementById('confirm-btn');
     const starContainer = document.querySelector('.star-rating');
-    if (starContainer) {
-        starContainer.style.pointerEvents = 'none';
-        starContainer.style.opacity = '0.5';
-    }
 
-    // 2. رابط صفحة الفيسبوك الخاصة بك (تم وضعه بناءً على الرابط السابق في كودك)
-    const facebookPageUrl = "https://www.facebook.com/3oroadtawfeer/reviews";
+    // 2. إظهار رسالة الشكر وقفل الاختيارات بعد التأكيد فقط
+    feedback.classList.remove('hidden');
+    confirmBtn.classList.add('hidden'); // إخفاء زر التأكيد
+    starContainer.style.pointerEvents = 'none';
+    starContainer.style.opacity = '0.5';
 
-    // 3. رسالة تشجيعية للعميل
-    let cheersMsg = "";
-    if (stars >= 4) {
-        cheersMsg = `شكراً لثقتك الغالية! ⭐\nبما أنك راضي عن الخدمة، هل يمكنك مشاركة رأيك الجميل على صفحتنا على فيسبوك؟`;
-    } else {
-        cheersMsg = `شكراً لتقييمك! ⭐\nنطمح دائماً للأفضل، هل يمكنك إخبارنا بمقترحاتك على صفحتنا لنطور من خدمتنا؟`;
-    }
+    const facebookPageUrl = "https://www.facebook.com/share/1HkZeEoRr3/";
+    const myWhatsAppNumber = "201032872750";
 
-    // 4. نافذة التأكيد للتوجه للفيسبوك
+    // 3. التوجيه بناءً على النجوم بعد التأكيد
     setTimeout(() => {
-        if (confirm(cheersMsg)) {
-            window.open(facebookPageUrl, '_blank');
+        if (stars >= 4) {
+            if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\n يسعدنا أن تكتب رأيك الجميل على صفحة الفيسبوك؟`)) {
+                window.open(facebookPageUrl, '_blank');
+            }
+        } else {
+            if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف المشكلة ونقدم الحل المناسب بإذن الله؟`)) {
+                let starEmojis = '⭐'.repeat(stars);
+                let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم ${starEmojis}`;
+                window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+            }
         }
     }, 400);
 }
