@@ -174,11 +174,14 @@ function confirmMyRating() {
             finalizeRating(); // قفل التقييم فقط عند الموافقة
             let starEmojis = '⭐'.repeat(stars);
             let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم (من فضلك اكتب ملاحظتك هنا) ${starEmojis}`;
-               // الرابط المباشر الحديث (wa.me)
-            const waUrl = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(ratingMsg)}`;
+               // الرابط الأكثر استقراراً لفتح التطبيق مباشرة
+            const waUrl = "https://api.whatsapp.com/send?phone=" + myWhatsAppNumber + "&text=" + encodeURIComponent(ratingMsg);
             
-            // الفتح في نفس النافذة بدلاً من _blank يقلل ظهور صفحة الانتظار في الموبايل
-            window.location.href = waUrl; 
+            // محاولة الفتح بطريقة تضمن العمل على أغلب المتصفحات
+            const link = document.createElement('a');
+            link.href = waUrl;
+            link.target = '_blank';
+            link.click();
         }
     }
 }
