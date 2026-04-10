@@ -133,7 +133,7 @@
 
     <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
 
-    <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك! ❤️</div>
+    <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
 </div>
 
 
@@ -173,7 +173,7 @@ function confirmMyRating() {
         if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف المشكلة ونقدم الحل المناسب باذن الله ؟`)) {
             finalizeRating(); // قفل التقييم فقط عند الموافقة
             let starEmojis = '⭐'.repeat(stars);
-            let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم ${starEmojis}`;
+            let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم (من فضلك اكتب ملاحظتك هنا) ${starEmojis}`;
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     }
