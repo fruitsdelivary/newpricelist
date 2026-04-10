@@ -174,7 +174,11 @@ function confirmMyRating() {
             finalizeRating(); // قفل التقييم فقط عند الموافقة
             let starEmojis = '⭐'.repeat(stars);
             let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم (من فضلك اكتب ملاحظتك هنا) ${starEmojis}`;
-            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+               // الرابط المباشر الحديث (wa.me)
+            const waUrl = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(ratingMsg)}`;
+            
+            // الفتح في نفس النافذة بدلاً من _blank يقلل ظهور صفحة الانتظار في الموبايل
+            window.location.href = waUrl; 
         }
     }
 }
