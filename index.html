@@ -174,24 +174,10 @@ function confirmMyRating() {
             finalizeRating(); // قفل التقييم فقط عند الموافقة
             let starEmojis = '⭐'.repeat(stars);
             let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم (من فضلك اكتب ملاحظتك هنا) ${starEmojis}`;
-
-                // 1. الرابط المباشر للتطبيق (الأقوى للموبايل)
-            const waDeepLink = `whatsapp://send?phone=${waNumber}&text=${msg}`;
-            // 2. الرابط الاحتياطي (في حال فشل الأول)
-            const waWebLink = `https://wa.me/${waNumber}?text=${msg}`;
-
-            // محاولة فتح التطبيق مباشرة
-            window.location.href = waDeepLink;
-
-            // إذا لم يفتح التطبيق خلال ثانية واحدة، استخدم الرابط الاحتياطي
-            setTimeout(() => {
-                if (document.hasFocus()) {
-                    window.location.href = waWebLink;
-                }
-            }, 1000);
+      window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     }
-}
+
 
 // دالة القفل (لا تعمل إلا إذا ضغط العميل OK)
 function finalizeRating() {
