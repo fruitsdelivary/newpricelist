@@ -155,42 +155,43 @@
     <script>
 
 function confirmMyRating() {
-    // 1. الحصول على القيمة المختارة من النجوم
+    // 1. التأكد من الاختيار
     const selectedStar = document.querySelector('input[name="rating"]:checked');
-    
-    if (!selectedStar) {
-        return alert("من فضلك اختر عدد النجوم أولاً! 😊");
-    }
+    if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
 
     const stars = parseInt(selectedStar.value);
+    const facebookPageUrl = "https://www.facebook.com/3oroadtawfeer/reviews";
+    const myWhatsAppNumber = "201032872750";
+
+    // 2. توزيع التوجيه (فيسبوك للراضي / واتساب للمشتكي)
+    if (stars >= 4) {
+        if (confirm(`شكراً لتقييمك بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على فيسبوك؟`)) {
+            finalizeRating(); // قفل التقييم فقط عند الموافقة
+            window.open(facebookPageUrl, '_blank');
+        }
+    } else {
+        if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف المشكلة ونقدم الحل المناسب باذن الله ؟`)) {
+            finalizeRating(); // قفل التقييم فقط عند الموافقة
+            let starEmojis = '⭐'.repeat(stars);
+            let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم ${starEmojis}`;
+            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    }
+}
+
+// دالة القفل (لا تعمل إلا إذا ضغط العميل OK)
+function finalizeRating() {
     const feedback = document.getElementById('rating-feedback');
     const confirmBtn = document.getElementById('confirm-btn');
     const starContainer = document.querySelector('.star-rating');
-
-    // 2. إظهار رسالة الشكر وقفل الاختيارات بعد التأكيد فقط
-    feedback.classList.remove('hidden');
-    confirmBtn.classList.add('hidden'); // إخفاء زر التأكيد
-    starContainer.style.pointerEvents = 'none';
-    starContainer.style.opacity = '0.5';
-
-    const facebookPageUrl = "https://www.facebook.com/share/1HkZeEoRr3/";
-    const myWhatsAppNumber = "201032872750";
-
-    // 3. التوجيه بناءً على النجوم بعد التأكيد
-    setTimeout(() => {
-        if (stars >= 4) {
-            if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\n يسعدنا أن تكتب رأيك الجميل على صفحة الفيسبوك؟`)) {
-                window.open(facebookPageUrl, '_blank');
-            }
-        } else {
-            if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف المشكلة ونقدم الحل المناسب بإذن الله؟`)) {
-                let starEmojis = '⭐'.repeat(stars);
-                let msg = `⚠️ ملاحظة عميل: تقييم ${stars} نجوم ${starEmojis}`;
-                window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-            }
-        }
-    }, 400);
+    if(feedback) feedback.classList.remove('hidden');
+    if(confirmBtn) confirmBtn.classList.add('hidden');
+    if(starContainer) {
+        starContainer.style.pointerEvents = 'none';
+        starContainer.style.opacity = '0.5';
+    }
 }
+
 
 
 
