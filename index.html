@@ -154,19 +154,36 @@
 
     <script>
 
-// غير كلمة false إلى true عشان تقفل الصفحة
+// اجعلها true للقفل و false للفتح
 const holidayMode = true; 
 
 if (holidayMode) {
-    document.write(`
-        <div style="text-align:center; padding:50px; font-family:Arial, sans-serif;">
-            <h1 style="font-size:50px;">🏠</h1>
-            <h2 style="color:#333;">نعتذر عن إستقبال طلبات التوصيل اليوم. </h2>
-            <p style="color:#666; font-size:18px;"> مغلق الآن، وسنعاود العمل قريباً  إن شاء الله.</p>
-            <p style="color:green; font-weight:bold;">شكراً لتفهمكم ❤️</p>
-        </div>
-    `);
-    window.stop(); // هذا السطر يمنع المتصفح من تحميل باقي الصفحة
+    // إنشاء طبقة تغطي الشاشة بالكامل
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: white;
+        z-index: 100000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+        font-family: sans-serif;
+    `;
+
+    overlay.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="100" style="margin-bottom:20px;">
+        <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل اليوم</h2>
+        <p style="color:#666; font-size:18px; line-height:1.6;">مغلق الآن، وسنعاود العمل قريباً إن شاء الله.</p>
+        <p style="color:#22c55e; font-weight:bold; margin-top:15px; font-size:20px;">شكراً لتفهمكم ❤️</p>
+    `;
+
+    document.documentElement.appendChild(overlay);
+    window.stop(); // إيقاف تحميل باقي الصفحة
 }
 
 function confirmMyRating() {
