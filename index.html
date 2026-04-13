@@ -154,6 +154,21 @@
 
     <script>
 
+// غير كلمة false إلى true عشان تقفل الصفحة
+const holidayMode = true; 
+
+if (holidayMode) {
+    document.write(`
+        <div style="text-align:center; padding:50px; font-family:Arial, sans-serif;">
+            <h1 style="font-size:50px;">🏠</h1>
+            <h2 style="color:#333;">نعتذر عن إستقبال طلبات التوصيل اليوم. </h2>
+            <p style="color:#666; font-size:18px;"> مغلق الآن، وسنعاود العمل قريباً  إن شاء الله.</p>
+            <p style="color:green; font-weight:bold;">شكراً لتفهمكم ❤️</p>
+        </div>
+    `);
+    window.stop(); // هذا السطر يمنع المتصفح من تحميل باقي الصفحة
+}
+
 function confirmMyRating() {
     // 1. التأكد من الاختيار
     const selectedStar = document.querySelector('input[name="rating"]:checked');
