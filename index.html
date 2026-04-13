@@ -154,17 +154,19 @@
 
     <script>
 
-// اجعلها true للقفل و false للفتح
 const holidayMode = true; 
 
 if (holidayMode) {
-    // إنشاء طبقة تغطي الشاشة بالكامل
     const overlay = document.createElement('div');
     overlay.style.cssText = `
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
-        background: white;
+        /* اللون الأبيض مع شفافية 0.85 */
+        background: rgba(255, 255, 255, 0.85); 
+        /* تأثير الضباب للخلفية */
+        backdrop-filter: blur(8px); 
+        -webkit-backdrop-filter: blur(8px);
         z-index: 100000;
         display: flex;
         flex-direction: column;
@@ -176,15 +178,18 @@ if (holidayMode) {
     `;
 
     overlay.innerHTML = `
-        <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="100" style="margin-bottom:20px;">
-        <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل اليوم</h2>
-        <p style="color:#666; font-size:18px; line-height:1.6;">مغلق الآن، وسنعاود العمل قريباً إن شاء الله.</p>
-        <p style="color:#22c55e; font-weight:bold; margin-top:15px; font-size:20px;">شكراً لتفهمكم ❤️</p>
+        <div style="background: white; padding: 30px; border-radius: 20px; shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee;">
+            <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin-bottom:20px;">
+            <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل اليوم</h2>
+            <p style="color:#666; font-size:18px;">مغلق الآن، وسنعاود العمل قريباً إن شاء الله.</p>
+            <p style="color:#22c55e; font-weight:bold; margin-top:15px; font-size:20px;">شكراً لتفهمكم ❤️</p>
+        </div>
     `;
 
     document.documentElement.appendChild(overlay);
-    window.stop(); // إيقاف تحميل باقي الصفحة
+    // ملحوظة: أزلنا window.stop() لكي تظهر الخلفية المضببة بشكل جميل
 }
+
 
 function confirmMyRating() {
     // 1. التأكد من الاختيار
