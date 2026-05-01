@@ -13,51 +13,23 @@
         }
         .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
 
-/* تنسيق قسم التقييم والنجوم */
-.rating-card {
-    background: white;
-    border: 2px dashed #fbbf24;
-    border-radius: 20px;
-    padding: 25px;
-    margin: 30px auto;
-    text-align: center;
-    max-width: 500px;
-}
-
-.star-rating {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: center;
-    gap: 12px;
-}
-
-.star-rating input { display: none; }
-
-.star-rating label {
-    font-size: 2.8rem;
-    color: #e5e7eb;
-    cursor: pointer;
-    transition: transform 0.2s, color 0.2s;
-}
-
-.star-rating label:hover { transform: scale(1.2); }
-
-.star-rating input:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: #fbbf24; /* اللون الذهبي للنجوم */
-}  
-   
-        /* حل نهائي لتداخل الأسعار على الآيفون */
-        .item-price-part { 
-            flex: 1; display: flex; align-items: center; justify-content: flex-end; 
-            gap: 15px; min-width: 120px;
+        /* تنسيق قسم التقييم والنجوم */
+        .rating-card {
+            background: white; border: 2px dashed #fbbf24; border-radius: 20px;
+            padding: 25px; margin: 30px auto; text-align: center; max-width: 500px;
         }
+        .star-rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 12px; }
+        .star-rating input { display: none; }
+        .star-rating label { font-size: 2.8rem; color: #e5e7eb; cursor: pointer; transition: transform 0.2s, color 0.2s; }
+        .star-rating label:hover { transform: scale(1.2); }
+        .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #fbbf24; }  
+   
+        /* حل تداخل الأسعار */
+        .item-price-part { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 15px; min-width: 120px; }
         .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.8rem; white-space: nowrap; }
         .current-price { color: #dc2626; font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
 
         .item-action-part { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
-
         .quantity-select { 
             height: 38px; width: 95px; border: 2px solid #22c55e; border-radius: 8px; 
             font-weight: bold; background-color: #fff; font-size: 0.8rem; text-align: center;
@@ -65,27 +37,12 @@
 
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
-        .offer-badge { background: #ef4444; color: white; padding: 1px 6px; border-radius: 99px; font-size: 10px; font-weight: bold; }
-
-        /* هذا التعديل يجعل الشارات متجاورة أسفل الاسم */
-.badge-container {
-    display: flex;
-    flex-direction: row-reverse; /* لجعل الشارات تبدأ من اليمين بجانب بعضها */
-    justify-content: flex-start;
-    gap: 6px; /* مسافة بسيطة بين الشارتين */
-    margin-top: 5px;
-}
-
-.special-badge, .offer-badge { 
-    padding: 1px 8px; 
-    border-radius: 99px; 
-    font-size: 10px; 
-    font-weight: bold; 
-    white-space: nowrap; /* يمنع انقسام نص الشارة */
-}
-
+        
+        .badge-container { display: flex; flex-direction: row-reverse; justify-content: flex-start; gap: 6px; margin-top: 5px; }
+        .special-badge, .offer-badge { padding: 1px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; }
+        .special-badge { background: #fbbf24; color: #000; }
+        .offer-badge { background: #ef4444; color: white; }
     </style>
-
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
 
@@ -105,22 +62,21 @@
                 🛒 ابدأ طلبك الآن! (نموذج الطلب السريع)
             </button>
 
-          <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
-    <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
-    <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
-</div>
+            <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
+                <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
+                <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
+            </div>
 
-<div style="text-align: center; padding: 8px 2px; background: #fdfdfd; border-radius: 8px; margin: 10px auto; border: 1px solid #eee; width: 95%; overflow: hidden;">
-    <div style="white-space: nowrap; font-family: sans-serif; display: flex; justify-content: center; align-items: center; gap: 4px;">
-        <span style="color: #888; font-size: 10px;">متاح الدفع عبر:</span>
-        <strong style="color: #e60000; font-size: 10px;">Vodafone Cash</strong>
-        <span style="color: #ddd;">|</span>
-        <strong style="color: #5b2d82; font-size: 10px;">InstaPay</strong>
-        <span style="color: #ddd;">|</span>
-        <strong style="color: #28a745; font-size: 10px;">أو عند الاستلام</strong>
-    </div>
-</div>
-
+            <div style="text-align: center; padding: 8px 2px; background: #fdfdfd; border-radius: 8px; margin: 10px auto; border: 1px solid #eee; width: 95%; overflow: hidden;">
+                <div style="white-space: nowrap; font-family: sans-serif; display: flex; justify-content: center; align-items: center; gap: 4px;">
+                    <span style="color: #888; font-size: 10px;">متاح الدفع عبر:</span>
+                    <strong style="color: #e60000; font-size: 10px;">Vodafone Cash</strong>
+                    <span style="color: #ddd;">|</span>
+                    <strong style="color: #5b2d82; font-size: 10px;">InstaPay</strong>
+                    <span style="color: #ddd;">|</span>
+                    <strong style="color: #28a745; font-size: 10px;">أو عند الاستلام</strong>
+                </div>
+            </div>
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
                 <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
@@ -147,32 +103,26 @@
                 <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none"></textarea>
                 <button type="submit" class="w-full mt-8 bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl">إرسال الطلب عبر واتساب ✅</button>
             </form>
-
         </div>
-<div class="rating-card shadow-sm border-2 border-dashed border-yellow-400 p-6 rounded-2xl text-center my-8 bg-white">
-    <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
-    <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار)</p>
-    
-    <div class="star-rating mb-4">
-        <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-        <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-        <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-        <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-        <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
-    </div>
 
-    <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
-
-    <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
-</div>
-
-</div>
+        <div class="rating-card shadow-sm border-2 border-dashed border-yellow-400 p-6 rounded-2xl text-center my-8 bg-white">
+            <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
+            <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار)</p>
+            <div class="star-rating mb-4">
+                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+            <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
+            <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
+        </div>
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
             <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 11 ص إلى 6 م يومياً عدا الجمعة</div>
             <a href="http://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg">📨 مراسلة واتساب مباشرة</a>
             <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg">🔵 زيارة صفحة الفيسبوك</a>
-            
             <div class="mt-6 flex justify-center opacity-70">
                 <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=4c8kqkxygt8km1fw7qfsjmr2ktzj1qwf" border="0" title="عداد الزيارات">
             </div>
@@ -180,87 +130,7 @@
     </div>
 
     <script>
-
-const holidayMode = false; 
-
-if (holidayMode) {
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        /* اللون الأبيض مع شفافية 0.85 */
-        background: rgba(255, 255, 255, 0.5); 
-        /* تأثير الضباب للخلفية */
-        backdrop-filter: blur(8px); 
-        -webkit-backdrop-filter: blur(8px);
-        z-index: 100000;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 20px;
-        font-family: sans-serif;
-    `;
-
-    overlay.innerHTML = `
-        <div style="background: white; padding: 30px; border-radius: 20px; shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee;">
-            <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin-bottom:20px;">
-            <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل حالياً </h2>
-            <p style="color:#666; font-size:18px;">سنعاود العمل قريباً إن شاء الله.</p>
-            <p style="color:#22c55e; font-weight:bold; margin-top:15px; font-size:20px;">شكراً لتفهمكم ❤️</p>
-        </div>
-    `;
-
-    document.documentElement.appendChild(overlay);
-    // ملحوظة: أزلنا window.stop() لكي تظهر الخلفية المضببة بشكل جميل
-}
-
-
-function confirmMyRating() {
-    // 1. التأكد من الاختيار
-    const selectedStar = document.querySelector('input[name="rating"]:checked');
-    if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
-
-    const stars = parseInt(selectedStar.value);
-    const facebookPageUrl = "https://www.facebook.com/3oroadtawfeer";
-    const myWhatsAppNumber = "201032872750";
-
-    // 2. توزيع التوجيه (فيسبوك للراضي / واتساب للمشتكي)
-    if (stars >= 4) {
-        if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على صفحة فيسبوك؟`)) {
-            finalizeRating(); // قفل التقييم فقط عند الموافقة
-
-        window.open(facebookPageUrl, '_blank');
-        }
-   
-} else {
-
-        if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف سبب التقييم ونقدم الحل المناسب بإذن الله`)) {
-            finalizeRating(); // قفل التقييم فقط عند الموافقة
-            let starEmojis = '⭐'.repeat(stars);
-            let msg = `⚠️ ملاحظة عميل: تقييم  ${stars} نجوم ${starEmojis}(من فضلك اكتب ملاحظاتك هنا)`;
-            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-    }
-}
-
-// دالة القفل (لا تعمل إلا إذا ضغط العميل OK)
-function finalizeRating() {
-    const feedback = document.getElementById('rating-feedback');
-    const confirmBtn = document.getElementById('confirm-btn');
-    const starContainer = document.querySelector('.star-rating');
-    if(feedback) feedback.classList.remove('hidden');
-    if(confirmBtn) confirmBtn.classList.add('hidden');
-    if(starContainer) {
-        starContainer.style.pointerEvents = 'none';
-        starContainer.style.opacity = '0.5';
-    }
-}
-
-
-                const productsData = [
+        const productsData = [
             { name: "بصل أحمر", price: 20, unit: "كجم", category: "veg", available: false },
             { name: "ثوم بلدي", price: 40, unit: "كجم", category: "veg", available: true },
             { name: "بطاطس تحمير", price: 20, unit: "كجم", category: "veg", available: true },
@@ -274,10 +144,7 @@ function finalizeRating() {
             { name: "ليمون", price: 50, unit: "كجم", category: "veg", available: true },
             { name: "فلفل أخضر بارد", price: 30, unit: "كجم", category: "veg", available: true },
             { name: "فلفل أخضر حار", price: 30, unit: "كجم", category: "veg", available: true },
-            { name: "فلفل أحمر بارد", price: 60, unit: "كجم", category: "veg", available: false },
             { name: "فلفل ألوان", price: 90, oldPrice: 100, unit: "كجم", category: "veg", available: true },
-            { name: "سبانخ", price: 15, unit: "حزمة", category: "veg", available: false },
-            { name: "خس بلدي", price: 12.5, unit: "حزمة", category: "veg", available: false },
             { name: "شبت وكسبرة", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "بقدونس", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "فجل", price: 5, unit: "ربطة", category: "veg", available: true },
@@ -288,7 +155,6 @@ function finalizeRating() {
             { name: "خس كابوتشا", price: 35, unit: "حبة", category: "veg", available: true },
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
             { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true },
-            { name: "بطاطا", price: 30, unit: "كجم", category: "veg", available: false },
             { name: "بصل أبيض", price: 12.5, unit: "كجم", category: "veg", available: true },
             { name: "فاصوليا خضراء", price: 30, unit: "كجم", category: "veg", available: true, isSpecial: true },
             { name: "ورق عنب", price: 90, unit: "كجم", category: "veg", available: true },
@@ -308,117 +174,66 @@ function finalizeRating() {
             { name: "كنتالوب", price: 25, unit: "كجم", category: "fruit", available: true },
             { name: "شهد مخطط", price: 35, unit: "كجم", category: "fruit", available: true },
             { name: "عنب أحمر", price: 150, unit: "كجم", category: "fruit", available: true },
-            { name: "عنب أخضر", price: 120, unit: "كجم", category: "fruit", available: false }, 
             { name: "تمر القصيم (٩٠٠جم)", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial: true },
             { name: "برتقال عصير", price: 20, unit: "كجم", category: "fruit", available: true },
-            { name: "توت عماني", price: 50, unit: "طبق", category: "fruit", available: false },
             { name: "بطيخ", price: 150, oldPrice: 170, unit: "حبة", category: "fruit", available: true, isSpecial: true },
             { name: "خوخ بلدي فاخر", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: true },
             { name: "خوخ بلدي", price: 50, unit: "كجم", category: "fruit", available: true },
             { name: "خوخ سكري", price: 80, unit: "كجم", category: "fruit", available: true }
         ];
 
+        function init() {
+            try {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+                document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
 
-                function init() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-            document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
+                let sVeg = '', sFruit = '', iAll = '';
+                productsData.forEach(p => {
+                    const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
+                    const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
+                    const priceDiv = `<div class="item-price-part">${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}<span class="current-price">${p.price} ج</span></div>`;
 
-            let sVeg = '', sFruit = '', iAll = '';
-                                    
-    productsData.forEach(p => {
-        // 1. تجهيز الشارات
-        const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
-        const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
-
-        const priceDiv = `<div class="item-price-part">
-                            ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
-                            <span class="current-price">${p.price} ج</span>
-                          </div>`;
-        
-        // 2. قائمة الأسعار (sRow) - تبديل الترتيب ليظهر العرض أولاً
-        const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                        <div class="item-name-part">
-                            <div>${p.name}</div>
-                            <div class="badge-container">
-                                ${offerBadge} 
-                                ${specialBadge}
-                                ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}
-                            </div>
-                        </div>
+                    const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                        <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
                         ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
-                      </div>`;
-        
-        // 3. صفحة الطلب (iRow) - العرض أولاً ثم التميز أسفل السعر
-        const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                        <div class="item-name-part text-sm">
-                            <div class="font-bold">${p.name}</div>
-                            
-                            <div class="mt-1">
-                                ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
-                                <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
-                            </div>
+                    </div>`;
 
-                            <div class="badge-container" style="margin-top: 3px;">
-                                ${offerBadge}
-                                ${specialBadge} 
-                            </div>
-                        </div>
-                        <div class="item-action-part">
-                            ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
-                        </div>
-                      </div>`;
+                    const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                        <div class="item-name-part text-sm"><div class="font-bold">${p.name}</div>
+                        <div class="mt-1">${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}<span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span></div>
+                        <div class="badge-container" style="margin-top: 3px;">${offerBadge}${specialBadge}</div></div>
+                        <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
+                    </div>`;
 
-        if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
-        iAll += iRow;
-    });
+                    if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
+                    iAll += iRow;
+                });
 
-                   document.getElementById('vegetables-list-static').innerHTML = sVeg;
-            document.getElementById('fruits-list-static').innerHTML = sFruit;
-            document.getElementById('interactive-lists-combined').innerHTML = iAll;
+                document.getElementById('vegetables-list-static').innerHTML = sVeg;
+                document.getElementById('fruits-list-static').innerHTML = sFruit;
+                document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
-            // توليد خيارات الكمية: كسور، ثم (من 1 لـ 10 بالكسور)، ثم (من 11 لـ 25 صحيح)
-document.querySelectorAll('.quantity-select').forEach(s => {
-    let opts = '<option value="0">-- طلب --</option>';
-    const unit = s.dataset.unit;
-    
-    if (unit === 'كجم') {
-        const weights = [];
-        
-        // 1. الكسور الأقل من كيلو
-        weights.push({ val: 0.125, text: '⅛ك' });
-        weights.push({ val: 0.25,  text: '¼ك' });
-        weights.push({ val: 0.5,   text: '½ك' });
-        weights.push({ val: 0.75,  text: '¾ك' });
-
-        // 2. من 1 كيلو إلى 10 كيلو مع الكسور (1، 1و¼، 1و½، 1و¾...)
-        for (let i = 1; i <= 10; i++) {
-            weights.push({ val: i, text: i + 'ك' });
-            if (i < 10) { // إضافة الكسور حتى نصل للرقم 10
-                weights.push({ val: i + 0.25, text: i + 'و¼ك' });
-                weights.push({ val: i + 0.5,  text: i + 'و½ك' });
-                weights.push({ val: i + 0.75, text: i + 'و¾ك' });
-            }
+                document.querySelectorAll('.quantity-select').forEach(s => {
+                    let opts = '<option value="0">-- طلب --</option>';
+                    if (s.dataset.unit === 'كجم') {
+                        const weights = [{v:0.125,t:'⅛ك'},{v:0.25,t:'¼ك'},{v:0.5,t:'½ك'},{v:0.75,t:'¾ك'}];
+                        for (let i = 1; i <= 10; i++) {
+                            weights.push({v:i,t:i+'ك'});
+                            if (i < 10) { weights.push({v:i+0.25,t:i+'و¼ك'},{v:i+0.5,t:i+'و½ك'},{v:i+0.75,t:i+'و¾ك'}); }
+                        }
+                        for (let i = 11; i <= 25; i++) { weights.push({v:i,t:i+'ك'}); }
+                        weights.forEach(w => opts += `<option value="${w.v}">${w.t}</option>`);
+                    } else {
+                        for(let i=1; i<=20; i++) opts += `<option value="${i}">${i} ${s.dataset.unit}</option>`;
+                    }
+                    s.innerHTML = opts;
+                });
+            } catch (e) { console.error("Error building price list:", e); }
         }
 
-        // 3. من 11 كيلو إلى 25 كيلو (أرقام صحيحة فقط)
-        for (let i = 11; i <= 25; i++) {
-            weights.push({ val: i, text: i + 'ك' });
-        }
-        
-        weights.forEach(w => {
-            opts += `<option value="${w.val}">${w.text}</option>`;
-        });
-    } else {
-        // للوحدات الأخرى (ربطة، قطعة، إلخ)
-        for(let i=1; i<=20; i++) {
-            opts += `<option value="${i}">${i} ${unit}</option>`;
-        }
-    }
-    s.innerHTML = opts;
-});
-
-        }
+        // صمام الأمان للتحميل المستقر
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
         function toggleView(v) {
             document.getElementById('price-list-view').style.display = v === 'order-form-view' ? 'none' : 'block';
@@ -428,47 +243,46 @@ document.querySelectorAll('.quantity-select').forEach(s => {
         }
 
         function generateWhatsAppOrder() {
-    let vegItems = '';
-    let fruitItems = '';
-    let count = 0;
-
-    // المرور على جميع القوائم المنسدلة
-    document.querySelectorAll('.quantity-select').forEach(s => {
-        if (s.value != "0") {
-            const itemName = s.dataset.name;
-            const quantityText = s.options[s.selectedIndex].text;
-            const itemLine = `• ${quantityText} ${itemName}\n`;
-            
-            // البحث عن نوع الصنف (خضار أم فاكهة) من البيانات الأصلية
-            const product = productsData.find(p => p.name === itemName);
-            if (product && product.category === 'veg') {
-                vegItems += itemLine;
-            } else {
-                fruitItems += itemLine;
-            }
-            count++;
-        }
-    });
-
-    if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-
-            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
-            msg += '------------------\n'; // إزالة السطر الفارغ هنا
-            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems; // إزالة \n الإضافية
-            if (fruitItems) msg += '🍉 *الفواكه:*\n' + fruitItems; // إزالة \n الإضافية
-
-            msg += '------------------\n';
-            msg += '📦 *التوصيل:*\n'; // إزالة المسافة بعد النقطتين
-            msg += '💰 *الإجمالي:*\n'; // إزالة المسافة بعد النقطتين
-            msg += '------------------\n'; // إزالة السطور الفارغة هنا
-            
-            const notes = document.getElementById('notes').value;
-            msg += `📌 *الملاحظات والعنوان:*\n${notes || 'لا يوجد'}`;
-
+            let vegItems = '', fruitItems = '', count = 0;
+            document.querySelectorAll('.quantity-select').forEach(s => {
+                if (s.value != "0") {
+                    const itemName = s.dataset.name;
+                    const quantityText = s.options[s.selectedIndex].text;
+                    const itemLine = `• ${quantityText} ${itemName}\n`;
+                    const product = productsData.find(p => p.name === itemName);
+                    if (product && product.category === 'veg') vegItems += itemLine; else fruitItems += itemLine;
+                    count++;
+                }
+            });
+            if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
+            let msg = '📝 *طلب جديد:*\n------------------\n';
+            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems;
+            if (fruitItems) msg += '🍉 *الفواكه:*\n' + fruitItems;
+            msg += `------------------\n📌 *العنوان والملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
-} 
-        window.onload = init;
-    </script>
+        }
 
+        function confirmMyRating() {
+            const selectedStar = document.querySelector('input[name="rating"]:checked');
+            if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
+            const stars = parseInt(selectedStar.value);
+            if (stars >= 4) {
+                if (confirm(`شكراً لتقييمك الراقي! ⭐\nهل تود دعمنا بكتابة رأيك على فيسبوك؟`)) {
+                    finalizeRating(); window.open("https://www.facebook.com/3oroadtawfeer", '_blank');
+                }
+            } else {
+                if (confirm(`نعتذر عن أي تقصير ⭐\nهل تود مراسلتنا لنعرف السبب ونقدم الحل؟`)) {
+                    finalizeRating();
+                    window.open(`https://wa.me/201032872750?text=${encodeURIComponent('⚠️ ملاحظة عميل: تقييم ' + stars + ' نجوم')}`, '_blank');
+                }
+            }
+        }
+
+        function finalizeRating() {
+            const f = document.getElementById('rating-feedback'), b = document.getElementById('confirm-btn'), s = document.querySelector('.star-rating');
+            if(f) f.classList.remove('hidden'); if(b) b.classList.add('hidden');
+            if(s) { s.style.pointerEvents = 'none'; s.style.opacity = '0.5'; }
+        }
+    </script>
 </body>
 </html>
