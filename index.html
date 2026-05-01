@@ -335,32 +335,31 @@ function finalizeRating() {
             document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
 
             let sVeg = '', sFruit = '', iAll = '';
-                                    productsData.forEach(p => {
-    // 1. تجهيز الشارات
-    const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
-    // التأكد من أن شارة العرض تعمل عند وجود oldPrice
-    const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
+                                    
+    productsData.forEach(p => {
+        // 1. تجهيز الشارات
+        const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
+        const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
 
-    const priceDiv = `<div class="item-price-part">
-                        ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
-                        <span class="current-price">${p.price} ج</span>
-                      </div>`;
-    
-    // 2. تعديل قائمة الأسعار (sRow) لظهور العرض والتميز متجاورين
-    const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                    <div class="item-name-part">
-                        <div>${p.name}</div>
-                        <div class="badge-container">
-                            ${specialBadge}
-                            ${offerBadge}
-                            ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}
+        const priceDiv = `<div class="item-price-part">
+                            ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
+                            <span class="current-price">${p.price} ج</span>
+                          </div>`;
+        
+        // 2. قائمة الأسعار (sRow) - تبديل الترتيب ليظهر العرض أولاً
+        const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                        <div class="item-name-part">
+                            <div>${p.name}</div>
+                            <div class="badge-container">
+                                ${offerBadge} 
+                                ${specialBadge}
+                                ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}
+                            </div>
                         </div>
-                    </div>
-                    ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
-                  </div>`;
-    
-    // نسخة صفحة الطلب (iRow) المحدثة لتشمل السعر القديم
-        // 4. نسخة صفحة الطلب (iRow) - الشارات أسفل السعر
+                        ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
+                      </div>`;
+        
+        // 3. صفحة الطلب (iRow) - العرض أولاً ثم التميز أسفل السعر
         const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                         <div class="item-name-part text-sm">
                             <div class="font-bold">${p.name}</div>
@@ -371,8 +370,8 @@ function finalizeRating() {
                             </div>
 
                             <div class="badge-container" style="margin-top: 3px;">
-                                ${specialBadge}
-                                ${offerBadge} 
+                                ${offerBadge}
+                                ${specialBadge} 
                             </div>
                         </div>
                         <div class="item-action-part">
@@ -380,10 +379,9 @@ function finalizeRating() {
                         </div>
                       </div>`;
 
-
-    if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
-    iAll += iRow;
-});
+        if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
+        iAll += iRow;
+    });
 
                    document.getElementById('vegetables-list-static').innerHTML = sVeg;
             document.getElementById('fruits-list-static').innerHTML = sFruit;
