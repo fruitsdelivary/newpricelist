@@ -10,31 +10,54 @@
 /* هذا الجزء يضمن بقاء الاسم والسعر في سطر واحد مهما حدث */
 .flex-row-item {
     display: flex;
-    justify-content: space-between; /* يوزع العناصر بين اليمين واليسار */
-    align-items: center; /* يوسطهم عمودياً */
-    padding: 12px 16px;
-    border-bottom: 1px solid #f0f0f0;
+    flex-direction: row-reverse; /* يضمن الترتيب من اليمين لليسار */
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 10px;
+    border-bottom: 1px solid #f3f4f6;
+    min-height: 60px;
 }
 
 .item-name-part {
-    flex: 2; /* يعطي مساحة أكبر للاسم والشارة */
+    flex: 1;
     text-align: right;
-    font-weight: 600;
-    font-size: 1.05rem;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #374151;
     display: flex;
-    align-items: center; /* يضمن بقاء الشارة بجانب النص تماماً */
-    gap: 8px; /* مسافة ثابتة بين الاسم والشارة */
+    flex-direction: column; /* يضع الشارة تحت الاسم مباشرة إذا ضاق المكان لراحة العين */
+    align-items: flex-start;
+}
+
+.item-price-part {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+    min-width: 90px;
 }
 
 .special-badge {
-    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    background: #fbbf24;
     color: #000;
     padding: 1px 6px;
     border-radius: 4px;
-    font-size: 10px;
-    font-weight: bold;
-    white-space: nowrap; /* يمنع انكسار كلمة مميز */
+    font-size: 9px;
+    font-weight: 800;
+    margin-top: 4px; /* مسافة بسيطة تحت الاسم */
+    display: inline-block;
 }
+
+.offer-badge {
+    background: #ef4444;
+    color: white;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
 
 /* تنسيق قسم التقييم والنجوم */
 .rating-card {
@@ -350,11 +373,11 @@ const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
               </div>`;
 
-// نسخة صفحة الطلب (لضمان الاتساق هناك أيضاً)
+// نسخة صفحة الطلب (التنسيق المتناسق الجديد)
 const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part text-sm">
-                    <span>${p.name}</span>${specialBadge}
-                    <br> <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
+                <div class="item-name-part">
+                    <span>${p.name}</span>
+                    <div>${specialBadge}</div> <span class="text-green-600 font-bold text-xs mt-1">${p.price} ج / ${p.unit}</span>
                 </div>
                 <div class="item-action-part">
                     ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
