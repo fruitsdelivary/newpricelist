@@ -76,19 +76,22 @@
     margin-right: 4px; /* مسافة بسيطة عن اسم الصنف */
     display: inline-block;
 }
-        /* التعديل الجديد: حاوية الشارات وتنسيق مميز */
-        .badge-container {
-            display: flex;
-            flex-direction: column; /* لجعل الشارات تحت بعضها لتوفير مساحة */
-            align-items: flex-start;
-            gap: 4px;
-            margin-top: 5px;
-        }
-        .special-badge { 
-            background: #fbbf24; color: #000; padding: 1px 8px; 
-            border-radius: 99px; font-size: 10px; font-weight: bold; 
-            display: inline-block; width: fit-content;
-        }
+        /* هذا التعديل يجعل الشارات متجاورة أسفل الاسم */
+.badge-container {
+    display: flex;
+    flex-direction: row-reverse; /* لجعل الشارات تبدأ من اليمين بجانب بعضها */
+    justify-content: flex-start;
+    gap: 6px; /* مسافة بسيطة بين الشارتين */
+    margin-top: 5px;
+}
+
+.special-badge, .offer-badge { 
+    padding: 1px 8px; 
+    border-radius: 99px; 
+    font-size: 10px; 
+    font-weight: bold; 
+    white-space: nowrap; /* يمنع انقسام نص الشارة */
+}
 
     </style>
 
@@ -332,8 +335,8 @@ function finalizeRating() {
             document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
 
             let sVeg = '', sFruit = '', iAll = '';
-                        productsData.forEach(p => {
-                // تعريف الشارات أولاً
+                                    productsData.forEach(p => {
+                // 1. تعريف الشارات (بناءً على حالة المنتج)
                 const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
                 const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
 
@@ -342,7 +345,7 @@ function finalizeRating() {
                                     <span class="current-price">${p.price} ج</span>
                                   </div>`;
                 
-                // --- نسخة قائمة الأسعار ---
+                // 2. نسخة قائمة الأسعار (sRow)
                 const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                                 <div class="item-name-part">
                                     <div>${p.name}</div>
@@ -355,11 +358,13 @@ function finalizeRating() {
                                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
                               </div>`;
                 
-                // --- نسخة صفحة الطلب ---
+                // 3. نسخة صفحة الطلب (iRow)
                 const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                                 <div class="item-name-part text-sm">
                                     <div>${p.name}</div>
-                                    <div class="badge-container">${specialBadge}</div>
+                                    <div class="badge-container">
+                                        ${specialBadge}
+                                    </div>
                                     <span class="text-green-600 font-bold text-xs mt-1">${p.price} ج / ${p.unit}</span>
                                 </div>
                                 <div class="item-action-part">
