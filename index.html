@@ -360,22 +360,25 @@ function finalizeRating() {
                   </div>`;
     
     // نسخة صفحة الطلب (iRow) المحدثة لتشمل السعر القديم
-const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part text-sm">
-                    <div>${p.name}</div>
-                    <div class="badge-container">
-                        ${specialBadge}
-                        ${offerBadge} 
-                    </div>
-                    <div class="mt-1">
-                        ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
-                        <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
-                    </div>
-                </div>
-                <div class="item-action-part">
-                    ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
-                </div>
-              </div>`;
+        // 4. نسخة صفحة الطلب (iRow) - الشارات أسفل السعر
+        const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                        <div class="item-name-part text-sm">
+                            <div class="font-bold">${p.name}</div>
+                            
+                            <div class="mt-1">
+                                ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
+                                <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
+                            </div>
+
+                            <div class="badge-container" style="margin-top: 3px;">
+                                ${specialBadge}
+                                ${offerBadge} 
+                            </div>
+                        </div>
+                        <div class="item-action-part">
+                            ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
+                        </div>
+                      </div>`;
 
 
     if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
