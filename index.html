@@ -7,30 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
 
-/* التنسيق الجديد والمريح لشارة مميز */
+/* شارة مميز مصغرة وأنيقة خلف الاسم */
 .special-badge {
     background: linear-gradient(45deg, #fbbf24, #f59e0b);
     color: #000;
-    padding: 1px 6px;
+    padding: 1px 5px;
     border-radius: 4px;
-    font-size: 9px; /* صغرنا الخط قليلاً ليكون متناسقاً */
+    font-size: 10px;
     font-weight: bold;
-    margin-right: 5px;
-    display: inline-flex;
-    align-items: center;
+    margin-right: 6px; /* مسافة بسيطة بين الاسم والشارة */
+    display: inline-block;
     vertical-align: middle;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    white-space: nowrap; /* يمنع انقسام كلمة مميز ⭐ على سطرين */
+    white-space: nowrap;
 }
 
-/* تحسين حاوية اسم الصنف */
-.item-name-part {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap; /* يسمح بنزول النص للسطر الثاني بانتظام إذا كان طويلاً */
-    gap: 4px;
-    line-height: 1.4;
+/* العودة للتنسيق القديم والمريح للمحاذاة */
+.item-name-part { 
+    flex: 1.5; 
+    text-align: right; 
+    font-weight: 600; 
+    font-size: 1.05rem;
+    display: block; /* لضمان بقاء النص والشارة في سطر واحد مستقيم */
 }
+
 
 
 /* تنسيق قسم التقييم والنجوم */
@@ -339,9 +338,10 @@ function finalizeRating() {
                                   </div>`;
                 
                 // نسخة قائمة الأسعار
-             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+             // نسخة قائمة الأسعار (التنسيق القديم مع شارة خلف الاسم)
+const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part">
-                    <span>${p.name}</span> ${specialBadge} ${offerBadge} 
+                    <span>${p.name}</span>${specialBadge}${offerBadge} 
                     ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}
                 </div>
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
