@@ -13,7 +13,6 @@
         }
         .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
 
-        /* تنسيق قسم التقييم والنجوم */
         .rating-card {
             background: white; border: 2px dashed #fbbf24; border-radius: 20px;
             padding: 25px; margin: 30px auto; text-align: center; max-width: 500px;
@@ -24,7 +23,6 @@
         .star-rating label:hover { transform: scale(1.2); }
         .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #fbbf24; }  
    
-        /* تنسيق الأسعار */
         .item-price-part { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 15px; min-width: 120px; }
         .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.8rem; white-space: nowrap; }
         .current-price { color: #dc2626; font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
@@ -130,7 +128,21 @@
     </div>
 
     <script>
-        // مصفوفة البيانات الأساسية
+        // --- [ كود وضع الإجازة ] ---
+        const holidayMode = false; // غيرها إلى true لتفعيل وضع الإجازة
+
+        if (holidayMode) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; font-family: sans-serif;`;
+            overlay.innerHTML = `<div style="background: white; padding: 30px; border-radius: 20px; shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee;">
+                <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin-bottom:20px; margin-left: auto; margin-right: auto;">
+                <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل حالياً </h2>
+                <p style="color:#666; font-size:18px;">سنعاود العمل قريباً إن شاء الله.</p>
+                <p style="color:#22c55e; font-weight:bold; margin-top:15px; font-size:20px;">شكراً لتفهمكم ❤️</p>
+            </div>`;
+            document.documentElement.appendChild(overlay);
+        }
+
         const productsData = [
             { name: "بصل أحمر", price: 20, unit: "كجم", category: "veg", available: false },
             { name: "ثوم بلدي", price: 40, unit: "كجم", category: "veg", available: true },
@@ -215,7 +227,6 @@
                 document.getElementById('fruits-list-static').innerHTML = sFruit;
                 document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
-                // توليد خيارات الكمية
                 document.querySelectorAll('.quantity-select').forEach(s => {
                     let opts = '<option value="0">-- طلب --</option>';
                     if (s.dataset.unit === 'كجم') {
@@ -234,7 +245,6 @@
             } catch (e) { console.error(e); }
         }
 
-        // صمام الأمان للتشغيل المستقر
         if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
         function toggleView(v) {
@@ -257,15 +267,10 @@
             });
             if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
             
-            // نص الرسالة بالكامل كما طلبته
-            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
-            msg += '------------------\n';
+            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n------------------\n';
             if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems;
             if (fruitItems) msg += '🍉 *الفواكه:*\n' + fruitItems;
-            msg += '------------------\n';
-            msg += '📦 *التوصيل:*\n';
-            msg += '💰 *الإجمالي:*\n';
-            msg += '------------------\n';
+            msg += '------------------\n📦 *التوصيل:*\n💰 *الإجمالي:*\n------------------\n';
             msg += `📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
             
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
