@@ -24,7 +24,7 @@
         .star-rating label:hover { transform: scale(1.2); }
         .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #fbbf24; }  
    
-        /* حل تداخل الأسعار */
+        /* تنسيق الأسعار */
         .item-price-part { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 15px; min-width: 120px; }
         .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.8rem; white-space: nowrap; }
         .current-price { color: #dc2626; font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
@@ -105,7 +105,7 @@
             </form>
         </div>
 
-        <div class="rating-card shadow-sm border-2 border-dashed border-yellow-400 p-6 rounded-2xl text-center my-8 bg-white">
+        <div class="rating-card">
             <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
             <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار)</p>
             <div class="star-rating mb-4">
@@ -130,6 +130,7 @@
     </div>
 
     <script>
+        // مصفوفة البيانات الأساسية
         const productsData = [
             { name: "بصل أحمر", price: 20, unit: "كجم", category: "veg", available: false },
             { name: "ثوم بلدي", price: 40, unit: "كجم", category: "veg", available: true },
@@ -214,6 +215,7 @@
                 document.getElementById('fruits-list-static').innerHTML = sFruit;
                 document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
+                // توليد خيارات الكمية
                 document.querySelectorAll('.quantity-select').forEach(s => {
                     let opts = '<option value="0">-- طلب --</option>';
                     if (s.dataset.unit === 'كجم') {
@@ -229,10 +231,10 @@
                     }
                     s.innerHTML = opts;
                 });
-            } catch (e) { console.error("Error building price list:", e); }
+            } catch (e) { console.error(e); }
         }
 
-        // صمام الأمان للتحميل المستقر
+        // صمام الأمان للتشغيل المستقر
         if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
         function toggleView(v) {
@@ -246,8 +248,7 @@
             let vegItems = '', fruitItems = '', count = 0;
             document.querySelectorAll('.quantity-select').forEach(s => {
                 if (s.value != "0") {
-                    const itemName = s.dataset.name;
-                    const quantityText = s.options[s.selectedIndex].text;
+                    const itemName = s.dataset.name, quantityText = s.options[s.selectedIndex].text;
                     const itemLine = `• ${quantityText} ${itemName}\n`;
                     const product = productsData.find(p => p.name === itemName);
                     if (product && product.category === 'veg') vegItems += itemLine; else fruitItems += itemLine;
@@ -255,10 +256,18 @@
                 }
             });
             if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-            let msg = '📝 *طلب جديد:*\n------------------\n';
+            
+            // نص الرسالة بالكامل كما طلبته
+            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n';
+            msg += '------------------\n';
             if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems;
             if (fruitItems) msg += '🍉 *الفواكه:*\n' + fruitItems;
-            msg += `------------------\n📌 *العنوان والملاحظات:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
+            msg += '------------------\n';
+            msg += '📦 *التوصيل:*\n';
+            msg += '💰 *الإجمالي:*\n';
+            msg += '------------------\n';
+            msg += `📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
+            
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
         }
 
@@ -266,14 +275,18 @@
             const selectedStar = document.querySelector('input[name="rating"]:checked');
             if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
             const stars = parseInt(selectedStar.value);
+            const myWhatsAppNumber = "201032872750";
+
             if (stars >= 4) {
-                if (confirm(`شكراً لتقييمك الراقي! ⭐\nهل تود دعمنا بكتابة رأيك على فيسبوك؟`)) {
+                if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على صفحة فيسبوك؟`)) {
                     finalizeRating(); window.open("https://www.facebook.com/3oroadtawfeer", '_blank');
                 }
             } else {
-                if (confirm(`نعتذر عن أي تقصير ⭐\nهل تود مراسلتنا لنعرف السبب ونقدم الحل؟`)) {
+                if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف سبب التقييم ونقدم الحل المناسب بإذن الله`)) {
                     finalizeRating();
-                    window.open(`https://wa.me/201032872750?text=${encodeURIComponent('⚠️ ملاحظة عميل: تقييم ' + stars + ' نجوم')}`, '_blank');
+                    let starEmojis = '⭐'.repeat(stars);
+                    let msg = `⚠️ ملاحظة عميل: تقييم  ${stars} نجوم ${starEmojis}(من فضلك اكتب ملاحظاتك هنا)`;
+                    window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
         }
