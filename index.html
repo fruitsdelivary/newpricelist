@@ -7,30 +7,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
 
-/* شارة مميز مصغرة وأنيقة خلف الاسم */
+/* هذا الجزء يضمن بقاء الاسم والسعر في سطر واحد مهما حدث */
+.flex-row-item {
+    display: flex;
+    justify-content: space-between; /* يوزع العناصر بين اليمين واليسار */
+    align-items: center; /* يوسطهم عمودياً */
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.item-name-part {
+    flex: 2; /* يعطي مساحة أكبر للاسم والشارة */
+    text-align: right;
+    font-weight: 600;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center; /* يضمن بقاء الشارة بجانب النص تماماً */
+    gap: 8px; /* مسافة ثابتة بين الاسم والشارة */
+}
+
 .special-badge {
     background: linear-gradient(45deg, #fbbf24, #f59e0b);
     color: #000;
-    padding: 1px 5px;
+    padding: 1px 6px;
     border-radius: 4px;
     font-size: 10px;
     font-weight: bold;
-    margin-right: 6px; /* مسافة بسيطة بين الاسم والشارة */
-    display: inline-block;
-    vertical-align: middle;
-    white-space: nowrap;
+    white-space: nowrap; /* يمنع انكسار كلمة مميز */
 }
-
-/* العودة للتنسيق القديم والمريح للمحاذاة */
-.item-name-part { 
-    flex: 1.5; 
-    text-align: right; 
-    font-weight: 600; 
-    font-size: 1.05rem;
-    display: block; /* لضمان بقاء النص والشارة في سطر واحد مستقيم */
-}
-
-
 
 /* تنسيق قسم التقييم والنجوم */
 .rating-card {
@@ -338,7 +342,6 @@ function finalizeRating() {
                                   </div>`;
                 
                 // نسخة قائمة الأسعار
-             // نسخة قائمة الأسعار (التنسيق القديم مع شارة خلف الاسم)
 const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part">
                     <span>${p.name}</span>${specialBadge}${offerBadge} 
@@ -347,17 +350,17 @@ const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
               </div>`;
 
-                
-                // نسخة صفحة الطلب
-                const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                                <div class="item-name-part text-sm">
-                                    ${specialBadge} ${p.name} <br> 
-                                    <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
-                                </div>
-                                <div class="item-action-part">
-                                    ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
-                                </div>
-                              </div>`;
+// نسخة صفحة الطلب (لضمان الاتساق هناك أيضاً)
+const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                <div class="item-name-part text-sm">
+                    <span>${p.name}</span>${specialBadge}
+                    <br> <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
+                </div>
+                <div class="item-action-part">
+                    ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
+                </div>
+              </div>`;
+
 
                 if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
                 iAll += iRow;
