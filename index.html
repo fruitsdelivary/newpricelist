@@ -6,58 +6,12 @@
     <title>دليفري الخضار والفاكهة..قائمة الأسعار ونموذج الطلب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-
-/* هذا الجزء يضمن بقاء الاسم والسعر في سطر واحد مهما حدث */
-.flex-row-item {
-    display: flex;
-    flex-direction: row-reverse; /* يضمن الترتيب من اليمين لليسار */
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 10px;
-    border-bottom: 1px solid #f3f4f6;
-    min-height: 60px;
-}
-
-.item-name-part {
-    flex: 1;
-    text-align: right;
-    font-weight: 700;
-    font-size: 1rem;
-    color: #374151;
-    display: flex;
-    flex-direction: column; /* يضع الشارة تحت الاسم مباشرة إذا ضاق المكان لراحة العين */
-    align-items: flex-start;
-}
-
-.item-price-part {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: flex-end;
-    min-width: 90px;
-}
-
-.special-badge {
-    background: #fbbf24;
-    color: #000;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 9px;
-    font-weight: 800;
-    margin-top: 4px; /* مسافة بسيطة تحت الاسم */
-    display: inline-block;
-}
-
-.offer-badge {
-    background: #ef4444;
-    color: white;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 9px;
-    font-weight: bold;
-    margin-top: 4px;
-}
-
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; }
+        .flex-row-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;
+        }
+        .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
 
 /* تنسيق قسم التقييم والنجوم */
 .rating-card {
@@ -208,7 +162,7 @@
 
     <script>
 
-const holidayMode = false; 
+const holidayMode = true; 
 
 if (holidayMode) {
     const overlay = document.createElement('div');
@@ -302,7 +256,7 @@ function finalizeRating() {
             { name: "فلفل أخضر بارد", price: 30, unit: "كجم", category: "veg", available: true },
             { name: "فلفل أخضر حار", price: 30, unit: "كجم", category: "veg", available: true },
             { name: "فلفل أحمر بارد", price: 60, unit: "كجم", category: "veg", available: false },
-            { name: "فلفل ألوان", price: 90,oldPrice: 100, unit: "كجم", category: "veg", available: true },
+            { name: "فلفل ألوان", price: 100,oldPrice: 100, unit: "كجم", category: "veg", available: true },
             { name: "سبانخ", price: 15, unit: "حزمة", category: "veg", available: true },
             { name: "خس بلدي", price: 12.5, unit: "حزمة", category: "veg", available: true },
             { name: "شبت وكسبرة", price: 10, unit: "ربطة", category: "veg", available: true },
@@ -337,58 +291,45 @@ function finalizeRating() {
  { name: "شهد مخطط", price: 30, unit: "كجم", category: "fruit", available: true },
  { name: "عنب أحمر", price: 150, unit: "كجم", category: "fruit", available: true },
  { name: "عنب أخضر", price: 120, unit: "كجم", category: "fruit", available: true }, 
-            { name: "تمر القصيم (٩٠٠جم)", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial: true},
+            { name: "تمر القصيم (٩٠٠جم)", price: 130, unit: "علبة", category: "fruit", available: true },
             { name: "برتقال عصير", price: 20, unit: "كجم", category: "fruit", available: true },
  { name: "توت عماني", price: 50, unit: "طبق", category: "fruit", available: false },
-{ name: "بطيخ", price: 150, unit: "حبة", category: "fruit", available: true, isSpecial: true },
-            { name: "خوخ بلدي فاخر", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: true},
+{ name: "بطيخ", price: 150, unit: "حبة", category: "fruit", available: true },
+            { name: "خوخ بلدي فاخر", price: 70, unit: "كجم", category: "fruit", available: true },
   { name: "خوخ بلدي", price: 50, unit: "كجم", category: "fruit", available: true },
             { name: "خوخ سكري", price: 80, unit: "كجم", category: "fruit", available: true }
         ];
 
-                function init() {
+        function init() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
             document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
 
             let sVeg = '', sFruit = '', iAll = '';
             productsData.forEach(p => {
-                // شارة العرض (أحمر)
-                const offerBadge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
-                
-                // شارة مميز (ذهبي) - تظهر فقط إذا كانت isSpecial: true
-                const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
-
+                const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
                 const priceDiv = `<div class="item-price-part">
                                     ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
                                     <span class="current-price">${p.price} ج</span>
                                   </div>`;
                 
                 // نسخة قائمة الأسعار
-const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part">
-                    <span>${p.name}</span>${specialBadge}${offerBadge} 
-                    ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}
-                </div>
-                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
-              </div>`;
-
-// نسخة صفحة الطلب (التنسيق المتناسق الجديد)
-const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part">
-                    <span>${p.name}</span>
-                    <div>${specialBadge}</div> <span class="text-green-600 font-bold text-xs mt-1">${p.price} ج / ${p.unit}</span>
-                </div>
-                <div class="item-action-part">
-                    ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
-                </div>
-              </div>`;
-
+                const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                                <div class="item-name-part">${p.name}${badge} ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div>
+                                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
+                              </div>`;
+                
+                // نسخة صفحة الطلب (مع السعر)
+                const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                                <div class="item-name-part text-sm">${p.name} <br> <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span></div>
+                                <div class="item-action-part">
+                                    ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
+                                </div>
+                              </div>`;
 
                 if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
                 iAll += iRow;
             });
-            
             document.getElementById('vegetables-list-static').innerHTML = sVeg;
             document.getElementById('fruits-list-static').innerHTML = sFruit;
             document.getElementById('interactive-lists-combined').innerHTML = iAll;
