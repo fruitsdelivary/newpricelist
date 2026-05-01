@@ -7,28 +7,31 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
 
-/* تنسيق شارة مميز */
+/* التنسيق الجديد والمريح لشارة مميز */
 .special-badge {
-    background: linear-gradient(45deg, #fbbf24, #f59e0b); /* تدرج ذهبي */
-    color: #000; /* نص أسود للتباين */
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 800;
-    margin-right: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #d97706;
-    display: inline-block;
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    color: #000;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 9px; /* صغرنا الخط قليلاً ليكون متناسقاً */
+    font-weight: bold;
+    margin-right: 5px;
+    display: inline-flex;
+    align-items: center;
     vertical-align: middle;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    white-space: nowrap; /* يمنع انقسام كلمة مميز ⭐ على سطرين */
 }
 
+/* تحسين حاوية اسم الصنف */
+.item-name-part {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* يسمح بنزول النص للسطر الثاني بانتظام إذا كان طويلاً */
+    gap: 4px;
+    line-height: 1.4;
+}
 
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; }
-        .flex-row-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 16px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;
-        }
-        .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
 
 /* تنسيق قسم التقييم والنجوم */
 .rating-card {
@@ -336,13 +339,14 @@ function finalizeRating() {
                                   </div>`;
                 
                 // نسخة قائمة الأسعار
-                const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                                <div class="item-name-part">
-                                    ${specialBadge} ${p.name} ${offerBadge} 
-                                    ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}
-                                </div>
-                                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
-                              </div>`;
+             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                <div class="item-name-part">
+                    <span>${p.name}</span> ${specialBadge} ${offerBadge} 
+                    ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}
+                </div>
+                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
+              </div>`;
+
                 
                 // نسخة صفحة الطلب
                 const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
