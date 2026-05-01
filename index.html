@@ -359,20 +359,24 @@ function finalizeRating() {
                     ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
                   </div>`;
     
-    // 3. تعديل صفحة الطلب (iRow) لإضافة شارة العرض أيضاً
-    const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                    <div class="item-name-part text-sm">
-                        <div>${p.name}</div>
-                        <div class="badge-container">
-                            ${specialBadge}
-                            ${offerBadge} 
-                        </div>
-                        <span class="text-green-600 font-bold text-xs mt-1">${p.price} ج / ${p.unit}</span>
+    // نسخة صفحة الطلب (iRow) المحدثة لتشمل السعر القديم
+const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                <div class="item-name-part text-sm">
+                    <div>${p.name}</div>
+                    <div class="badge-container">
+                        ${specialBadge}
+                        ${offerBadge} 
                     </div>
-                    <div class="item-action-part">
-                        ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
+                    <div class="mt-1">
+                        ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
+                        <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
                     </div>
-                  </div>`;
+                </div>
+                <div class="item-action-part">
+                    ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
+                </div>
+              </div>`;
+
 
     if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
     iAll += iRow;
