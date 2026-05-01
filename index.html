@@ -66,7 +66,18 @@
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
         .offer-badge { background: #ef4444; color: white; padding: 1px 6px; border-radius: 99px; font-size: 10px; font-weight: bold; }
+.special-badge { 
+    background: #fbbf24; /* أصفر ذهبي */
+    color: #000; 
+    padding: 1px 6px; 
+    border-radius: 99px; 
+    font-size: 10px; 
+    font-weight: bold; 
+    margin-right: 4px; /* مسافة بسيطة عن اسم الصنف */
+    display: inline-block;
+}
     </style>
+
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
 
@@ -256,7 +267,7 @@ function finalizeRating() {
             { name: "فلفل أخضر بارد", price: 30, unit: "كجم", category: "veg", available: true },
             { name: "فلفل أخضر حار", price: 30, unit: "كجم", category: "veg", available: true },
             { name: "فلفل أحمر بارد", price: 60, unit: "كجم", category: "veg", available: false },
-            { name: "فلفل ألوان", price: 100,oldPrice: 100, unit: "كجم", category: "veg", available: true },
+            { name: "فلفل ألوان", price: 90,oldPrice: 100, unit: "كجم", category: "veg", available: true },
             { name: "سبانخ", price: 15, unit: "حزمة", category: "veg", available: true },
             { name: "خس بلدي", price: 12.5, unit: "حزمة", category: "veg", available: true },
             { name: "شبت وكسبرة", price: 10, unit: "ربطة", category: "veg", available: true },
@@ -278,7 +289,8 @@ function finalizeRating() {
             { name: "مشروم فريش", price: 50, oldPrice: 60, unit: "طبق", category: "veg", available: false },
             { name: " أرز رويزق 10ك", price: 310, oldPrice: 320, unit: "شيكارة", category: "veg", available: true },
 
-            { name: "مـوز", price: 40, unit: "كجم", category: "fruit", available: true },
+            
+{ name: "مـوز", price: 40, unit: "كجم", category: "fruit", available: true },
             { name: "تفاح أصفر", price: 100, unit: "كجم", category: "fruit", available: true },
             { name: "تفاح سكري", price: 110, unit: "كجم", category: "fruit", available: true },
  { name: "تفاح أحمر يوناني", price: 100, unit: "كجم", category: "fruit", available: true },
@@ -291,16 +303,16 @@ function finalizeRating() {
  { name: "شهد مخطط", price: 30, unit: "كجم", category: "fruit", available: true },
  { name: "عنب أحمر", price: 150, unit: "كجم", category: "fruit", available: true },
  { name: "عنب أخضر", price: 120, unit: "كجم", category: "fruit", available: true }, 
-            { name: "تمر القصيم (٩٠٠جم)", price: 130, unit: "علبة", category: "fruit", available: true },
+            { name: "تمر القصيم (٩٠٠جم)", price: 130, unit: "علبة", category: "fruit", available: true,isSpecial: true },
             { name: "برتقال عصير", price: 20, unit: "كجم", category: "fruit", available: true },
  { name: "توت عماني", price: 50, unit: "طبق", category: "fruit", available: false },
-{ name: "بطيخ", price: 150, unit: "حبة", category: "fruit", available: true },
-            { name: "خوخ بلدي فاخر", price: 70, unit: "كجم", category: "fruit", available: true },
+{ name: "بطيخ", price: 150, unit: "حبة", category: "fruit", available: true, isSpecial: true},
+            { name: "خوخ بلدي فاخر", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: true},
   { name: "خوخ بلدي", price: 50, unit: "كجم", category: "fruit", available: true },
             { name: "خوخ سكري", price: 80, unit: "كجم", category: "fruit", available: true }
         ];
 
-        function init() {
+                function init() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
             document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
@@ -308,20 +320,24 @@ function finalizeRating() {
             let sVeg = '', sFruit = '', iAll = '';
             productsData.forEach(p => {
                 const badge = p.oldPrice ? `<br><span class="offer-badge">عرض 🔥</span>` : '';
+                
+                // إضافة شارة مميز الجديدة
+                const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
+
                 const priceDiv = `<div class="item-price-part">
                                     ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
                                     <span class="current-price">${p.price} ج</span>
                                   </div>`;
                 
-                // نسخة قائمة الأسعار
+                // نسخة قائمة الأسعار (أضفنا specialBadge بجانب الاسم)
                 const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                                <div class="item-name-part">${p.name}${badge} ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div>
+                                <div class="item-name-part">${p.name} ${specialBadge}${badge} ${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div>
                                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
                               </div>`;
                 
-                // نسخة صفحة الطلب (مع السعر)
+                // نسخة صفحة الطلب (أضفنا specialBadge بجانب الاسم)
                 const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                                <div class="item-name-part text-sm">${p.name} <br> <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span></div>
+                                <div class="item-name-part text-sm">${p.name} ${specialBadge} <br> <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span></div>
                                 <div class="item-action-part">
                                     ${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}
                                 </div>
@@ -330,7 +346,7 @@ function finalizeRating() {
                 if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
                 iAll += iRow;
             });
-            document.getElementById('vegetables-list-static').innerHTML = sVeg;
+                   document.getElementById('vegetables-list-static').innerHTML = sVeg;
             document.getElementById('fruits-list-static').innerHTML = sFruit;
             document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
