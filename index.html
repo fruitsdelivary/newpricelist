@@ -122,22 +122,13 @@
             <a href="http://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg">📨 مراسلة واتساب مباشرة</a>
             <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg">🔵 زيارة صفحة الفيسبوك</a>
 
-             <div class="mt-6 flex flex-col items-center justify-center opacity-70">
+          // أضف هذا الجزء في مكان العداد
+<div id="counter-container" class="mt-6 flex flex-col items-center justify-center opacity-70">
     <p class="text-xs text-gray-400 mb-1">عدد الزيارات</p>
-    <span id="visit-count" class="text-lg font-bold text-green-600">...</span>
+    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdelivary.github.io&count_bg=%2322C55E&title_bg=%23555555&title=الزيارات" 
+         onerror="document.getElementById('counter-container').style.display='none';" 
+         alt="الزيارات">
 </div>
-
-<script>
-    // كود جلب عدد الزيارات وتحديثه تلقائياً
-    fetch('https://api.countapi.xyz/hit/delivary.github.io/visits')
-        .then(res => res.json())
-        .then(res => {
-            document.getElementById('visit-count').innerText = res.value.toLocaleString();
-        })
-        .catch(err => {
-            document.getElementById('visit-count').innerText = "2705"; // رقم افتراضي في حال توقف الخدمة
-        });
-</script>
 
 
         </footer>
