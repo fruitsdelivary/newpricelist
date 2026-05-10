@@ -89,22 +89,11 @@
             <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-12 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-xl active:scale-95 transition">
                 🛒 ابدأ طلبك الآن! 
             </button>
-
-<button onclick="shareProject()" class="w-full mb-6 bg-yellow-400 text-black font-bold py-3 rounded-xl shadow-md text-lg active:scale-95 transition flex items-center justify-center gap-2">
-        📢 شارك القائمة مع أصدقائك
-    </button>
     
         </div>
 
         <div id="order-form-view" style="display: none;">
             <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-3 rounded-xl">🔙 العودة لقائمة الأسعار</button>
-     
-
-<button onclick="shareProject()" class="w-full mb-6 bg-yellow-400 text-black font-bold py-3 rounded-xl shadow-sm text-md active:scale-95 transition">
-        📢 شارك القائمة مع أصدقائك 
-    </button>
-      </div>
-
 
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="mb-6 border rounded-xl overflow-hidden shadow-md">
