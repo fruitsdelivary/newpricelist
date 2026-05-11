@@ -211,6 +211,16 @@
 
     <script>
 
+function toggleView(v) {
+    const views = ['price-list-view', 'order-form-view', 'reviews-view'];
+    views.forEach(viewId => {
+        const el = document.getElementById(viewId);
+        if (el) el.style.display = (viewId === v) ? 'block' : 'none';
+    });
+    window.scrollTo(0, 0);
+}
+
+
 async function shareProject() {
     const shareData = {
         title: 'دليفري الخضار والفاكهة بشربين',
@@ -428,6 +438,20 @@ function filterProducts() {
         }
     });
 }
+
+<div id="reviews-view" style="display: none;">
+    <button onclick="toggleView('price-list-view')" class="w-full mb-4 bg-gray-400 text-white font-bold py-2 rounded-xl text-sm">🔙 العودة لقائمة الأسعار</button>
+    <div class="space-y-3">
+        <div class="review-card">
+            <div class="flex justify-between mb-1">
+                <span class="font-bold text-green-700 text-sm">عميل 1</span>
+                <span class="text-yellow-500 text-xs">⭐⭐⭐⭐⭐</span>
+            </div>
+            <p class="text-gray-600 text-sm italic">"اكتب نص التقييم هنا"</p>
+        </div>
+    </div>
+</div>
+
 
     </script>
 </body>
