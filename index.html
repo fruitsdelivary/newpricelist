@@ -170,20 +170,6 @@
             </form>
         </div>
 
-        <div class="rating-card">
-            <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
-            <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار)</p>
-            <div class="star-rating mb-4">
-                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
-            </div>
-            <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
-            <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
-        </div>
-
 <div id="reviews-view" style="display: none;">
     <button onclick="toggleView('price-list-view')" class="w-full mb-4 bg-gray-400 text-white font-bold py-2 rounded-xl text-sm">
         🔙 العودة لقائمة الأسعار
@@ -202,6 +188,20 @@
         </div>
         </div>
 </div>
+
+        <div class="rating-card">
+            <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
+            <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار)</p>
+            <div class="star-rating mb-4">
+                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+            <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
+            <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
+        </div>
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
             <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 11 ص إلى 6 م يومياً عدا الجمعة</div>
