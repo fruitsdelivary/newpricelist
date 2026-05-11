@@ -453,26 +453,6 @@ function filterProducts() {
     });
 }
 
- </div> 
-function toggleView(v) {
-    // هذه الأسطر تمسك الأقسام الثلاثة
-    const priceView = document.getElementById('price-list-view');
-    const orderView = document.getElementById('order-form-view');
-    const reviewsView = document.getElementById('reviews-view');
-
-    // هذه الأسطر تخفي كل شيء أولاً
-    if(priceView) priceView.style.display = 'none';
-    if(orderView) orderView.style.display = 'none';
-    if(reviewsView) reviewsView.style.display = 'none';
-
-    // هذا السطر يظهر القسم الذي ضغطت عليه فقط
-    const target = document.getElementById(v);
-    if(target) target.style.display = 'block';
-
-    // العودة لأعلى الصفحة تلقائياً
-    window.scrollTo(0, 0);
-}
-
     </script>
 
 
