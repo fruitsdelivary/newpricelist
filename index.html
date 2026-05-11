@@ -81,6 +81,12 @@
                 </div>
             </div>
 
+<div class="relative mb-6">
+    <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
+    class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
+</div>
+
+
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
                 <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
                 <div id="vegetables-list-static"></div>
@@ -355,6 +361,22 @@ async function shareProject() {
             if(f) f.classList.remove('hidden'); if(b) b.classList.add('hidden');
             if(s) { s.style.pointerEvents = 'none'; s.style.opacity = '0.5'; }
         }
+
+function filterProducts() {
+    const term = document.getElementById('search-input').value.toLowerCase();
+    const rows = document.querySelectorAll('.flex-row-item');
+
+    rows.forEach(row => {
+        const name = row.querySelector('.item-name-part').innerText.toLowerCase();
+        // إظهار الصف إذا كان يحتوي على نص البحث، وإخفاؤه إذا لم يحتوي
+        if (name.includes(term)) {
+            row.style.display = 'flex';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
     </script>
 </body>
 </html>
