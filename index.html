@@ -453,26 +453,27 @@ function filterProducts() {
     });
 }
 
+ </div> 
+
+<div id="reviews-view" style="display: none;">
+    <button onclick="toggleView('price-list-view')" class="w-full mb-4 bg-gray-400 text-white font-bold py-2 rounded-xl text-sm">
+        🔙 العودة لقائمة الأسعار
+    </button>
+
+    <div class="space-y-3">
+        <div class="bg-white p-4 rounded-2xl shadow-sm border-r-4 border-green-500">
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-bold text-green-700 text-sm">اسم العميل </span>
+                <span class="text-yellow-500 text-xs">⭐⭐⭐⭐⭐</span>
+            </div>
+            <p class="text-gray-700 text-sm italic leading-relaxed">
+                "اكتب هنا نص رسالة الشكر التي وصلت من الزبون"
+            </p>
+        </div>
+        </div>
+</div>
+
+
     </script>
-
- function toggleView(v) {
-    // هذه الأسطر تمسك الأقسام الثلاثة
-    const priceView = document.getElementById('price-list-view');
-    const orderView = document.getElementById('order-form-view');
-    const reviewsView = document.getElementById('reviews-view');
-
-    // هذه الأسطر تخفي كل شيء أولاً
-    if(priceView) priceView.style.display = 'none';
-    if(orderView) orderView.style.display = 'none';
-    if(reviewsView) reviewsView.style.display = 'none';
-
-    // هذا السطر يظهر القسم الذي ضغطت عليه فقط
-    const target = document.getElementById(v);
-    if(target) target.style.display = 'block';
-
-    // العودة لأعلى الصفحة تلقائياً
-    window.scrollTo(0, 0);
-}
-
 </body>
 </html>
