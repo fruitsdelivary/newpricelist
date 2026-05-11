@@ -383,12 +383,34 @@ async function shareProject() {
 
         if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
-        function toggleView(v) {
-            document.getElementById('price-list-view').style.display = v === 'order-form-view' ? 'none' : 'block';
-            document.getElementById('order-form-view').style.display = v === 'order-form-view' ? 'block' : 'none';
-            document.getElementById('main-title').textContent = v === 'order-form-view' ? '🛒 نموذج طلب واتساب' : '💰أسعار اليوم💰';
-            window.scrollTo(0,0);
-        }
+       function toggleView(v) {
+    // 1. تحديد كل الأقسام
+    const priceView = document.getElementById('price-list-view');
+    const orderView = document.getElementById('order-form-view');
+    const reviewsView = document.getElementById('reviews-view');
+    const mainTitle = document.getElementById('main-title');
+
+    // 2. إخفاء الجميع أولاً (تصفير الشاشة)
+    if(priceView) priceView.style.display = 'none';
+    if(orderView) orderView.style.display = 'none';
+    if(reviewsView) reviewsView.style.display = 'none';
+
+    // 3. إظهار القسم الذي ضغطت عليه فقط
+    if (v === 'order-form-view') {
+        orderView.style.display = 'block';
+        mainTitle.textContent = '🛒 نموذج طلب واتساب';
+    } else if (v === 'reviews-view') {
+        reviewsView.style.display = 'block';
+        mainTitle.textContent = '⭐⭐ مراجعات وآراء عملاءنا الكرام ⭐⭐';
+    } else {
+        priceView.style.display = 'block';
+        mainTitle.textContent = '💰أسعار اليوم💰';
+    }
+
+    // 4. الصعود لأعلى الصفحة
+    window.scrollTo(0, 0);
+}
+
 
         function generateWhatsAppOrder() {
             let vegItems = '', fruitItems = '', count = 0;
