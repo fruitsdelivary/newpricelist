@@ -186,6 +186,11 @@
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
             <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 11 ص إلى 6 م يومياً عدا الجمعة</div>
+
+<button onclick="toggleView('reviews-view')" class="w-full mb-4 bg-orange-500 text-white font-bold py-2 rounded-xl shadow-md text-sm active:scale-95 transition">
+    ⭐ مراجعات وآراء عملاءنا الكرام
+</button>
+
             <a href="http://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg">📨 مراسلة واتساب مباشرة</a>
             <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg">🔵 زيارة صفحة الفيسبوك</a>
 
@@ -210,16 +215,6 @@
     </div>
 
     <script>
-
-function toggleView(v) {
-    const views = ['price-list-view', 'order-form-view', 'reviews-view'];
-    views.forEach(viewId => {
-        const el = document.getElementById(viewId);
-        if (el) el.style.display = (viewId === v) ? 'block' : 'none';
-    });
-    window.scrollTo(0, 0);
-}
-
 
 async function shareProject() {
     const shareData = {
