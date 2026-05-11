@@ -6,6 +6,33 @@
     <title>دليفري الخضار والفاكهة..قائمة الأسعار ونموذج الطلب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+
+.new-arrival-bar {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+    color: white;
+    padding: 8px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.scrolling-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 20s linear infinite;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; }
         .flex-row-item {
             display: flex; justify-content: space-between; align-items: center;
@@ -85,6 +112,13 @@
     <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
     class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
 </div>
+
+<div class="new-arrival-bar">
+    <div class="scrolling-text">
+        ✨ وصل حديثاً: ورق عنب بناتي ممتاز - بامية - بطيخ مرمل - شهد مخطط- بطيخ أصفر.. اطلب الآن قبل نفاذ الكمية! ✨
+    </div>
+</div>
+
 
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
@@ -226,6 +260,7 @@ async function shareProject() {
             { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true },
             { name: "بصل أبيض", price: 12.5, unit: "كجم", category: "veg", available: true },
             { name: "فاصوليا خضراء", price: 30, unit: "كجم", category: "veg", available: true, isSpecial: true },
+           { name: "بامية", price: 100, unit: "كجم", category: "veg", available: true, isSpecial: true },
             { name: "ورق عنب", price: 90, unit: "كجم", category: "veg", available: true, isSpecial: false },
             { name: "كرنب أحمر (سلطة)", price: 35, unit: "حبة", category: "veg", available: true },
             { name: "كرنب أبيض (سلطة)", price: 35, unit: "حبة", category: "veg", available: true },
@@ -250,6 +285,7 @@ async function shareProject() {
             { name: "توت عماني", price: 50, unit: "طبق", category: "fruit", available: false },
             { name: "بطيخ", price: 170,oldPrice: 200, unit: "حبة", category: "fruit", available: true, isSpecial: true },
            { name: "بطيخ وسط", price: 150, unit: "حبة", category: "fruit", available: true, isSpecial: false },
+        { name: "بطيخ أصفر (بالوزن) ", price: 35, unit: "كجم", category: "veg", fruit: true, isSpecial: false },
             { name: "خوخ بلدي فاخر", price: 60, unit: "كجم", category: "fruit", available: true, isSpecial: true },
             { name: "خوخ بلدي", price: 50, unit: "كجم", category: "fruit", available: true },
             { name: "خوخ سكري", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false}
