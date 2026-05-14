@@ -222,28 +222,22 @@
 
 </div> 
 
-<!-- فقاعة المراجعات العائمة مع زر إغلاق -->
-<div id="floating-reviews" class="fixed bottom-24 left-4 z-50 flex flex-col items-center">
-    <!-- زر الإغلاق (X) -->
-    <button onclick="document.getElementById('floating-reviews').style.display='none'" 
-            class="bg-white text-gray-500 shadow-md rounded-full w-5 h-5 flex items-center justify-center text-[10px] mb-1 border border-gray-200 hover:bg-red-500 hover:text-white transition">
-        ✕
-    </button>
 
-    <!-- الفقاعة الأساسية -->
-    <div onclick="toggleView('reviews-view')" 
-         class="animate-bounce cursor-pointer relative group">
-        <div class="bg-orange-500 text-white p-3 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white">
-            <span class="text-xl">⭐</span>
-        </div>
-        <!-- مؤشر عدد المراجعات -->
-        <span class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 rounded-full border border-white">
-            +10
-        </span>
+<!-- فقاعة المراجعات المطورة: مدمجة مع عبارة نصية وزر إغلاق -->
+<div id="floating-reviews" class="fixed bottom-24 left-4 z-50 animate-bounce">
+    <div class="relative bg-orange-500 text-white py-2 px-4 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white cursor-pointer transition-transform active:scale-95" 
+         onclick="toggleView('reviews-view')">
         
-        <!-- نص توضيحي يظهر عند اقتراب الماوس (اختياري) -->
-        <div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-[10px] py-1 px-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-             شوف آراء الناس 😍
+        <!-- النجمة -->
+        <span class="text-lg">⭐</span>
+        
+        <!-- العبارة النصية -->
+        <span class="text-xs font-bold whitespace-nowrap">شوف رأي الناس 😍</span>
+
+        <!-- زر الإغلاق (X) مدمج داخل الإطار -->
+        <div onclick="event.stopPropagation(); document.getElementById('floating-reviews').style.display='none';" 
+             class="absolute -top-2 -right-1 bg-white text-gray-500 hover:text-red-600 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shadow-md border border-gray-200 font-bold">
+            ✕
         </div>
     </div>
 </div>
