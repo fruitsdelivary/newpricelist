@@ -363,26 +363,45 @@ async function shareProject() {
             const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
 
-            // --- إضافة كود الأسهم التفاعلية للفكرة الأولى دون المساس بالقديم ---
+            // --- تصميم الأسهم الهندسية الملونة والمحاذية جهة اليمين ---
             let trendArrow = '';
             if (p.trend === 'down') {
-                trendArrow = `<span class="text-red-600 font-bold text-sm mr-1 animate-pulse" title="انخفض السعر اليوم">🔻</span>`;
+                // سهم أحمر صريح متجّه لأسفل مع تأثير النبض التفاعلي
+                trendArrow = `
+                    <svg class="w-4 h-4 text-red-600 animate-pulse inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path>
+                    </svg>`;
             } else if (p.trend === 'up') {
-                trendArrow = `<span class="text-green-600 font-bold text-sm mr-1" title="ارتفع السعر">🔺</span>`;
+                // سهم أخضر صريح متجّه لأعلى
+                trendArrow = `
+                    <svg class="w-4 h-4 text-green-600 inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"></path>
+                    </svg>`;
             }
 
-            // دمج السهم بجانب السعر الحالي في الواجهة الساكنة
-            const priceDiv = `<div class="item-price-part">${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}<span class="current-price">${p.price} ج</span>${trendArrow}</div>`;
+            // تعديل الترتيب: وضع الـ trendArrow على يمين السعر الحالي مباشرة داخل الـ flex
+            const priceDiv = `
+                <div class="item-price-part">
+                    ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
+                    <div class="flex items-center gap-1.5">
+                        ${trendArrow}
+                        <span class="current-price">${p.price} ج</span>
+                    </div>
+                </div>`;
 
             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
             </div>`;
 
-            // دمج السهم بجانب السعر في الواجهة التفاعلية (نموذج الطلب)
+            // تعديل الترتيب في القائمة التفاعلية أيضاً
             const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part text-sm"><div class="font-bold">${p.name}</div>
-                <div class="mt-1">${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}<span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>${trendArrow}</div>
+                <div class="mt-1 flex items-center gap-1.5">
+                    ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
+                    ${trendArrow}
+                    <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
+                </div>
                 <div class="badge-container" style="margin-top: 3px;">${offerBadge}${specialBadge}</div></div>
                 <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
             </div>`;
