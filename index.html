@@ -274,7 +274,7 @@ async function shareProject() {
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -310,14 +310,14 @@ async function shareProject() {
 
             { name: "فلفل ألوان", price: 80, unit: "كجم", category: "veg", available: true, trend: "up" },
 
-{ name: "ورق عنب", price: 90, unit: "كجم", category: "veg", available: true },
+           { name: "ورق عنب", price: 90, unit: "كجم", category: "veg", available: true },
             { name: "شبت وكسبرة(صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "بقدونس", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "فجل", price: 5, unit: "ربطة", category: "veg", available: true },
             { name: "جرجير", price: 5, unit: "ربطة", category: "veg", available: true },
             { name: "نعناع", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "كرات مصري", price: 5, unit: "ربطة", category: "veg", available: true },
-            { name: "خس كابوتشا", price: 30, unit: "حبة", category: "veg", available: false },
+            { name: "خس كابوتشا", price: 30, unit: "حبة", category: "veg", available: true },
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
             { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true },
           
