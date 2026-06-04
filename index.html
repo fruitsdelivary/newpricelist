@@ -274,7 +274,7 @@ async function shareProject() {
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -308,16 +308,16 @@ async function shareProject() {
            { name: "فلفل أحمر بارد", price: 60, unit: "كجم", category: "veg", available: true },
              { name: "فلفل أحمر حار", price: 60, unit: "كجم", category: "veg", available: false },
 
-            { name: "فلفل ألوان", price: 80, unit: "كجم", category: "veg", available: true, trend: "up" },
+            { name: "فلفل ألوان", price: 80, unit: "كجم", category: "veg", available: true, trend: "down" },
 
            { name: "ورق عنب", price: 90, unit: "كجم", category: "veg", available: true },
-            { name: "شبت وكسبرة(صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true },
+            { name: "شبت وكسبرة(صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true, trend: "up" },
             { name: "بقدونس", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "فجل", price: 5, unit: "ربطة", category: "veg", available: true },
             { name: "جرجير", price: 5, unit: "ربطة", category: "veg", available: true },
             { name: "نعناع", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "كرات مصري", price: 5, unit: "ربطة", category: "veg", available: true },
-            { name: "خس كابوتشا", price: 30, unit: "حبة", category: "veg", available: true },
+            { name: "خس كابوتشا", price: 25, unit: "حبة", category: "veg", available: true },
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
             { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true },
           
@@ -332,7 +332,7 @@ async function shareProject() {
 
             { name: "مشروم فريش", price: 60, unit: "طبق", category: "veg", available: false, trend: "down" },
 
-            { name: "أرز رويزق 10ك", price: 315, oldPrice: 320, unit: "شيكارة", category: "veg", available: true },
+            { name: "أرز رويزق 10ك", price: 310, oldPrice: 320, unit: "شيكارة", category: "veg", available: true },
 
             { name: "موز", price: 50, unit: "كجم", category: "fruit", available: true, trend: "up" },
 
@@ -346,10 +346,10 @@ async function shareProject() {
 
             { name: "جوافة", price: 80, unit: "كجم", category: "fruit", available: false, trend: "up" },
       
-            { name: "كنتالوب", price: 35, unit: "كجم", category: "fruit", available: true },
+            { name: "كنتالوب", price: 35, unit: "كجم", category: "fruit", available: false },
             { name: "شهد مخطط", price: 30, unit: "كجم", category: "fruit", available: true },
 
-            { name: "عنب أسود", price: 90, unit: "كجم", category: "fruit", available: true },
+            { name: "عنب أسود", price: 80, unit: "كجم", category: "fruit", available: true },
 
             { name: "عنب أحمر فاخر", price: 90, unit: "كجم", category: "fruit", available: true, trend: "up" },
         
@@ -361,9 +361,9 @@ async function shareProject() {
 
             { name: "برتقال عصير", price: 25, unit: "كجم", category: "fruit", available: true },
            
-            { name: "بطيخ", price: 140, unit: "حبة", category: "fruit", available: true, isSpecial: false },
+            { name: "بطيخ", price: 145, unit: "حبة", category: "fruit", available: true, isSpecial: false },
 
-           { name: "بطيخ وسط", price: 110, unit: "حبة", category: "fruit", available: true, isSpecial: false },
+           { name: "بطيخ وسط", price: 115, unit: "حبة", category: "fruit", available: true, isSpecial: false },
 
          { name: "بطيخ أصفر (بالوزن)", price: 35, unit: "حبة", category: "fruit", available: true, isSpecial: false },
            
