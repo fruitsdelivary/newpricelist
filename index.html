@@ -274,7 +274,7 @@ async function shareProject() {
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false ; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -334,7 +334,7 @@ async function shareProject() {
 
             { name: "كرنب أبيض (سلطة)", price: 35, unit: "حبة", category: "veg", available: true },
 
-            { name: "مشروم فريش", price: 60, unit: "طبق", category: "veg", available: false, trend: "down" },
+            { name: "مشروم فريش", price: 70, oldPrice: 85, unit: "طبق", category: "veg", available: true, trend: "up" },
 
             { name: "أرز رويزق 10ك", price: 310, oldPrice: 320, unit: "شيكارة", category: "veg", available: true },
 
