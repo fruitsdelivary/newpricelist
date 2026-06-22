@@ -274,7 +274,7 @@ async function shareProject() {
 
 
 // --- [ مفتاح أوقات العمل ] ---
-const isWorkingHours = false; // غيّرها إلى true لتفعيل الطلبات، أو false لتعطيلها وإظهار التنويه!
+const isWorkingHours = true; // غيّرها إلى true لتفعيل الطلبات، أو false لتعطيلها وإظهار التنويه!
 
 
         // --- [ كود وضع الإجازة ] ---
@@ -484,12 +484,20 @@ const isWorkingHours = false; // غيّرها إلى true لتفعيل الطل�
     const reviewsView = document.getElementById('reviews-view');
     const mainTitle = document.getElementById('main-title');
 
-    // 2. إخفاء الجميع أولاً (تصفير الشاشة)
+    // 2. التحقق من مواعيد العمل عند الضغط على "ابدأ طلبك"
+    if (v === 'order-form-view') {
+        if (!isWorkingHours) {
+            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار والاطلاع عليها، وسنكون بانتظاركم فور بدء مواعيد العمل إن شاء الله! ❤️");
+            return; // إيقاف الدخول لصفحة الطلب
+        }
+    }
+
+    // 3. إخفاء الجميع أولاً (تصفير الشاشة)
     if(priceView) priceView.style.display = 'none';
     if(orderView) orderView.style.display = 'none';
     if(reviewsView) reviewsView.style.display = 'none';
 
-    // 3. إظهار القسم الذي ضغطت عليه فقط
+    // 4. إظهار القسم المطلوب بناءً على الزر المضغوط
     if (v === 'order-form-view') {
         orderView.style.display = 'block';
         mainTitle.textContent = '🛒 نموذج طلب واتساب';
@@ -501,9 +509,10 @@ const isWorkingHours = false; // غيّرها إلى true لتفعيل الطل�
         mainTitle.textContent = '💰أسعار اليوم💰';
     }
 
-    // 4. الصعود لأعلى الصفحة
+    // 5. الصعود لأعلى الصفحة
     window.scrollTo(0, 0);
 }
+
 
 
         function generateWhatsAppOrder() {
