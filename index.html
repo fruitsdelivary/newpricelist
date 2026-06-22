@@ -273,8 +273,9 @@ async function shareProject() {
 }
 
 
-// --- [ مفتاح أوقات العمل ] ---
-const isWorkingHours = false; // غيّرها إلى true لتفعيل الطلبات، أو false لتعطيلها وإظهار التنويه!
+// --- [ كود الإغلاق خارج أوقات العمل ] ---
+const closeAfterHoursMode = true; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
+
 
 
         // --- [ كود وضع الإجازة ] ---
@@ -484,10 +485,10 @@ const isWorkingHours = false; // غيّرها إلى true لتفعيل الطل�
     const reviewsView = document.getElementById('reviews-view');
     const mainTitle = document.getElementById('main-title');
 
-    // 2. التحقق من مواعيد العمل عند الضغط على "ابدأ طلبك"
+    // 2. التحقق من مفتاح الإغلاق خارج أوقات العمل
     if (v === 'order-form-view') {
-        if (!isWorkingHours) {
-            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار والاطلاع عليها، وسنكون بانتظاركم فور بدء مواعيد العمل إن شاء الله! ❤️");
+        if (closeAfterHoursMode) {
+            alert("🚨 نحن الآن خارج أوقات العمل .\n\nيمكنكم تصفح قائمة الأسعار والإطلاع عليها، وسنكون بإنتظاركم فور بدء مواعيد العمل الساعة ١١ص إن شاء الله! ❤️");
             return; // إيقاف الدخول لصفحة الطلب
         }
     }
@@ -512,6 +513,7 @@ const isWorkingHours = false; // غيّرها إلى true لتفعيل الطل�
     // 5. الصعود لأعلى الصفحة
     window.scrollTo(0, 0);
 }
+
 
 
 
