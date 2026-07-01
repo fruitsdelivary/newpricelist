@@ -294,25 +294,25 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
         }
 
         const productsData = [
-            { name: "بصل أحمر", price: 20, unit: "كجم", category: "veg", available: true}, 
-            { name: "ثوم بلدي", price: 80, unit: "كجم", category: "veg", available: true },
-            { name: "بطاطس تحمير", price: 25, unit: "كجم", category: "veg", available: true, trend: "up" },
-            { name: "بطاطس صغيرة", price: 20, unit: "كجم", category: "veg", available: true, trend: "up" },
+            { name: "بصل أحمر", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
+            { name: "ثوم بلدي", price: 80, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+            { name: "بطاطس تحمير", price: 25, unit: "كجم", category: "veg", available: true,minWeight: 1 },
+            { name: "بطاطس صغيرة", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
             { name: "باذنجان مكبب", price: 15, unit: "كجم", category: "veg", available: true },
             { name: "باذنجان حشو", price: 20, unit: "كجم", category: "veg", available: true },
-            { name: "خيار", price: 25, unit: "كجم", category: "veg", available: true },
-            { name: "كوسة", price: 25, unit: "كجم", category: "veg", available: true },
-            { name: "جزر", price: 25, unit: "كجم", category: "veg", available: true },
+            { name: "خيار", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+            { name: "كوسة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+            { name: "جزر", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
 
-         { name: "قته", price: 25, unit: "كجم", category: "veg", available: true },
-            { name: "طماطم جامدة", price: 25, unit: "كجم", category: "veg", available: true, trend: "down" },
+         { name: "قته", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 1},
+            { name: "طماطم جامدة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
 
-{ name: "طماطم طبخ سليمة", price: 20, unit: "كجم", category: "veg", available: true, trend: "down" },
+{ name: "طماطم طبخ سليمة", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1 },
 
-            { name: "ليمون", price: 60, unit: "كجم", category: "veg", available: true },
-            { name: "فلفل أخضر بارد", price: 25, unit: "كجم", category: "veg", available: true },
-            { name: "فلفل أخضر حار", price: 25, unit: "كجم", category: "veg", available: true },
-           { name: "فلفل أحمر بارد", price: 50, unit: "كجم", category: "veg", available: false },
+            { name: "ليمون", price: 60, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
+            { name: "فلفل أخضر بارد", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+            { name: "فلفل أخضر حار", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.25},
+           { name: "فلفل أحمر بارد", price: 50, unit: "كجم", category: "veg", available: false, minWeight: 0.5},
              { name: "فلفل أحمر حار", price: 50, unit: "كجم", category: "veg", available: true },
 
             { name: "فلفل ألوان", price: 80, unit: "كجم", category: "veg", available: true, trend: "up" },
@@ -326,9 +326,9 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
            
             { name: "خس كابوتشا", price: 30, unit: "حبة", category: "veg", available: true },
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
-            { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true },
+            { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
           
-            { name: "بصل أبيض", price: 15, unit: "كجم", category: "veg", available: true },
+            { name: "بصل أبيض", price: 15, unit: "كجم", category: "veg", available: true, minWeight: 1},
 
            { name: "بامية", price: 60, unit: "كجم", category: "veg", available: true, isSpecial: false },
 
@@ -450,20 +450,61 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
         document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
         document.querySelectorAll('.quantity-select').forEach(s => {
-            let opts = '<option value="0">-- طلب --</option>';
-            if (s.dataset.unit === 'كجم') {
-                const weights = [{v:0.125,t:'⅛ك'},{v:0.25,t:'¼ك'},{v:0.5,t:'½ك'},{v:0.75,t:'¾ك'}];
-                for (let i = 1; i <= 10; i++) {
-                    weights.push({v:i,t:i+'ك'});
-                    if (i < 10) { weights.push({v:i+0.25,t:i+'و¼ك'},{v:i+0.5,t:i+'و½ك'},{v:i+0.75,t:i+'و¾ك'}); }
-                }
-                for (let i = 11; i <= 25; i++) { weights.push({v:i,t:i+'ك'}); }
-                weights.forEach(w => opts += `<option value="${w.v}">${w.t}</option>`);
-            } else {
-                for(let i=1; i<=20; i++) opts += `<option value="${i}">${i} ${s.dataset.unit}</option>`;
+
+    let opts = '<option value="0">-- طلب --</option>';
+
+    if (s.dataset.unit === 'كجم') {
+
+        const product = productsData.find(
+            p => p.name === s.dataset.name
+        );
+
+        const minWeight = product?.minWeight || 0.125;
+
+        const weights = [
+            {v:0.125,t:'⅛ك'},
+            {v:0.25,t:'¼ك'},
+            {v:0.5,t:'½ك'},
+            {v:0.75,t:'¾ك'}
+        ];
+
+        let filteredWeights = weights.filter(
+            w => w.v >= minWeight
+        );
+
+        for(let i=1; i<=10; i++){
+            filteredWeights.push({v:i,t:i+'ك'});
+
+            if(i<10){
+                if(i+0.25 >= minWeight)
+                    filteredWeights.push({v:i+0.25,t:i+'و¼ك'});
+
+                if(i+0.5 >= minWeight)
+                    filteredWeights.push({v:i+0.5,t:i+'و½ك'});
+
+                if(i+0.75 >= minWeight)
+                    filteredWeights.push({v:i+0.75,t:i+'و¾ك'});
             }
-            s.innerHTML = opts;
+        }
+
+        for(let i=11;i<=25;i++){
+            filteredWeights.push({v:i,t:i+'ك'});
+        }
+
+        filteredWeights.forEach(w=>{
+            opts += `<option value="${w.v}">${w.t}</option>`;
         });
+
+    } else {
+
+        for(let i=1;i<=20;i++){
+            opts += `<option value="${i}">${i} ${s.dataset.unit}</option>`;
+        }
+    }
+
+    s.innerHTML = opts;
+});
+       
     } catch (e) { console.error(e); }
 }
 
