@@ -274,7 +274,7 @@ async function shareProject() {
 
 
 // --- [ كود الإغلاق خارج أوقات العمل ] ---
-const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
+const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
 
 
 
@@ -315,7 +315,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
            { name: "فلفل أحمر بارد", price: 50, unit: "كجم", category: "veg", available: false, minWeight: 0.5},
              { name: "فلفل أحمر حار", price: 50, unit: "كجم", category: "veg", available: true },
 
-            { name: "فلفل ألوان", price: 90, unit: "كجم", category: "veg", available: true, trend: "up" },
+            { name: "فلفل ألوان", price: 90, unit: "كجم", category: "veg", available: true,minWeight: 0.25, trend: "up" },
 
             { name: "شبت وكسبرة (صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true, trend: "up" },
 
@@ -328,7 +328,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
             { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
           
-            { name: "بصل أبيض", price: 15, unit: "كجم", category: "veg", available: true, minWeight: 1},
+            { name: "بصل أبيض", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
 
            { name: "بامية", price: 60, unit: "كجم", category: "veg", available: true, isSpecial: false },
 
@@ -350,7 +350,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
             { name: "تفاح مصري", price: 80, unit: "كجم", category: "fruit", available: true },
             { name: "تفاح أخضر دايت", price: 160, unit: "كجم", category: "fruit", available: true },
 
-            { name: "كنتالوب", price: 35, unit: "كجم", category: "fruit", available: true },
+            { name: "كنتالوب", price: 35, unit: "كجم", category: "fruit", available: false },
 
             { name: "شهد مخطط", price: 35, unit: "كجم", category: "fruit", available: true },
 
@@ -381,7 +381,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
          { name: "خوخ كحكي أردني", price: 200, unit: "كجم", category: "fruit", available: true },
 
-{ name: "كرز لبناني", price: 300, unit: "كجم", category: "fruit", available: true, minWeight: 0.25},
+{ name: "كرز سوري", price: 400, unit: "كجم", category: "fruit", available: true, minWeight: 0.25},
 
       { name: "أفوكادو", price: 200, unit: "كجم", category: "fruit", available: true }, 
 
