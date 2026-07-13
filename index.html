@@ -272,7 +272,7 @@ async function shareProject() {
 
 
 // --- [ كود الإغلاق خارج أوقات العمل ] ---
-const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
+const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
 
 
 
@@ -305,9 +305,9 @@ const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار
          { name: "قته", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
             { name: "طماطم جامدة", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
 
-{ name: "طماطم طبخ سليمة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 1 },
+{ name: "طماطم طبخ سليمة", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1 },
 
-            { name: "ليمون", price: 80, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
+            { name: "ليمون", price: 70, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
             { name: "فلفل أخضر بارد", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
             { name: "فلفل أخضر حار", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 0.25},
 
@@ -338,7 +338,7 @@ const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار
 
             { name: "كرنب أبيض (سلطة)", price: 40, unit: "حبة", category: "veg", available: true },
 
-            { name: "مشروم فريش", price: 70, unit: "طبق", category: "veg", available: false, trend: "up" },
+            { name: "مشروم فريش", price: 70, unit: "طبق", category: "veg", available: true, trend: "up" },
 
             { name: "أرز رويزق 10ك", price: 300, oldPrice: 310, unit: "شيكارة", category: "veg", available: true },
 
