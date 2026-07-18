@@ -277,14 +277,14 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = false ; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
             overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; font-family: sans-serif;`;
             overlay.innerHTML = `<div style="background: white; padding: 30px; border-radius: 20px; shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee;">
                 <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin-bottom:20px; margin-left: auto; margin-right: auto;">
-                <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل حالياً. </h2>
+                <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل يومي الأحد والاثنين.. </h2>
                 <p style="color:#666; font-size:18px;">..سنعاود العمل قريباً إن شاء الله.</p>
                 <p style="color:#22c55e; font-weight:bold; margin-top:15px; font-size:20px;">شكراً لتفهمكم ❤️</p>
             </div>`;
