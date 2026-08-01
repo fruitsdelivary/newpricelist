@@ -272,7 +272,7 @@ async function shareProject() {
 
 
 // --- [ كود الإغلاق خارج أوقات العمل ] ---
-const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
+const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
 
 
 
@@ -329,7 +329,7 @@ const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار
            
             { name: "خس كابوتشا", price: 30, unit: "حبة", category: "veg", available: false },
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
-            { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: false, minWeight: 0.5},
+            { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
           
             { name: "بصل أبيض", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
 
