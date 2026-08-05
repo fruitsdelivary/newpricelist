@@ -277,7 +277,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false ; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -365,7 +365,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
   { name: "عنب أحمر كريمسون", price: 80, unit: "كجم", category: "fruit", available: true, trend: "up" },
 
-{ name: "عنب أسمر", price: 70, unit: "كجم", category: "fruit", available: true, trend: "up" },
+{ name: "عنب أسمر", price: 70, unit: "كجم", category: "fruit", available: false, trend: "up" },
 
          { name: "برقوق", price: 110, unit: "كجم", category: "fruit", available: true },
 
@@ -387,7 +387,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
             { name: "برتقال عصير", price: 25, unit: "كجم", category: "fruit", available: true },
            
-            { name: "بطيخ", price: 150, unit: "حبة", category: "fruit", available: false, isSpecial: false },
+            { name: "بلح برحي", price: 150, unit: "كجم", category: "fruit", available: false, isSpecial: false, minWeight: 0.5 },
 
          { name: "خوخ كحكي أردني", price: 200, unit: "كجم", category: "fruit", available: true },
 
