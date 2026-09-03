@@ -277,7 +277,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false ; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -293,7 +293,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
         const productsData = [
             { name: "بصل أحمر", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
-            { name: "ثوم بلدي", price: 80, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+            { name: "ثوم بلدي", price: 60, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
             { name: "بطاطس تحمير", price: 30, unit: "كجم", category: "veg", available: true,minWeight: 1 },
             { name: "بطاطس صغيرة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 1},
             { name: "باذنجان مكبب", price: 10, unit: "كجم", category: "veg", available: true },
@@ -352,14 +352,13 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
             { name: "تفاح أصفر", price: 110, unit: "كجم", category: "fruit", available: true },
 
             { name: "تفاح سكري", price: 100, unit: "كجم", category: "fruit", available: true },
-            { name: "تفاح مصري", price: 100, unit: "كجم", category: "fruit", available: false },
-            { name: "تفاح أخضر دايت", price: 160, unit: "كجم", category: "fruit", available: true },
+            
 
             { name: "عنب بناتي", price: 80, unit: "كجم", category: "fruit", available: true },
 
   { name: "عنب أحمر كريمسون", price: 80, unit: "كجم", category: "fruit", available: true, trend: "up" },
 
-{ name: "بلح أسمر", price: 80, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.25 },
+{ name: "بلح أسمر", price: 60, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.5 },
 
          { name: "برقوق", price: 120, unit: "كجم", category: "fruit", available: true },
 
@@ -367,25 +366,21 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
           { name: "مانجو نعومي", price: 80, unit: "كجم", category: "fruit", available: true },
 
-      { name: "مانجو زبدية", price: 80, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+      { name: "مانجو زبدية", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
 
 { name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available:  true, isSpecial: false, minWeight: 0.5},
 
-{ name: "مانجو مبروكة", price: 100, unit: "كجم", category: "fruit", available:  true, isSpecial: false, minWeight: 0.5},
+{ name: "مانجو مبروكة", price: 100, unit: "كجم", category: "fruit", available:  false, isSpecial: false, minWeight: 0.5},
 
 { name: "مانجو سكري", price: 90, unit: "كجم", category: "fruit", available:  false, isSpecial: false, minWeight: 0.5}, 
 
-{ name: "مانجو فص", price: 150, unit: "كجم", category: "fruit", available:  false, isSpecial: true},
+{ name: "مانجو فص", price: 160, unit: "كجم", category: "fruit", available:  true, isSpecial: true},
 
 { name: "مانجو عويس", price: 160, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5}, 
 
-            { name: "تمر القصيم ٩٠٠جم", price: 125, unit: "علبة", category: "fruit", available: false, isSpecial:false },
-
-            { name: "برتقال عصير", price: 30, unit: "كجم", category: "fruit", available: false },
+            { name: "تمر القصيم ٩٠٠جم", price: 125, unit: "علبة", category: "fruit", available: true, isSpecial:false },
            
-            { name: "جوافة", price: 80, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
-
-         { name: "خوخ كحكي لبناني ", price: 150, unit: "كجم", category: "fruit", available: false },
+            { name: "جوافة", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
 
       { name: "بلح برحي", price: 80, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
 
