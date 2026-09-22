@@ -272,7 +272,7 @@ async function shareProject() {
 
 
 // --- [ كود الإغلاق خارج أوقات العمل ] ---
-const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
+const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
 
 
 
@@ -351,11 +351,11 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
             { name: "مشروم فريش", price: 60,oldPrice: 70, unit: "طبق", category: "veg", available: false, trend: "up" },
 
-            { name: "أرز رويزق 10ك", price: 310, oldPrice: 305, unit: "شيكارة", category: "veg", available: true },
+            { name: "أرز رويزق 10ك", price: 305, oldPrice: 310, unit: "شيكارة", category: "veg", available: true },
 
             { name: "موز", price: 50, unit: "كجم", category: "fruit", available: true, trend: "up" },
 
-            { name: "تفاح أصفر", price: 110, unit: "كجم", category: "fruit", available: true },
+            { name: "تفاح أصفر", price: 100, unit: "كجم", category: "fruit", available: true },
 
             { name: "تفاح سكري", price: 110, unit: "كجم", category: "fruit", available: true },
 
@@ -366,9 +366,10 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 { name: "بلح أسمر", price: 40, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.5 },
 
-         { name: "برقوق", price: 130, unit: "كجم", category: "fruit", available: true },
+         { name: "برقوق", price: 130, unit: "كجم", category: "fruit", available: t
+false },
 
-         { name: "كمثرى", price: 70, unit: "كجم", category: "fruit", available: false},
+         { name: "كمثرى", price: 80, unit: "كجم", category: "fruit", available: false},
 
           { name: "مانجو نعومي", price: 80, unit: "كجم", category: "fruit", available: true },
 
@@ -377,7 +378,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 { name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: false, isSpecial: false, minWeight: 0.5},
 
 
-{ name: "مانجو فص", price: 200, unit: "كجم", category: "fruit", available:  true, isSpecial: true},
+{ name: "مانجو فص", price: 200, unit: "كجم", category: "fruit", available: false, isSpecial: true},
 
 { name: "مانجو عويس", price: 150, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5}, 
 
@@ -393,7 +394,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 { name: "رمان", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
 
-{ name: "رمان سكري", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+{ name: "رمان سكري", price: 60, unit: "كجم", category: "fruit", available: true, minWeight: 1},
 
 
 
