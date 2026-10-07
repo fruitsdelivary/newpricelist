@@ -277,7 +277,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false ; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -350,7 +350,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
             { name: "ذرة أصفر", price: 60,oldPrice: 70, unit: "طبق", category: "veg", available: true },
 
-            { name: "أرز رويزق 10ك", price: 300, oldPrice: 310, unit: "شيكارة", category: "veg", available: true },
+            { name: "أرز رويزق 10ك", price: 290, oldPrice: 300, unit: "شيكارة", category: "veg", available: true },
 
             { name: "موز", price: 50, unit: "كجم", category: "fruit", available: true, trend: "up" },
 
@@ -361,9 +361,9 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 { name: "تفاح سكري٢", price: 100, unit: "كجم", category: "fruit", available: true },
 
 { name: "تفاح أحمر صغير", price: 80, unit: "كجم", category: "fruit", available:true, minWeight: 1 },
-            
+            { name: "عنب أحمر كريمسون", price: 80, unit: "كجم", category: "fruit", available: true, trend: "up" },
 
-  { name: "عنب أحمر كريمسون", price: 80, unit: "كجم", category: "fruit", available: true, trend: "up" },
+  { name: "عنب ببذر", price: 35, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
 
 { name: "بلح أسمر", price: 35, unit: "كجم", category: "fruit", available: true, trend: "down", minWeight: 0.5 },
 
@@ -373,11 +373,9 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
           { name: "مانجو نعومي", price: 80, unit: "كجم", category: "fruit", available: true },
 
-      { name: "مانجو زبدية", price: 80, unit: "كجم", category: "fruit", available: false, minWeight: 0.5 },
-
 { name: "كاكا", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
 
-{ name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5},
+{ name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 1},
 
 
 { name: "مانجو فص", price: 200, unit: "كجم", category: "fruit", available: true, isSpecial: true},
@@ -390,7 +388,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
       { name: "بلح برحي", price: 80, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
 
-{ name: "بلح أحمر ", price: 40, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+{ name: "بلح أحمر ", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 0.5},
 
 { name: "برتقال أخضر", price: 30, unit: "كجم", category: "fruit", available: true, minWeight: 1},
 
