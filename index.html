@@ -272,12 +272,12 @@ async function shareProject() {
 
 
 // --- [ كود الإغلاق خارج أوقات العمل ] ---
-const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
+const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
 
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false ; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -303,9 +303,9 @@ const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار
             { name: "جزر", price: 40, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
 
          
-            { name: "طماطم جامدة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+            { name: "طماطم جامدة", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
 
-{ name: "طماطم طبخ سليمة", price: 17.5, unit: "كجم", category: "veg", available: true, minWeight: 1 },
+{ name: "طماطم طبخ سليمة", price: 15, unit: "كجم", category: "veg", available: true, minWeight: 1 },
 
             { name: "ليمون", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
 
@@ -348,7 +348,7 @@ const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار
 
             { name: "كرنب أبيض (سلطة)", price: 35, unit: "حبة", category: "veg", available: true },
 
-            { name: "ذرة أصفر", price: 60,oldPrice: 70, unit: "طبق", category: "veg", available: true },
+            { name: "ذرة أصفر", price: 60,oldPrice: 70, unit: "طبق", category: "veg", available: false },
 
             { name: "أرز رويزق 10ك", price: 290, oldPrice: 300, unit: "شيكارة", category: "veg", available: true },
 
@@ -382,13 +382,13 @@ const closeAfterHoursMode = true ; // غيرها إلى true لقفل أزرار
 
 { name: "مانجو عويس", price: 150, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5}, 
 
-            { name: "تمر القصيم ٩٠٠جم", price: 130, unit: "علبة", category: "fruit", available: false, isSpecial:false },
+            { name: "تمر القصيم ٩٠٠جم", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial:false },
            
             { name: "جوافة", price: 80, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
 
       { name: "بلح برحي", price: 80, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
 
-{ name: "بلح أحمر ", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 0.5},
+{ name: "بلح أحمر ", price: 40, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
 
 { name: "برتقال أخضر", price: 30, unit: "كجم", category: "fruit", available: true, minWeight: 1},
 
