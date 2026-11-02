@@ -277,7 +277,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 
         // --- [ كود وضع الإجازة ] ---
-        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
+        const holidayMode = false ; // غيرها إلى true لتفعيل وضع الإجازة
 
         if (holidayMode) {
             const overlay = document.createElement('div');
@@ -299,7 +299,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
             { name: "باذنجان مكبب", price: 15, unit: "كجم", category: "veg", available: true },
             { name: "باذنجان حشو", price: 20, unit: "كجم", category: "veg", available: true },
             { name: "خيار", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
-            { name: "كوسة", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+            { name: "كوسة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
             { name: "جزر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
 
          
@@ -323,7 +323,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 { name: "قلقاس", price: 35, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
 
-{ name: "فاصوليا خضراء", price:  35, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+{ name: "فاصوليا خضراء", price:  30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
 
             { name: "شبت وكسبرة (صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true, trend: "up" },
 
@@ -348,13 +348,13 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 { name: "بطاطا", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
 
 
-       { name:  "ملوخية", price: 15, unit: "ربطة", category: "veg", available: true },
+       { name:  "خس بلدي", price: 15, unit: "ربطة", category: "veg", available: true },
 
             { name: "كرنب أحمر (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
 
             { name: "كرنب أبيض (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
 
-            { name: "ذرة أصفر", price: 55,oldPrice: 65, unit: "طبق", category: "veg", available: true },
+            { name: "ذرة أصفر", price: 55,oldPrice: 65, unit: "طبق", category: "veg", available: false },
 
 { name: "مشروم فريش", price: 65,oldPrice: 70, unit: "طبق", category: "veg", available: false },
 
@@ -390,13 +390,13 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
             { name: "تمر القصيم ٩٠٠جم", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial:false },
            
-            { name: "جوافة بلطيمي", price: 80, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
+            { name: "جوافة بلطيمي", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
 
 { name: "جوافة", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
 
-      { name: "بلح برحي", price: 100, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+      { name: "بلح برحي", price: 100, unit: "كجم", category: "fruit", available: false, minWeight: 0.5},
 
-{ name: "بلح أحمر ", price: 40, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+{ name: "بلح أحمر ", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 0.5},
 
 { name: "برتقال بصرة", price: 30, unit: "كجم", category: "fruit", available: true, minWeight: 1},
 
@@ -408,7 +408,7 @@ const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرا�
 
 { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
 
-{ name: "كيوي", price: 200, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
+{ name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
 
 
 
