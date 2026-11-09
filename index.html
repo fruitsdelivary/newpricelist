@@ -415,7 +415,7 @@ setInterval(updateWorkSchedule, 30000);
 // ==========================================
 
 
-        const productsData = [
+        let productsData = [
             { name: "بصل أحمر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
             { name: "ثوم بلدي", price: 70, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
             { name: "بطاطس تحمير", price: 35, unit: "كجم", category: "veg", available: true,minWeight: 1 },
@@ -594,6 +594,125 @@ setInterval(updateWorkSchedule, 30000);
         ];
 
 
+// ==========================================
+// تحديث الأسعار تلقائياً من Google Sheets
+// اسم الورقة: الأسعار
+// ==========================================
+const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv';
+
+function parseCSV(text) {
+    const rows = [];
+    let row = [], cell = '', quoted = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === '"') {
+            if (quoted && text[i + 1] === '"') { cell += '"'; i++; }
+            else quoted = !quoted;
+        } else if (ch === ',' && !quoted) {
+            row.push(cell); cell = '';
+        } else if ((ch === '\n' || ch === '\r') && !quoted) {
+            if (ch === '\r' && text[i + 1] === '\n') i++;
+            row.push(cell);
+            if (row.some(value => String(value).trim() !== '')) rows.push(row);
+            row = []; cell = '';
+        } else {
+            cell += ch;
+        }
+    }
+    row.push(cell);
+    if (row.some(value => String(value).trim() !== '')) rows.push(row);
+    return rows;
+}
+
+function cleanSheetNumber(value) {
+    const normalized = String(value ?? '')
+        .trim()
+        .replace(/[٠-٩]/g, digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit))
+        .replace(/[۰-۹]/g, digit => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
+        .replace(/[٫٬]/g, '.')
+        .replace(/,/g, '');
+    if (!normalized) return null;
+    const number = Number(normalized);
+    return Number.isFinite(number) ? number : null;
+}
+
+async function loadPricesFromSheet() {
+    try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error('تعذر تحميل جدول الأسعار');
+        const csvText = await response.text();
+        const rows = parseCSV(csvText);
+        if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
+
+        const headers = rows[0].map((value, index) =>
+            String(value).replace(/^\uFEFF/, '').trim()
+        );
+        const column = name => headers.indexOf(name);
+        const requiredColumns = ['اسم الصنف', 'السعر بالجنيه', 'الوحدة', 'القسم', 'متاح؟'];
+        if (requiredColumns.some(name => column(name) === -1)) {
+            throw new Error('أسماء أعمدة جدول الأسعار لا تطابق القالب');
+        }
+
+        const get = (row, name) => {
+            const index = column(name);
+            return index < 0 ? '' : String(row[index] ?? '').trim();
+        };
+        const yes = value => ['نعم', 'متاح', 'نعم متاح', 'yes', 'true', '1'].includes(value.toLowerCase());
+        const no = value => ['لا', 'غير متاح', 'نفد', 'no', 'false', '0'].includes(value.toLowerCase());
+        const updatedProducts = [];
+
+        rows.slice(1).forEach(row => {
+            const name = get(row, 'اسم الصنف');
+            if (!name) return;
+            const price = cleanSheetNumber(get(row, 'السعر بالجنيه'));
+            // لا نعرض صنفاً بسعر فارغ أو غير صحيح، ولا نحوّله إلى سعر صفر.
+            if (price === null || price <= 0) return;
+
+            const oldProduct = productsData.find(product => product.name.trim() === name);
+            const product = oldProduct ? { ...oldProduct, name } : {
+                name, price, unit: 'كجم', category: 'veg', available: true
+            };
+            product.price = price;
+
+            const unit = get(row, 'الوحدة');
+            if (unit) product.unit = unit;
+
+            const category = get(row, 'القسم');
+            if (category) product.category = category.includes('فاكه') ? 'fruit' : 'veg';
+
+            const availability = get(row, 'متاح؟');
+            if (yes(availability)) product.available = true;
+            else if (no(availability)) product.available = false;
+
+            const minWeightText = get(row, 'أقل وزن (كجم)');
+            const minWeight = cleanSheetNumber(minWeightText);
+            if (minWeight !== null && minWeight > 0) product.minWeight = minWeight;
+            else if (minWeightText === '') delete product.minWeight;
+
+            const oldPriceText = get(row, 'السعر القديم');
+            const oldPrice = cleanSheetNumber(oldPriceText);
+            if (oldPrice !== null && oldPrice > 0) product.oldPrice = oldPrice;
+            else delete product.oldPrice;
+
+            const trend = get(row, 'اتجاه السعر').toLowerCase();
+            if (['up', 'صاعد', 'مرتفع', 'زيادة', '↑'].includes(trend)) product.trend = 'up';
+            else if (['down', 'هابط', 'منخفض', 'انخفاض', '↓'].includes(trend)) product.trend = 'down';
+            else delete product.trend;
+
+            const special = get(row, 'صنف مميز؟');
+            product.isSpecial = yes(special);
+            updatedProducts.push(product);
+        });
+
+        if (!updatedProducts.length) throw new Error('لم يتم العثور على أصناف بأسعار صحيحة');
+        productsData = updatedProducts;
+        console.info(`تم تحديث ${productsData.length} صنفاً من جدول الأسعار`);
+    } catch (error) {
+        console.warn('تعذر تحديث الأسعار من Google Sheets، سيتم استخدام الأسعار المحفوظة بالموقع:', error);
+    }
+}
+
+
         function init() {
     try {
         const now = new Date();
@@ -741,7 +860,16 @@ setInterval(updateWorkSchedule, 30000);
 
 
 
-        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+        async function startApp() {
+            await loadPricesFromSheet();
+            init();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startApp);
+        } else {
+            startApp();
+        }
 
 
        function toggleView(v) {
