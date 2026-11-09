@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -199,6 +199,7 @@
         🔙 العودة لقائمة الأسعار
     </button>
     
+    <div id="reviews-summary" class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center mb-5">جاري تحميل التقييمات...</div>
     <div id="reviews-container" class="space-y-4"></div>
 </div>
 
@@ -207,21 +208,13 @@
 
         <div class="rating-card">
             <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
-            <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار)</p>
-            <div class="star-rating mb-4">
-                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
-            </div>
-            <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
-            <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
+            <p class="text-sm text-gray-500 mb-4">يسعدنا تقييمك لخدمتنا ومشاركتنا اقتراحاتك. اضغط على الزر التالي لإرسال تقييمك.</p>
+            <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-3 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">قيّم تجربتك معنا ⭐</button>
         </div>
 
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
-            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
+            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 10 ص إلى 5 م يومياً عدا الجمعة</div>
 
 
 <button onclick="toggleView('reviews-view')" 
@@ -287,6 +280,47 @@
 
     <script>
 
+// روابط التقييمات المعتمدة ونموذج إرسال تقييم جديد
+const GOOGLE_REVIEWS_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/1mS5U8R5RWov6pwh8u3BnQDPOKh-Lz2gX7nMv8Dczsm0/export?format=csv&gid=0";
+const GOOGLE_REVIEW_FORM_URL =
+    "https://docs.google.com/forms/d/e/1FAIpQLSfKWyBllhmoR4YWDJrcfkbOrufQGpbUbj__RjTtKQvaVYMURg/viewform";
+
+// قراءة CSV مع مراعاة الفواصل الموجودة داخل النصوص وعلامات الاقتباس
+function parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", quoted = false;
+    text = String(text || "").replace(/^\uFEFF/, "");
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === '"') {
+            if (quoted && text[i + 1] === '"') { field += '"'; i++; }
+            else quoted = !quoted;
+        } else if (ch === "," && !quoted) {
+            row.push(field); field = "";
+        } else if ((ch === "\n" || ch === "\r") && !quoted) {
+            if (ch === "\r" && text[i + 1] === "\n") i++;
+            row.push(field);
+            if (row.some(cell => String(cell).trim() !== "")) rows.push(row);
+            row = []; field = "";
+        } else { field += ch; }
+    }
+    row.push(field);
+    if (row.some(cell => String(cell).trim() !== "")) rows.push(row);
+    return rows;
+}
+
+function normalizeText(value) {
+    return String(value ?? "").replace(/^\uFEFF/, "").trim().replace(/\s+/g, " ");
+}
+
+function parseSheetNumber(value) {
+    const arabicDigits = {"٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9"};
+    const normalized = String(value ?? "").replace(/[٠-٩]/g, d => arabicDigits[d]).trim();
+    if (!normalized) return null;
+    const number = Number(normalized);
+    return Number.isFinite(number) ? number : null;
+}
 
 async function shareProject() {
     const shareData = {
@@ -312,110 +346,32 @@ async function shareProject() {
 
 
 
-// ==========================================
-// نظام الإغلاق التلقائي والإجازة الأسبوعية
-// يعتمد على توقيت مصر Africa/Cairo
-// ==========================================
-
-let closeAfterHoursMode = false;
-let holidayMode = false;
-let scheduleOverlay = null;
-let currentOverlayMode = null;
-
-function updateWorkSchedule() {
-    // استخراج اليوم والوقت حسب توقيت مصر، وليس توقيت جهاز الزائر
-    const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Africa/Cairo',
-        weekday: 'long',
-        hour: '2-digit',
-        minute: '2-digit',
-        hourCycle: 'h23'
-    }).formatToParts(new Date());
-
-    const getPart = (type) => parts.find(part => part.type === type).value;
-    const day = getPart('weekday');
-    const hour = Number(getPart('hour'));
-    const minute = Number(getPart('minute'));
-    const currentTime = hour * 60 + minute;
-
-    // الإغلاق اليومي: من 4:15 مساءً حتى 7:00 صباحاً
-    closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
-
-    // الإجازة الأسبوعية: الخميس 4:15 مساءً حتى السبت 7:00 صباحاً
-    holidayMode =
-        (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
-        day === 'Friday' ||
-        (day === 'Saturday' && currentTime < 7 * 60);
-
-    // الإجازة لها أولوية على رسالة الإغلاق اليومي
-    let overlayMode = null;
-    if (holidayMode) {
-        overlayMode = 'holiday';
-    } else if (closeAfterHoursMode) {
-        overlayMode = 'closed';
-    }
-
-    // لا تعِد إنشاء الشاشة إذا لم تتغير الحالة
-    if (overlayMode === currentOverlayMode) return;
-    currentOverlayMode = overlayMode;
-
-    if (scheduleOverlay) {
-        scheduleOverlay.remove();
-        scheduleOverlay = null;
-    }
-
-    // وقت العمل: إزالة شاشة التنويه وفتح الموقع
-    if (!overlayMode) return;
-
-    scheduleOverlay = document.createElement('div');
-    scheduleOverlay.style.cssText = `
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        z-index: 100000;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 20px;
-        font-family: sans-serif;
-    `;
-
-    if (overlayMode === 'holiday') {
-        scheduleOverlay.innerHTML = `
-            <div style="background:white;padding:30px;border-radius:20px;border:1px solid #eee;box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-                <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin:0 auto 20px;">
-                <h2 style="color:#333;margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل حالياً</h2>
-                <p style="color:#666;font-size:18px;">نحن في إجازتنا الأسبوعية.<br>سنعاود استقبال الطلبات يوم السبت الساعة 7 صباحاً إن شاء الله.</p>
-                <p style="color:#22c55e;font-weight:bold;margin-top:15px;font-size:20px;">شكراً لتفهمكم ❤️</p>
-            </div>
-        `;
-    } else {
-        scheduleOverlay.innerHTML = `
-            <div style="background:white;padding:30px;border-radius:20px;border:1px solid #eee;box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-                <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin:0 auto 20px;">
-                <h2 style="color:#333;margin-bottom:10px;">نعتذر، نحن خارج أوقات العمل حالياً</h2>
-                <p style="color:#666;font-size:18px;">نستقبل طلباتكم يومياً من 7 صباحاً حتى 4:15 مساءً، عدا الجمعة.</p>
-                <p style="color:#22c55e;font-weight:bold;margin-top:15px;font-size:20px;">ننتظركم في أقرب وقت ❤️</p>
-            </div>
-        `;
-    }
-
-    document.documentElement.appendChild(scheduleOverlay);
-}
-
-// تشغيل الجدول فور فتح الصفحة، ثم مراجعته كل 30 ثانية
-updateWorkSchedule();
-setInterval(updateWorkSchedule, 30000);
-// ==========================================
+// --- [ كود الإغلاق خارج أوقات العمل ] ---
+const closeAfterHoursMode = false ; // غيرها إلى true لقفل أزرار الطلب فقط وإظهار التنويه، أو false لفتح الطلبات!
 
 
-        let productsData = [
+
+
+
+
+        // --- [ كود وضع الإجازة ] ---
+        const holidayMode = true ; // غيرها إلى true لتفعيل وضع الإجازة
+
+
+        if (holidayMode) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; font-family: sans-serif;`;
+            overlay.innerHTML = `<div style="background: white; padding: 30px; border-radius: 20px; shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee;">
+                <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin-bottom:20px; margin-left: auto; margin-right: auto;">
+                <h2 style="color:#333; margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل في الوقت الحالي.. </h2>
+                <p style="color:#666; font-size:18px;">..سنعاود العمل قريباً إن شاء الله.</p>
+                <p style="color:#22c55e; font-weight:bold; margin-top:15px; font-size:20px;">شكراً لتفهمكم ❤️</p>
+            </div>`;
+            document.documentElement.appendChild(overlay);
+        }
+
+
+        const productsData = [
             { name: "بصل أحمر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
             { name: "ثوم بلدي", price: 70, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
             { name: "بطاطس تحمير", price: 35, unit: "كجم", category: "veg", available: true,minWeight: 1 },
@@ -594,112 +550,6 @@ setInterval(updateWorkSchedule, 30000);
         ];
 
 
-
-        // تحميل الأسعار والبيانات اليومية من Google Sheets
-        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv";
-
-        function parseCSV(text) {
-            const rows = [];
-            let row = [], cell = "", quoted = false;
-            for (let i = 0; i < text.length; i++) {
-                const ch = text[i], next = text[i + 1];
-                if (ch === '"' && quoted && next === '"') { cell += '"'; i++; }
-                else if (ch === '"') quoted = !quoted;
-                else if (ch === ',' && !quoted) { row.push(cell.trim()); cell = ""; }
-                else if ((ch === '\n' || ch === '\r') && !quoted) {
-                    if (ch === '\r' && next === '\n') i++;
-                    row.push(cell.trim());
-                    if (row.some(v => v !== "")) rows.push(row);
-                    row = []; cell = "";
-                } else cell += ch;
-            }
-            row.push(cell.trim());
-            if (row.some(v => v !== "")) rows.push(row);
-            return rows;
-        }
-
-        function normalizeText(value) {
-            return String(value ?? "").trim().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").toLowerCase();
-        }
-
-        function parseSheetNumber(value) {
-            if (value == null || String(value).trim() === "") return null;
-            const normalized = String(value).trim()
-                .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
-                .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
-                .replace(/٫/g, ".").replace(/٬/g, "").replace(/,/g, "");
-            const n = Number(normalized);
-            return Number.isFinite(n) ? n : null;
-        }
-
-        async function loadPricesFromSheet() {
-            try {
-                const response = await fetch(GOOGLE_SHEET_CSV_URL + "&_=" + Date.now(), { cache: "no-store" });
-                if (!response.ok) throw new Error("تعذر تحميل جدول الأسعار");
-                const csv = await response.text();
-                const rows = parseCSV(csv);
-                if (rows.length < 2) throw new Error("جدول الأسعار فارغ");
-
-                const headers = rows[0].map(normalizeText);
-                const col = name => headers.indexOf(normalizeText(name));
-                const nameCol = col("اسم الصنف");
-                const priceCol = col("السعر بالجنيه");
-                const unitCol = col("الوحدة");
-                const categoryCol = col("القسم");
-                const availableCol = col("متاح؟");
-                const minWeightCol = col("أقل وزن (كجم)");
-                const oldPriceCol = col("السعر القديم");
-                const trendCol = col("اتجاه السعر");
-                const specialCol = col("صنف مميز؟");
-                if (nameCol < 0 || priceCol < 0) throw new Error("أعمدة الاسم أو السعر غير موجودة");
-
-                const byName = new Map();
-                rows.slice(1).forEach(row => {
-                    const name = row[nameCol]?.trim();
-                    if (name) byName.set(normalizeText(name), row);
-                });
-
-                productsData.forEach(product => {
-                    const row = byName.get(normalizeText(product.name));
-                    if (!row) return;
-
-                    const price = parseSheetNumber(row[priceCol]);
-                    if (price !== null) product.price = price;
-                    if (unitCol >= 0 && row[unitCol]) product.unit = row[unitCol].trim();
-
-                    if (categoryCol >= 0 && row[categoryCol]) {
-                        const category = normalizeText(row[categoryCol]);
-                        product.category = (category.includes("فاكه") || category.includes("فواكه") || category.includes("fruit")) ? "fruit" : "veg";
-                    }
-                    if (availableCol >= 0 && row[availableCol] !== "") {
-                        const available = normalizeText(row[availableCol]);
-                        product.available = ["نعم", "متاح", "متوفر", "yes", "true", "1"].includes(available);
-                    }
-                    if (minWeightCol >= 0) {
-                        const minWeight = parseSheetNumber(row[minWeightCol]);
-                        if (minWeight !== null) product.minWeight = minWeight;
-                    }
-                    if (oldPriceCol >= 0) {
-                        const oldPrice = parseSheetNumber(row[oldPriceCol]);
-                        product.oldPrice = oldPrice !== null ? oldPrice : null;
-                    }
-                    if (trendCol >= 0) {
-                        const trend = normalizeText(row[trendCol]);
-                        if (["ارتفاع", "صعود", "up", "increase", "مرتفع"].includes(trend)) product.trend = "up";
-                        else if (["انخفاض", "هبوط", "down", "decrease", "منخفض"].includes(trend)) product.trend = "down";
-                        else product.trend = "";
-                    }
-                    if (specialCol >= 0 && row[specialCol] !== "") {
-                        const special = normalizeText(row[specialCol]);
-                        product.isSpecial = ["نعم", "yes", "true", "1"].includes(special);
-                    }
-                });
-                console.log("تم تحديث الأسعار من Google Sheets");
-            } catch (error) {
-                console.warn("تعذر تحديث الأسعار من Google Sheets، سيتم استخدام الأسعار المحفوظة بالموقع:", error);
-            }
-        }
-
         function init() {
     try {
         const now = new Date();
@@ -709,17 +559,28 @@ setInterval(updateWorkSchedule, 30000);
 
         let sVeg = '', sFruit = '', iAll = '';
         productsData.forEach(p => {
-            const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
-            const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
+            const specialBadge = p.available && p.isSpecial
+                ? `<span class="special-badge">مميز ⭐</span>` : '';
+            const offerBadge = p.available && p.oldPrice
+                ? `<span class="offer-badge">عرض 🔥</span>` : '';
 
 
-            // مثلثات صغيرة لاتجاه السعر
+            // --- تصميم الأسهم الهندسية الملونة والمحاذية جهة اليمين ---
             let trendArrow = '';
             if (p.trend === 'down') {
-                trendArrow = '<span class="inline-block text-red-600 font-black text-sm leading-none" aria-label="انخفاض">▼</span>';
+                // سهم أحمر صريح متجّه لأسفل مع تأثير النبض التفاعلي
+                trendArrow = `
+                    <svg class="w-4 h-4 text-red-600 animate-pulse inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path>
+                    </svg>`;
             } else if (p.trend === 'up') {
-                trendArrow = '<span class="inline-block text-green-600 font-black text-sm leading-none" aria-label="ارتفاع">▲</span>';
+                // سهم أخضر صريح متجّه لأعلى
+                trendArrow = `
+                    <svg class="w-4 h-4 text-green-600 inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"></path>
+                    </svg>`;
             }
+
 
             // تعديل الترتيب: وضع الـ trendArrow على يمين السعر الحالي مباشرة داخل الـ flex
             const priceDiv = `
@@ -838,14 +699,10 @@ setInterval(updateWorkSchedule, 30000);
 
 
 
-        async function startApp() { await loadPricesFromSheet(); init(); }
-        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
 
        function toggleView(v) {
-    // تحديث حالة العمل لحظياً قبل السماح بفتح نموذج الطلب
-    updateWorkSchedule();
-
     // 1. تحديد كل الأقسام
     const priceView = document.getElementById('price-list-view');
     const orderView = document.getElementById('order-form-view');
@@ -853,16 +710,11 @@ setInterval(updateWorkSchedule, 30000);
     const mainTitle = document.getElementById('main-title');
 
 
-    // 2. منع فتح نموذج الطلب أثناء الإغلاق أو الإجازة
+    // 2. التحقق من مفتاح الإغلاق خارج أوقات العمل
     if (v === 'order-form-view') {
-        if (holidayMode) {
-            alert("❤️ نحن في إجازتنا الأسبوعية.\nسنعاود استقبال الطلبات يوم السبت الساعة 7 صباحاً إن شاء الله.");
-            return;
-        }
-
         if (closeAfterHoursMode) {
-            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار، وسنكون في انتظاركم عند بدء العمل الساعة 7 صباحاً إن شاء الله! ❤️");
-            return;
+            alert("🚨 نحن الآن خارج أوقات العمل .\n\nيمكنكم تصفح قائمة الأسعار والإطلاع عليها، وسنكون بإنتظاركم فور بدء مواعيد العمل إن شاء الله! ❤️");
+            return; // إيقاف الدخول لصفحة الطلب
         }
     }
 
@@ -880,6 +732,7 @@ setInterval(updateWorkSchedule, 30000);
     } else if (v === 'reviews-view') {
         reviewsView.style.display = 'block';
         mainTitle.textContent = '⭐⭐ مراجعات وآراء عملاءنا الكرام ⭐⭐';
+        loadReviews();
     } else {
         priceView.style.display = 'block';
         mainTitle.textContent = '💰أسعار اليوم💰';
@@ -898,19 +751,6 @@ setInterval(updateWorkSchedule, 30000);
 
 
         function generateWhatsAppOrder() {
-            // إعادة فحص الموعد قبل تجهيز أو إرسال الطلب
-            updateWorkSchedule();
-
-            if (holidayMode) {
-                alert("❤️ نحن في إجازتنا الأسبوعية.\nلا يمكن إرسال الطلبات حالياً، وسنعاود العمل السبت الساعة 7 صباحاً إن شاء الله.");
-                return;
-            }
-
-            if (closeAfterHoursMode) {
-                alert("🚨 انتهت مواعيد استقبال الطلبات اليوم.\nيمكنك إرسال طلبك بعد الساعة 7 صباحاً إن شاء الله.");
-                return;
-            }
-
             let vegItems = '', fruitItems = '', count = 0;
             document.querySelectorAll('.quantity-select').forEach(s => {
                 if (s.value != "0") {
@@ -934,32 +774,9 @@ setInterval(updateWorkSchedule, 30000);
 
 
         function confirmMyRating() {
-            const selectedStar = document.querySelector('input[name="rating"]:checked');
-            if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
-            const stars = parseInt(selectedStar.value);
-            const myWhatsAppNumber = "201032872750";
-
-
-            if (stars >= 4) {
-                if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على صفحة فيسبوك؟`)) {
-                    finalizeRating(); window.open("https://www.facebook.com/3oroadtawfeer", '_blank');
-                }
-            } else {
-                if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف سبب التقييم ونقدم الحل المناسب بإذن الله`)) {
-                    finalizeRating();
-                    let starEmojis = '⭐'.repeat(stars);
-                    let msg = `⚠️ ملاحظة عميل: تقييم  ${stars} نجوم ${starEmojis}(من فضلك اكتب ملاحظاتك هنا)`;
-                    window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-                }
-            }
+            window.open(GOOGLE_REVIEW_FORM_URL, "_blank", "noopener,noreferrer");
         }
 
-
-        function finalizeRating() {
-            const f = document.getElementById('rating-feedback'), b = document.getElementById('confirm-btn'), s = document.querySelector('.star-rating');
-            if(f) f.classList.remove('hidden'); if(b) b.classList.add('hidden');
-            if(s) { s.style.pointerEvents = 'none'; s.style.opacity = '0.5'; }
-        }
 
 
 function filterProducts() {
@@ -979,122 +796,91 @@ function filterProducts() {
 }
 
 
-// قائمة المراجعات - أضف هنا بسهولة دون زحام
-const allReviews = [
-    { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
-
-
-{ name: "Aml Saad", text:  `
-ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر` },
-
-
-     { name: "أ/سارة", text:  `
-ايه تقييم حضرتك لنظام الطلب الجديد؟ جميل جدا جدا 
-بيفكرنى بكل اللى محتاجاه` },
-
-
-    { name: "أ.مدحت", text: `السلام عليكم
-ملاحظه  : 
-البطيخه السابقه كانت أحلى بطيخه أكلناها فى حياتنا  ،  ربنا يوسع عليكم. 
-بطيخه زى بتاعة المره اللى فاتت
-وشكرا` },
-    { name: "د.ميرفت", text: `السلام عليكم
-لسه فاتحه البطيخه النهارده 
-سكككككككر
-تسلم ايدك` },
-
-
-{ name: "Om Eslam", text: `تمام الحمد لله أنا دوخت علي رقمك وصفحتك واضطريت اجيب من ناس تانيه بس بصراحه التعامل مع حضرتك حاجه تانيه` },
-
-
-            { name: "السيد حسن", text: `   جزاك الله خيرا
-الحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله 
-جزاك الله خيرا 🌹🌹` },
-
-
-        { name: "Adam", text: `خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا` },
-
-
- { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
-
-
-      
- { name: "أ/سارة", text:  `ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
-
-
-    { name: "dr.eman", text:  ` 
-ربنا يجزيك الحسني و زياده 
-كفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل
-ربنا يبارك لك يا ابني و يجعله في ميزان حسناتك` },
-
-
-      
- { name: "أ/هبه", text: `شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل` },
-
-
-
-
- { name: "مدام سالي", text:  `الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي 
-يارب تفضل علي نفس المستوي علطول بإذن الله 
-جزاكم الله خيرا` },
-
-
-{ name: "", text: `شكرا على حسن معاملتكم والبدنجان والفاكهه جميله جدا` },
-
-
-{ name: "مدام سالي", text: `شكرا ع الحاجه جميله جدااااا كالعاده يارب دايما متميزين` },
-
-
-{ name: "", text: `شكرا عالحاجة جميلة جدا والبلح نضيف ماشاءالله... كنت برة فمشوار وبناتي اللي استلموا الاوردر.. تسلموا ع امانتكم` },
-
-
-{ name: "أ/شيرين", text: `الف شكر عالاوردر كله و عالهدية ماشاءالله تبارك الرحمن روعة تسلم ايدك` },
-
-
-{ name: "أوشو", text: `ماشاء الله الفاكهه جميله جداا والله  ومفيش فيها حاجه وحشه 
-وخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜` },
-
-
-{ name: "", text: `
-الفاكهة جميلة جدا زي كل مرة طبعا 
-ماشاءالله 
-ربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة` },
-
-
-{ name: "", text: `
-البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك` },
-
-
-
-
-    // أضف مراجعات جديدة هنا بنفس التنسيق
-];
-
-
-// دالة عرض المراجعات تلقائياً
-function loadReviews() {
-    const container = document.getElementById('reviews-container');
-    if(!container) return;
-    
-    container.innerHTML = allReviews.map(rev => `
-        <div class="bg-white p-5 rounded-2xl shadow-sm border-r-4 border-green-500 mb-4">
-            <div class="flex justify-between items-center mb-2">
-                <span class="font-bold text-green-700">${rev.name}</span>
-                <span class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</span>
-            </div>
-            <p class="text-gray-700 italic">"${rev.text}"</p>
-        </div>
-    `).join('');
+// تحميل وعرض التقييمات التي تمت مراجعتها واعتمادها فقط
+function escapeReviewHTML(value) {
+    return String(value ?? "").replace(/[&<>\"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '\"': "&quot;", "'": "&#39;"
+    })[char]);
 }
 
+async function loadReviews() {
+    const container = document.getElementById("reviews-container");
+    const summary = document.getElementById("reviews-summary");
+    if (!container || !summary) return;
 
-// استدعي الدالة لتشغيلها عند تحميل الموقع
-window.addEventListener('DOMContentLoaded', loadReviews);
+    summary.textContent = "جاري تحميل التقييمات...";
+    container.innerHTML = "";
 
+    try {
+        const response = await fetch(
+            GOOGLE_REVIEWS_CSV_URL + "&_=" + Date.now(),
+            { cache: "no-store" }
+        );
+        if (!response.ok) throw new Error("تعذر الوصول إلى جدول التقييمات");
 
+        const csv = await response.text();
+        const rows = parseCSV(csv);
+        if (rows.length < 2) throw new Error("لا توجد تقييمات معتمدة حتى الآن");
 
+        const headers = rows[0].map(normalizeText);
+        const column = name => headers.indexOf(normalizeText(name));
+        const ratingCol = column("عدد النجوم");
+        const nameCol = column("اسم العميل");
+        const commentCol = column("تعليق العميل");
+        const dateCol = column("تاريخ التقييم");
 
-    </script>
+        if (ratingCol < 0 || commentCol < 0) {
+            throw new Error("يرجى مراجعة عناوين أعمدة جدول التقييمات");
+        }
+
+        const reviews = rows.slice(1).map(row => {
+            const rating = parseSheetNumber(row[ratingCol]);
+            if (!Number.isInteger(rating) || rating < 1 || rating > 5) return null;
+            return {
+                rating,
+                name: nameCol >= 0 ? normalizeText(row[nameCol]) : "",
+                comment: commentCol >= 0 ? normalizeText(row[commentCol]) : "",
+                date: dateCol >= 0 ? normalizeText(row[dateCol]) : ""
+            };
+        }).filter(Boolean);
+
+        if (!reviews.length) {
+            summary.innerHTML = '<div class="font-bold text-gray-700">لا توجد تقييمات معتمدة حتى الآن</div>';
+            return;
+        }
+
+        const average = (reviews.reduce((sum, item) => sum + item.rating, 0) / reviews.length).toFixed(1);
+        summary.innerHTML = `
+            <div class="text-yellow-500 text-2xl font-extrabold mb-2">⭐ ${average} / 5</div>
+            <div class="font-bold text-gray-700">بناءً على ${reviews.length} تقييم معتمد</div>
+        `;
+
+        container.innerHTML = reviews.map(review => {
+            const name = escapeReviewHTML(review.name || "عميلنا الكريم");
+            const comment = escapeReviewHTML(review.comment || "لم يترك تعليقًا");
+            const date = escapeReviewHTML(review.date);
+            return `
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-r-4 border-green-500 mb-4">
+                    <div class="flex justify-between items-center mb-2 gap-2">
+                        <span class="font-bold text-green-700">${name}</span>
+                        <span class="text-yellow-500 text-sm whitespace-nowrap">${"⭐".repeat(review.rating)}</span>
+                    </div>
+                    <p class="text-gray-700 italic leading-relaxed">${comment}</p>
+                    ${date ? `<div class="text-xs text-gray-400 mt-3">${date}</div>` : ""}
+                </div>
+            `;
+        }).join("");
+    } catch (error) {
+        console.error("خطأ تحميل التقييمات:", error);
+        summary.innerHTML = `
+            <div class="text-red-600 font-bold">تعذر تحميل التقييمات حاليًا.</div>
+            <div class="text-gray-500 text-sm mt-1">يرجى المحاولة مرة أخرى لاحقًا.</div>
+        `;
+    }
+}
+
+</script>
 
 
 
