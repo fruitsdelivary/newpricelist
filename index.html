@@ -221,7 +221,7 @@
 
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
-            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 استقبال الطلبات من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
+            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
 
 
 <button onclick="toggleView('reviews-view')" 
@@ -677,8 +677,15 @@ async function loadPricesFromSheet() {
             const unit = get(row, 'الوحدة');
             if (unit) product.unit = unit;
 
-            const category = get(row, 'القسم');
-            if (category) product.category = category.includes('فاكه') ? 'fruit' : 'veg';
+            const category = get(row, 'القسم').trim().toLowerCase();
+            if (category) {
+                // دعم الصيغ المختلفة لاسم قسم الفواكه في Google Sheets
+                const normalizedCategory = category.replace(/[أإآ]/g, 'ا').replace(/\s+/g, '');
+                const isFruit = normalizedCategory.includes('فاكه') ||
+                    normalizedCategory.includes('فواك') ||
+                    normalizedCategory.includes('fruit');
+                product.category = isFruit ? 'fruit' : 'veg';
+            }
 
             const availability = get(row, 'متاح؟');
             if (yes(availability)) product.available = true;
