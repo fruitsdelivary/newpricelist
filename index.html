@@ -264,17 +264,20 @@ let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
-    // 1. التحقق من التحكم اليدوي أولاً
+    //  1. التحقق من التحكم اليدوي بدقة
     if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
-        holidayMode = false;
+        holidayMode = false; // تأكد من إيقاف وضع الإجازة
     } else if (manualWorkStatus === 'إجازة') {
         holidayMode = true;
-        closeAfterHoursMode = false;
+        closeAfterHoursMode = false; // تأكد من إيقاف وضع الإغلاق العادي
     } else if (manualWorkStatus === 'مفتوح') {
         holidayMode = false;
         closeAfterHoursMode = false;
     } else {
+        // ... (باقي الكود التلقائي كما هو)
+    }
+
         // 2. الوضع التلقائي حسب التوقيت بمصر
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
