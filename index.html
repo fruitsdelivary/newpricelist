@@ -256,27 +256,31 @@ async function shareProject() {
 }
 
 // ==========================================
-// نظام التحكم اليدوي والتلقائي للعمل
+// نظام التحكم في العمل (حسب الطلب بدقة)
 // ==========================================
-let manualWorkStatus = 'تلقائي'; // القيم الممكنة: تلقائي، مفتوح، مغلق، إجازة
+let manualWorkStatus = 'تلقائي'; // القيم الممكنة من جوجل شيت: تلقائي، مفتوح، مغلق، إجازة
 let closeAfterHoursMode = false;
 let holidayMode = false;
 let scheduleOverlay = null;
-let currentOverlayMode = null;
 
 function updateWorkSchedule() {
-    // 1. الأولوية القصوى لحالة التحكم اليدوي القادمة من جوجل شيت
-    if (manualWorkStatus === 'مغلق') {
+    // 1. إذا كانت الحالة "مفتوح" في جوجل شيت: يعمل الموقع في أي وقت تماماً
+    if (manualWorkStatus === 'مفتوح') {
+        closeAfterHoursMode = false;
+        holidayMode = false;
+    }
+    // 2. إذا كانت الحالة "مغلق" في جوجل شيت: يتعطل فقط زر "أبدأ طلبك الآن!"
+    else if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
         holidayMode = false;
-    } else if (manualWorkStatus === 'إجازة' || manualWorkStatus === 'اجازة') {
+    }
+    // 3. إذا كانت الحالة "إجازة" في جوجل شيت: يحجب الصفحة بالكامل
+    else if (manualWorkStatus === 'إجازة' || manualWorkStatus === 'اجازة') {
         holidayMode = true;
         closeAfterHoursMode = false;
-    } else if (manualWorkStatus === 'مفتوح') {
-        holidayMode = false;
-        closeAfterHoursMode = false;
-    } else {
-        // 2. الوضع التلقائي يعمل حصرياً إذا كانت الحالة "تلقائي"
+    }
+    // 4. الوضع التلقائي: يفتح ويغلق وفق المواعيد الرسمية
+    else {
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
             weekday: 'long',
@@ -291,6 +295,7 @@ function updateWorkSchedule() {
         const minute = Number(getPart('minute'));
         const currentTime = hour * 60 + minute;
 
+        // تحديد ما إذا كان خارج ساعات العمل أو إجازة أسبوعية
         closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
         holidayMode =
             (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
@@ -298,63 +303,33 @@ function updateWorkSchedule() {
             (day === 'Saturday' && currentTime < 7 * 60);
     }
 
-    let overlayMode = null;
+    // إدارة شاشة حجب الموقع (تظهر فقط في وضع الإجازة)
     if (holidayMode) {
-        overlayMode = 'holiday';
-    } else if (closeAfterHoursMode) {
-        overlayMode = 'closed';
-    }
-
-    if (overlayMode === currentOverlayMode) return;
-    currentOverlayMode = overlayMode;
-
-    if (scheduleOverlay) {
-        scheduleOverlay.remove();
-        scheduleOverlay = null;
-    }
-
-    if (!overlayMode) return;
-
-    scheduleOverlay = document.createElement('div');
-    scheduleOverlay.style.cssText = `
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        z-index: 100000;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 20px;
-        font-family: sans-serif;
-    `;
-
-    if (overlayMode === 'holiday') {
-        scheduleOverlay.innerHTML = `
-            <div style="background:white;padding:30px;border-radius:20px;border:1px solid #eee;box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-                <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin:0 auto 20px;">
-                <h2 style="color:#333;margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل حالياً</h2>
-                <p style="color:#666;font-size:18px;">نحن في إجازتنا الأسبوعية.<br>سنعاود استقبال الطلبات يوم السبت الساعة 7 صباحاً إن شاء الله.</p>
-                <p style="color:#22c55e;font-weight:bold;margin-top:15px;font-size:20px;">شكراً لتفهمكم ❤️</p>
-            </div>
-        `;
+        if (!scheduleOverlay) {
+            scheduleOverlay = document.createElement('div');
+            scheduleOverlay.style.cssText = `
+                position: fixed; inset: 0; width: 100%; height: 100%;
+                background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px); z-index: 100000;
+                display: flex; flex-direction: column; align-items: center;
+                justify-content: center; text-align: center; padding: 20px; font-family: sans-serif;
+            `;
+            scheduleOverlay.innerHTML = `
+                <div style="background:white;padding:30px;border-radius:20px;border:1px solid #eee;box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+                    <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin:0 auto 20px;">
+                    <h2 style="color:#333;margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل حالياً</h2>
+                    <p style="color:#666;font-size:18px;">نحن في إجازتنا الأسبوعية.<br>سنعاود استقبال الطلبات يوم السبت الساعة 7 صباحاً إن شاء الله.</p>
+                    <p style="color:#22c55e;font-weight:bold;margin-top:15px;font-size:20px;">شكراً لتفهمكم ❤️</p>
+                </div>
+            `;
+            document.documentElement.appendChild(scheduleOverlay);
+        }
     } else {
-        scheduleOverlay.innerHTML = `
-            <div style="background:white;padding:30px;border-radius:20px;border:1px solid #eee;box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-                <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin:0 auto 20px;">
-                <h2 style="color:#333;margin-bottom:10px;">نعتذر، نحن خارج أوقات العمل حالياً</h2>
-                <p style="color:#666;font-size:18px;">نستقبل طلباتكم يومياً من 7 صباحاً حتى 4:15 مساءً، عدا الجمعة.</p>
-                <p style="color:#22c55e;font-weight:bold;margin-top:15px;font-size:20px;">ننتظركم في أقرب وقت ❤️</p>
-            </div>
-        `;
+        if (scheduleOverlay) {
+            scheduleOverlay.remove();
+            scheduleOverlay = null;
+        }
     }
-
-    document.documentElement.appendChild(scheduleOverlay);
 }
 
 setInterval(updateWorkSchedule, 30000);
@@ -472,7 +447,7 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
-        // فحص شامل لجميع خلايا الجدول لجلب الحالة اليدوية بدقة
+        // البحث الشامل عن حالة العمل اليدوية في الجدول
         let detectedStatus = 'تلقائي';
         rows.forEach(row => {
             row.forEach(cell => {
@@ -684,7 +659,7 @@ async function loadPricesFromSheet() {
         }
 
         if (closeAfterHoursMode) {
-            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار، وسنكون في انتظاركم عند بدء العمل الساعة 7 صباحاً إن شاء الله! ❤️");
+            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار بحرية، وسنكون في انتظاركم عند بدء العمل الساعة 7 صباحاً إن شاء الله! ❤️");
             return;
         }
     }
@@ -716,7 +691,7 @@ async function loadPricesFromSheet() {
             }
 
             if (closeAfterHoursMode) {
-                alert("🚨 انتهت مواعيد استقبال الطلبات اليوم.\nيمكنك إرسال طلبك بعد الساعة 7 صباحاً إن شاء الله.");
+                alert("🚨 انتهت مواعيد استقبال الطلبات اليوم.\nيمكنك تصفح القائمة الآن وإرسال طلبك صباحاً.");
                 return;
             }
 
@@ -791,7 +766,7 @@ const allReviews = [
     { name: "السيد حسن", text: `جزاك الله خيرا الحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله جزاك الله خيرا 🌹🌹` },
     { name: "Adam", text: `خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا` },
     { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
-    { name: "أ/سارة", text: `ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
+    { name: "أ/سارة", text: `what ma sha Allah... الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
     { name: "dr.eman", text: `ربنا يجزيك الحسني و زياده كفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل ربنا يبارك لك يا ابني و يجعله في ميزان حسناتك` },
     { name: "أ/هبه", text: `شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل` },
     { name: "مدام سالي", text: `الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي يارب تفضل علي نفس المستوي علطول بإذن الله جزاكم الله خيرا` },
