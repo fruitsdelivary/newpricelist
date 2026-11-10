@@ -334,4 +334,419 @@ setInterval(updateWorkSchedule, 30000);
             { name: "نعناع", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "خس كابوتشا", price: 25, unit: "حبة", category: "veg", available: true },
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
-            { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true
+            { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+            { name: "بصل أبيض", price: 30, unit: "كجم", category: "veg", available: false, minWeight: 1},
+            { name: "بطاطا", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
+            { name: "خس بلدي", price: 15, unit: "ربطة", category: "veg", available: true },
+            { name: "كرنب أحمر (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
+            { name: "كرنب أبيض (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
+            { name: "ذرة أصفر", price: 55, oldPrice: 65, unit: "طبق", category: "veg", available: false },
+            { name: "مشروم فريش", price: 65, oldPrice: 70, unit: "طبق", category: "veg", available: false },
+            { name: "أرز رويزق 10ك", price: 295, oldPrice: 300, unit: "شيكارة", category: "veg", available: true },
+            { name: "موز", price: 40, unit: "كجم", category: "fruit", available: true, trend: "down" },
+            { name: "تفاح أصفر", price: 100, unit: "كجم", category: "fruit", available: true },
+            { name: "تفاح سكري", price: 90, unit: "كجم", category: "fruit", available: true },
+            { name: "تفاح سكري٢", price: 80, unit: "كجم", category: "fruit", available: true },
+            { name: "تفاح أحمر لبناني", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+            { name: "عنب أحمر كريمسون", price: 100, unit: "كجم", category: "fruit", available: true, trend: "up" },
+            { name: "عنب ببذر", price: 35, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+            { name: "بلح أسمر", price: 40, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.5 },
+            { name: "برقوق يوناني", price: 120, unit: "كجم", category: "fruit", available: true },
+            { name: "كمثرى", price: 100, unit: "كجم", category: "fruit", available: false},
+            { name: "كاكا", price: 60, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+            { name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 1},
+            { name: "كنتالوب", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: true},
+            { name: "مانجو كريمسون", price: 100, unit: "كجم", category: "fruit", available: false, isSpecial: false, minWeight: 0.5}, 
+            { name: "تمر القصيم ٩٠٠جم", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial:false },
+            { name: "جوافة بلطيمي", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
+            { name: "جوافة", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
+            { name: "بلح برحي", price: 120, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+            { name: "بلح أحمر ", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+            { name: "برتقال بصرة", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+            { name: "كلمنتينا أخضر", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+            { name: "رمان", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 1},
+            { name: "رمان سكري", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+            { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+            { name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
+        ];
+
+const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv';
+
+function parseCSV(text) {
+    const rows = [];
+    let row = [], cell = '', quoted = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === '"') {
+            if (quoted && text[i + 1] === '"') { cell += '"'; i++; }
+            else quoted = !quoted;
+        } else if (ch === ',' && !quoted) {
+            row.push(cell); cell = '';
+        } else if ((ch === '\n' || ch === '\r') && !quoted) {
+            if (ch === '\r' && text[i + 1] === '\n') i++;
+            row.push(cell);
+            if (row.some(value => String(value).trim() !== '')) rows.push(row);
+            row = []; cell = '';
+        } else {
+            cell += ch;
+        }
+    }
+    row.push(cell);
+    if (row.some(value => String(value).trim() !== '')) rows.push(row);
+    return rows;
+}
+
+function cleanSheetNumber(value) {
+    const normalized = String(value ?? '')
+        .trim()
+        .replace(/[٠-٩]/g, digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit))
+        .replace(/[۰-۹]/g, digit => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
+        .replace(/[٫٬]/g, '.')
+        .replace(/,/g, '');
+    if (!normalized) return null;
+    const number = Number(normalized);
+    return Number.isFinite(number) ? number : null;
+}
+
+async function loadPricesFromSheet() {
+    try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error('تعذر تحميل جدول الأسعار');
+        const csvText = await response.text();
+        const rows = parseCSV(csvText);
+        if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
+
+        const headers = rows[0].map((value) =>
+            String(value).replace(/^\uFEFF/, '').trim()
+        );
+        const column = name => headers.indexOf(name);
+        const requiredColumns = ['اسم الصنف', 'السعر بالجنيه', 'الوحدة', 'القسم', 'متاح؟'];
+        if (requiredColumns.some(name => column(name) === -1)) {
+            throw new Error('أسماء أعمدة جدول الأسعار لا تطابق القالب');
+        }
+
+        const get = (row, name) => {
+            const index = column(name);
+            return index < 0 ? '' : String(row[index] ?? '').trim();
+        };
+        const yes = value => ['نعم', 'متاح', 'نعم متاح', 'yes', 'true', '1'].includes(value.toLowerCase());
+        const no = value => ['لا', 'غير متاح', 'نفد', 'no', 'false', '0'].includes(value.toLowerCase());
+        const updatedProducts = [];
+
+        rows.slice(1).forEach(row => {
+            const name = get(row, 'اسم الصنف');
+            if (!name) return;
+            const price = cleanSheetNumber(get(row, 'السعر بالجنيه'));
+            if (price === null || price <= 0) return;
+
+            const oldProduct = productsData.find(product => product.name.trim() === name);
+            const product = oldProduct ? { ...oldProduct, name } : {
+                name, price, unit: 'كجم', category: 'veg', available: true
+            };
+            product.price = price;
+
+            const unit = get(row, 'الوحدة');
+            if (unit) product.unit = unit;
+
+            const category = get(row, 'القسم').trim().toLowerCase();
+            if (category) {
+                const normalizedCategory = category.replace(/[أإآ]/g, 'ا').replace(/\s+/g, '');
+                const isFruit = normalizedCategory.includes('فاكه') ||
+                    normalizedCategory.includes('فواك') ||
+                    normalizedCategory.includes('fruit');
+                product.category = isFruit ? 'fruit' : 'veg';
+            }
+
+            const availability = get(row, 'متاح؟');
+            if (yes(availability)) product.available = true;
+            else if (no(availability)) product.available = false;
+
+            const minWeightText = get(row, 'أقل وزن (كجم)');
+            const minWeight = cleanSheetNumber(minWeightText);
+            if (minWeight !== null && minWeight > 0) product.minWeight = minWeight;
+            else if (minWeightText === '') delete product.minWeight;
+
+            const oldPriceText = get(row, 'السعر القديم');
+            const oldPrice = cleanSheetNumber(oldPriceText);
+            if (oldPrice !== null && oldPrice > 0) product.oldPrice = oldPrice;
+            else delete product.oldPrice;
+
+            const trend = get(row, 'اتجاه السعر').toLowerCase();
+            if (['up', 'صاعد', 'مرتفع', 'زيادة', '↑'].includes(trend)) product.trend = 'up';
+            else if (['down', 'هابط', 'منخفض', 'انخفاض', '↓'].includes(trend)) product.trend = 'down';
+            else delete product.trend;
+
+            const special = get(row, 'صنف مميز؟');
+            product.isSpecial = yes(special);
+
+            // إضافة قراءة خانة مناسب للتخزين؟
+            const storageVal = get(row, 'مناسب للتخزين؟');
+            product.isStorage = yes(storageVal);
+
+            updatedProducts.push(product);
+        });
+
+        if (!updatedProducts.length) throw new Error('لم يتم العثور على أصناف بأسعار صحيحة');
+        productsData = updatedProducts;
+    } catch (error) {
+        console.warn('تعذر تحديث الأسعار من Google Sheets، سيتم استخدام الأسعار المحفوظة:', error);
+    }
+}
+
+
+        function init() {
+    try {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+        document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
+
+        let sVeg = '', sFruit = '', iAll = '';
+        productsData.forEach(p => {
+            const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
+            const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
+            const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 📦</span>` : '';
+
+            // --- تصميم الأسهم الموحدة (مثلثات صغيرة ▲ و ▼ فقط بدقة) ---
+            let trendArrow = '';
+            if (p.trend === 'down') {
+                trendArrow = `<span style="color: #dc2626; font-size: 0.9rem; font-weight: bold; line-height: 1;">▼</span>`;
+            } else if (p.trend === 'up') {
+                trendArrow = `<span style="color: #16a34a; font-size: 0.9rem; font-weight: bold; line-height: 1;">▲</span>`;
+            }
+
+            const priceDiv = `
+                <div class="item-price-part">
+                    ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
+                    <div class="flex items-center gap-1.5">
+                        ${trendArrow}
+                        <span class="current-price">${p.price} ج</span>
+                    </div>
+                </div>`;
+
+            const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${storageBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
+                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
+            </div>`;
+
+            const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+                <div class="item-name-part text-sm"><div class="font-bold">${p.name}</div>
+                <div class="mt-1 flex items-center gap-1.5">
+                    ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
+                    ${trendArrow}
+                    <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
+                </div>
+                <div class="badge-container" style="margin-top: 3px;">${offerBadge}${specialBadge}${storageBadge}</div></div>
+                <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
+            </div>`;
+
+            if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
+            iAll += iRow;
+        });
+
+        document.getElementById('vegetables-list-static').innerHTML = sVeg;
+        document.getElementById('fruits-list-static').innerHTML = sFruit;
+        document.getElementById('interactive-lists-combined').innerHTML = iAll;
+
+        document.querySelectorAll('.quantity-select').forEach(s => {
+            let opts = '<option value="0">-- طلب --</option>';
+            if (s.dataset.unit === 'كجم') {
+                const product = productsData.find(p => p.name === s.dataset.name);
+                const minWeight = product?.minWeight || 0.125;
+                const weights = [
+                    {v:0.125,t:'⅛ك'},
+                    {v:0.25,t:'¼ك'},
+                    {v:0.5,t:'½ك'},
+                    {v:0.75,t:'¾ك'}
+                ];
+                let filteredWeights = weights.filter(w => w.v >= minWeight);
+                for(let i=1; i<=10; i++){
+                    filteredWeights.push({v:i,t:i+'ك'});
+                    if(i<10){
+                        if(i+0.25 >= minWeight) filteredWeights.push({v:i+0.25,t:i+'و¼ك'});
+                        if(i+0.5 >= minWeight) filteredWeights.push({v:i+0.5,t:i+'و½ك'});
+                        if(i+0.75 >= minWeight) filteredWeights.push({v:i+0.75,t:i+'و¾ك'});
+                    }
+                }
+                for(let i=11;i<=25;i++){
+                    filteredWeights.push({v:i,t:i+'ك'});
+                }
+                filteredWeights.forEach(w=>{
+                    opts += `<option value="${w.v}">${w.t}</option>`;
+                });
+            } else {
+                for(let i=1;i<=20;i++){
+                    opts += `<option value="${i}">${i} ${s.dataset.unit}</option>`;
+                }
+            }
+            s.innerHTML = opts;
+        });
+       
+    } catch (e) { console.error(e); }
+}
+
+        async function startApp() {
+            await loadPricesFromSheet();
+            init();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startApp);
+        } else {
+            startApp();
+        }
+
+       function toggleView(v) {
+            updateWorkSchedule();
+
+            const priceView = document.getElementById('price-list-view');
+            const orderView = document.getElementById('order-form-view');
+            const reviewsView = document.getElementById('reviews-view');
+            const mainTitle = document.getElementById('main-title');
+
+            // إذا حاول الدخول إلى نموذج الطلب وقت الإغلاق/الإجازة، نمنع الانتقال للنموذج ونبهه
+            if (v === 'order-form-view') {
+                if (holidayMode) {
+                    alert("❤️ نحن في إجازتنا الأسبوعية.\nسنعاود استقبال الطلبات يوم السبت الساعة 7 صباحاً إن شاء الله.");
+                    return;
+                }
+                if (closeAfterHoursMode) {
+                    alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار، وسنكون في انتظاركم عند بدء العمل الساعة 7 صباحاً إن شاء الله! ❤️");
+                    return;
+                }
+            }
+
+            if(priceView) priceView.style.display = 'none';
+            if(orderView) orderView.style.display = 'none';
+            if(reviewsView) reviewsView.style.display = 'none';
+
+            if (v === 'order-form-view') {
+                orderView.style.display = 'block';
+                mainTitle.textContent = '🛒 نموذج طلب واتساب';
+            } else if (v === 'reviews-view') {
+                reviewsView.style.display = 'block';
+                mainTitle.textContent = '⭐⭐ مراجعات وآراء عملاءنا الكرام ⭐⭐';
+            } else {
+                priceView.style.display = 'block';
+                mainTitle.textContent = '💰أسعار اليوم💰';
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function generateWhatsAppOrder() {
+            updateWorkSchedule();
+
+            if (holidayMode) {
+                alert("❤️ نحن في إجازتنا الأسبوعية.\nلا يمكن إرسال الطلبات حالياً، وسنعاود العمل السبت الساعة 7 صباحاً إن شاء الله.");
+                return;
+            }
+
+            if (closeAfterHoursMode) {
+                alert("🚨 انتهت مواعيد استقبال الطلبات اليوم.\nيمكنك إرسال طلبك بعد الساعة 7 صباحاً إن شاء الله.");
+                return;
+            }
+
+            let vegItems = '', fruitItems = '', count = 0;
+            document.querySelectorAll('.quantity-select').forEach(s => {
+                if (s.value != "0") {
+                    const itemName = s.dataset.name, quantityText = s.options[s.selectedIndex].text;
+                    const itemLine = `• ${quantityText} ${itemName}\n`;
+                    const product = productsData.find(p => p.name === itemName);
+                    if (product && product.category === 'veg') vegItems += itemLine; else fruitItems += itemLine;
+                    count++;
+                }
+            });
+            if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
+            
+            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n------------------\n';
+            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems;
+            if (fruitItems) msg += '🍉 *الفواكه:*\n' + fruitItems;
+            msg += '------------------\n📦 *التوصيل:*\n💰 *الإجمالي:*\n------------------\n';
+            msg += `📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
+            
+            window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
+        }
+
+        function confirmMyRating() {
+            const selectedStar = document.querySelector('input[name="rating"]:checked');
+            if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
+            const stars = parseInt(selectedStar.value);
+            const myWhatsAppNumber = "201032872750";
+
+            if (stars >= 4) {
+                if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على صفحة فيسبوك؟`)) {
+                    finalizeRating(); window.open("https://www.facebook.com/3oroadtawfeer", '_blank');
+                }
+            } else {
+                if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف سبب التقييم ونقدم الحل المناسب بإذن الله`)) {
+                    finalizeRating();
+                    let starEmojis = '⭐'.repeat(stars);
+                    let msg = `⚠️ ملاحظة عميل: تقييم  ${stars} نجوم ${starEmojis}(من فضلك اكتب ملاحظاتك هنا)`;
+                    window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+                }
+            }
+        }
+
+        function finalizeRating() {
+            const f = document.getElementById('rating-feedback'), b = document.getElementById('confirm-btn'), s = document.querySelector('.star-rating');
+            if(f) f.classList.remove('hidden'); if(b) b.classList.add('hidden');
+            if(s) { s.style.pointerEvents = 'none'; s.style.opacity = '0.5'; }
+        }
+
+function filterProducts() {
+    const term = document.getElementById('search-input').value.toLowerCase();
+    const rows = document.querySelectorAll('.flex-row-item');
+
+    rows.forEach(row => {
+        const name = row.querySelector('.item-name-part').innerText.toLowerCase();
+        if (name.includes(term)) {
+            row.style.display = 'flex';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+const allReviews = [
+    { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
+    { name: "Aml Saad", text: `ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر` },
+    { name: "أ/سارة", text: `ايه تقييم حضرتك لنظام الطلب الجديد؟ جميل جدا جدا بيفكرنى بكل اللى محتاجاه` },
+    { name: "أ.مدحت", text: `السلام عليكم ملاحظه : البطيخه السابقه كانت أحلى بطيخه أكلناها فى حياتنا ، ربنا يوسع عليكم. بطيخه زى بتاعة المره اللي فاتت وشكرا` },
+    { name: "د.ميرفت", text: `السلام عليكم لسه فاتحه البطيخه النهارده سكككككككر تسلم ايدك` },
+    { name: "Om Eslam", text: `تمام الحمد لله أنا دوخت علي رقمك وصفحتك واضطريت اجيب من ناس تانيه بس بصراحه التعامل مع حضرتك حاجه تانيه` },
+    { name: "السيد حسن", text: `جزاك الله خيرا الحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله جزاك الله خيرا 🌹🌹` },
+    { name: "Adam", text: `خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا` },
+    { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
+    { name: "أ/سارة", text: `ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
+    { name: "dr.eman", text: `ربنا يجزيك الحسني و زياده كفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل ربنا يبارك لك يا ابني و يجعله في ميزان حسناتك` },
+    { name: "أ/هبه", text: `شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل` },
+    { name: "مدام سالي", text: `الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي يارب تفضل علي نفس المستوي علطول بإذن الله جزاكم الله خيرا` },
+    { name: "", text: `شكرا على حسن معاملتكم والبدنجان والفاكهه جميله جدا` },
+    { name: "مدام سالي", text: `شكرا ع الحاجه جميله جدااااا كالعاده يارب دايما متميزين` },
+    { name: "", text: `شكرا عالحاجة جميلة جدا والبلح نضيف ماشاءالله... كنت برة فمشوار وبناتي اللي استلموا الاوردر.. تسلموا ع امانتكم` },
+    { name: "أ/شيرين", text: `الف شكر عالاوردر كله و عالهدية ماشاءالله تبارك الرحمن روعة تسلم ايدك` },
+    { name: "أوشو", text: `ماشاء الله الفاكهه جميله جداا والله ومفيش فيها حاجه وحشه وخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜` },
+    { name: "", text: `الفاكهة جميلة جدا زي كل مرة طبعا ماشاءالله ربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة` },
+    { name: "", text: `البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك` },
+];
+
+function loadReviews() {
+    const container = document.getElementById('reviews-container');
+    if(!container) return;
+    
+    container.innerHTML = allReviews.map(rev => `
+        <div class="bg-white p-5 rounded-2xl shadow-sm border-r-4 border-green-500 mb-4">
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-bold text-green-700">${rev.name}</span>
+                <span class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</span>
+            </div>
+            <p class="text-gray-700 italic">"${rev.text}"</p>
+        </div>
+    `).join('');
+}
+
+window.addEventListener('DOMContentLoaded', loadReviews);
+
+    </script>
+</body>
+</html>
