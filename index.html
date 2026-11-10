@@ -61,10 +61,11 @@
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
         
-        .badge-container { display: flex; flex-direction: row-reverse; justify-content: flex-start; gap: 6px; margin-top: 5px; }
-        .special-badge, .offer-badge { padding: 1px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; }
+        .badge-container { display: flex; flex-direction: row-reverse; justify-content: flex-start; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+        .special-badge, .offer-badge, .storage-badge { padding: 1px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; }
         .special-badge { background: #fbbf24; color: #000; }
         .offer-badge { background: #ef4444; color: white; }
+        .storage-badge { background: #3b82f6; color: white; }
     </style>
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
@@ -264,7 +265,6 @@ let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
-    // 1. فحص التحكم اليدوي أولاً وبأولوية مطلقة
     if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
         holidayMode = false;
@@ -275,7 +275,6 @@ function updateWorkSchedule() {
         holidayMode = false;
         closeAfterHoursMode = false;
     } else {
-        // 2. الوضع التلقائي يعمل فقط إذا كانت الحالة "تلقائي"
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
             weekday: 'long',
@@ -420,7 +419,7 @@ setInterval(updateWorkSchedule, 30000);
             { name: "برتقال بصرة", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 1},
             { name: "كلمنتينا أخضر", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
             { name: "رمان", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 1},
-            { name: "رمان سكري", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+            { name: "رمان سكري", price: 50, unit: "kجم", category: "fruit", available: true, minWeight: 1},
             { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
             { name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
         ];
@@ -471,19 +470,13 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
-        // فحص شامل لجميع خلايا الجدول بحثاً عن كلمة حالة العمل اليدوية بغض النظر عن مكانها
         rows.forEach(row => {
             row.forEach(cell => {
-                const cellText = String(cell ?? '').trim();
-                if (cellText.includes('مغلق')) {
-                    manualWorkStatus = 'مغلق';
-                } else if (cellText.includes('إجازة') || cellText.includes('اجازة')) {
-                    manualWorkStatus = 'إجازة';
-                } else if (cellText.includes('مفتوح')) {
-                    manualWorkStatus = 'مفتوح';
-                } else if (cellText.includes('تلقائي')) {
-                    manualWorkStatus = 'تلقائي';
-                }
+                const txt = String(cell ?? '').trim();
+                if (txt === 'مغلق') manualWorkStatus = 'مغلق';
+                else if (txt === 'إجازة' || txt === 'اجازة') manualWorkStatus = 'إجازة';
+                else if (txt === 'مفتوح') manualWorkStatus = 'مفتوح';
+                else if (txt === 'تلقائي') manualWorkStatus = 'تلقائي';
             });
         });
 
@@ -547,6 +540,11 @@ async function loadPricesFromSheet() {
 
             const special = get(row, 'صنف مميز؟');
             product.isSpecial = yes(special);
+
+            // دعم عمود "مناسب للتخزين" من جوجل شيت
+            const storageText = get(row, 'مناسب للتخزين');
+            product.isStorage = yes(storageText);
+
             updatedProducts.push(product);
         });
 
@@ -567,6 +565,7 @@ async function loadPricesFromSheet() {
         productsData.forEach(p => {
             const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
+            const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
 
             let trendArrow = '';
             if (p.trend === 'down') {
@@ -591,7 +590,7 @@ async function loadPricesFromSheet() {
                 </div>`;
 
             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
+                <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${storageBadge}${offerBadge}${specialBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
             </div>`;
 
@@ -602,7 +601,7 @@ async function loadPricesFromSheet() {
                     ${trendArrow}
                     <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
                 </div>
-                <div class="badge-container" style="margin-top: 3px;">${offerBadge}${specialBadge}</div></div>
+                <div class="badge-container" style="margin-top: 3px;">${storageBadge}${offerBadge}${specialBadge}</div></div>
                 <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
             </div>`;
 
