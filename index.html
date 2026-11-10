@@ -221,7 +221,7 @@
 
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
-            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
+            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 إستقبال الطلبات من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
 
 
 <button onclick="toggleView('reviews-view')" 
@@ -685,7 +685,7 @@ setInterval(updateWorkSchedule, 30000);
                     }
                     if (trendCol >= 0) {
                         const trend = normalizeText(row[trendCol]);
-                        if (["ارتفاع", "صعود", "up", "increase", "مرتفع"].includes(trend)) product.trend = "up";
+                        if (["ارتفاع", "صعود", "up", "increase", "زيادة"].includes(trend)) product.trend = "up";
                         else if (["انخفاض", "هبوط", "down", "decrease", "منخفض"].includes(trend)) product.trend = "down";
                         else product.trend = "";
                     }
