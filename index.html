@@ -695,8 +695,8 @@ async function loadPricesFromSheet() {
             else delete product.oldPrice;
 
             const trend = get(row, 'اتجاه السعر').toLowerCase();
-            if (['up', 'صاعد', 'مرتفع', 'زيادة', '↑'].includes(trend)) product.trend = 'up';
-            else if (['down', 'هابط', 'منخفض', 'انخفاض', '↓'].includes(trend)) product.trend = 'down';
+            if (['up', 'صاعد', 'مرتفع', 'زيادة', '🔺'].includes(trend)) product.trend = 'up';
+            else if (['down', 'هابط', 'منخفض', 'انخفاض', '🔻'].includes(trend)) product.trend = 'down';
             else delete product.trend;
 
             const special = get(row, 'صنف مميز؟');
