@@ -78,6 +78,14 @@
         .special-badge, .offer-badge { padding: 1px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; }
         .special-badge { background: #fbbf24; color: #000; }
         .offer-badge { background: #ef4444; color: white; }
+    
+        .cart-dock{position:fixed;bottom:0;left:0;right:0;z-index:80;background:#fff;border-top:2px solid #16a34a;box-shadow:0 -5px 18px rgba(0,0,0,.12);padding:10px 14px;display:none;}
+        .cart-line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #eee;background:#fff;}
+        .cart-qty{display:flex;align-items:center;gap:8px;}
+        .cart-qty button{width:32px;height:32px;border-radius:8px;background:#e5e7eb;font-weight:bold;}
+        .cart-add-btn{background:#16a34a;color:white;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:800;white-space:nowrap;}
+        .cart-select{width:82px;height:36px;border:1px solid #22c55e;border-radius:8px;text-align:center;background:#fff;}
+        body{padding-bottom:76px;}
     </style>
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
@@ -99,7 +107,7 @@
         <div id="work-status-notice" role="status" aria-live="polite" style="display:none;position:sticky;top:8px;z-index:40;margin:0 auto 16px;padding:10px 14px;border-radius:12px;text-align:center;font-size:14px;font-weight:700;box-shadow:0 3px 12px rgba(0,0,0,.08);"></div>
         
         <div id="price-list-view">
-            <button id="start-order-btn-top" onclick="toggleView('order-form-view')" class="w-full mb-6 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-lg active:scale-95 transition">
+            <button id="start-order-btn-top" onclick="openCartReview()" class="w-full mb-6 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-lg active:scale-95 transition">
                 🛒 ابدأ طلبك الآن!
             </button>
 
@@ -170,7 +178,7 @@
             </section>
 
 
-            <button id="start-order-btn-bottom" onclick="toggleView('order-form-view')" class="w-full mt-4 mb-12 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-xl active:scale-95 transition">
+            <button id="start-order-btn-bottom" onclick="openCartReview()" class="w-full mt-4 mb-12 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-xl active:scale-95 transition">
                 🛒 ابدأ طلبك الآن! 
             </button>
     
@@ -189,13 +197,37 @@
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="mb-6 border rounded-xl overflow-hidden shadow-md">
                     <h2 class="bg-green-600 text-white p-3 text-center font-bold">تحديد الأصناف المطلوبة</h2>
-                    <div id="interactive-lists-combined"></div>
+                    <div class="p-4 text-center text-gray-600">أضف الأصناف من قائمة الأسعار، ثم راجع سلتك لإكمال البيانات وإرسال الطلب.</div>
                 </div>
                 <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none"></textarea>
                 <button id="submit-order-btn" type="submit" class="w-full mt-8 bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl">إرسال الطلب عبر واتساب ✅</button>
             </form>
         </div>
 
+
+<div id="cart-dock" class="cart-dock">
+  <div class="max-w-3xl mx-auto flex items-center justify-between gap-3">
+    <div class="font-bold text-gray-800">🛒 طلبك <span id="cart-count" class="inline-flex bg-green-600 text-white rounded-full min-w-7 h-7 items-center justify-center px-2">0</span> صنف</div>
+    <button type="button" onclick="openCartReview()" class="bg-green-600 text-white font-bold px-5 py-3 rounded-xl shadow">مراجعة الطلب</button>
+  </div>
+</div>
+
+<div id="cart-review-view" style="display:none;" class="mb-10">
+  <button onclick="toggleView('price-list-view')" class="w-full mb-5 bg-gray-400 text-white font-bold py-3 rounded-xl">🔙 العودة لقائمة الأسعار</button>
+  <h2 class="text-xl font-extrabold text-green-700 mb-3 text-center">مراجعة طلبك</h2>
+  <div id="cart-review-items" class="border rounded-xl overflow-hidden mb-5"></div>
+  <div class="flex flex-wrap gap-2 mb-5">
+    <button type="button" onclick="repeatLastOrder()" class="bg-yellow-400 text-black font-bold px-4 py-3 rounded-xl">🔁 تكرار آخر طلب</button>
+    <button type="button" onclick="toggleView('price-list-view')" class="bg-blue-600 text-white font-bold px-4 py-3 rounded-xl">إضافة أصناف أخرى</button>
+  </div>
+  <form id="cart-checkout-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();" class="space-y-3">
+    <input id="customer-name" required placeholder="الاسم" class="w-full p-3 border rounded-xl text-right">
+    <input id="customer-phone" required inputmode="tel" placeholder="رقم الهاتف" class="w-full p-3 border rounded-xl text-right">
+    <textarea id="customer-address" required rows="2" placeholder="العنوان بالتفصيل" class="w-full p-3 border rounded-xl text-right"></textarea>
+    <textarea id="notes" rows="3" placeholder="ملاحظات إضافية (اختياري)" class="w-full p-3 border rounded-xl text-right"></textarea>
+    <button id="submit-order-btn" type="submit" class="w-full bg-green-600 text-white font-bold py-4 rounded-2xl text-xl shadow">إرسال الطلب عبر واتساب ✅</button>
+  </form>
+</div>
 
 <div id="reviews-view" style="display: none;" class="mb-10">
     <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-4 rounded-2xl shadow-md text-lg">
@@ -615,6 +647,7 @@ setInterval(updateWorkSchedule, 30000);
             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
+                <div class="item-action-part flex items-center gap-2">${p.available ? `<select class="quantity-select cart-select" data-unit="${p.unit}" data-name="${p.name}" aria-label="كمية ${p.name}"></select><button type="button" class="cart-add-btn" onclick="addProductToCart(${JSON.stringify(p.name)})">أضف</button>` : ''}</div>
             </div>`;
 
 
@@ -627,7 +660,7 @@ setInterval(updateWorkSchedule, 30000);
                     <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
                 </div>
                 <div class="badge-container" style="margin-top: 3px;">${offerBadge}${specialBadge}</div></div>
-                <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
+                <div class="item-action-part flex items-center gap-2">${p.available ? `<select class="quantity-select cart-select" data-unit="${p.unit}" data-name="${p.name}"></select><button type="button" class="cart-add-btn" onclick="addProductToCart(${JSON.stringify(p.name)})">أضف للطلب</button>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
             </div>`;
 
 
@@ -719,6 +752,8 @@ setInterval(updateWorkSchedule, 30000);
 
 
         if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+document.addEventListener('DOMContentLoaded', renderCart);
+setTimeout(renderCart, 0);
 
 
        function toggleView(v) {
@@ -729,6 +764,8 @@ setInterval(updateWorkSchedule, 30000);
     const priceView = document.getElementById('price-list-view');
     const orderView = document.getElementById('order-form-view');
     const reviewsView = document.getElementById('reviews-view');
+    const cartReviewView = document.getElementById('cart-review-view');
+    const cartDock = document.getElementById('cart-dock');
     const mainTitle = document.getElementById('main-title');
 
 
@@ -750,6 +787,8 @@ setInterval(updateWorkSchedule, 30000);
     if(priceView) priceView.style.display = 'none';
     if(orderView) orderView.style.display = 'none';
     if(reviewsView) reviewsView.style.display = 'none';
+    if(cartReviewView) cartReviewView.style.display = 'none';
+    if(cartDock) cartDock.style.display = 'none';
 
 
     // 4. إظهار القسم المطلوب بناءً على الزر المضغوط
@@ -759,9 +798,14 @@ setInterval(updateWorkSchedule, 30000);
     } else if (v === 'reviews-view') {
         reviewsView.style.display = 'block';
         mainTitle.textContent = '⭐⭐ مراجعات وآراء عملاءنا الكرام ⭐⭐';
+    } else if (v === 'cart-review-view') {
+        cartReviewView.style.display = 'block';
+        mainTitle.textContent = '🛒 مراجعة الطلب';
+        renderCart();
     } else {
         priceView.style.display = 'block';
         mainTitle.textContent = '💰أسعار اليوم💰';
+        renderCart();
     }
 
 
@@ -811,6 +855,98 @@ setInterval(updateWorkSchedule, 30000);
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
         }
 
+
+
+// ==============================
+// سلة الطلب وحفظ آخر طلب على نفس الجهاز
+// ==============================
+const CART_STORAGE_KEY = 'sharbin_delivery_cart_v1';
+const LAST_ORDER_STORAGE_KEY = 'sharbin_delivery_last_order_v1';
+let shoppingCart = [];
+try { shoppingCart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]'); } catch(e) { shoppingCart = []; }
+
+function saveCart(){ try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(shoppingCart)); } catch(e){} }
+function getProductQuantityOptions(select){
+  if(!select) return null;
+  return {value:select.value, text:select.options[select.selectedIndex]?.text || ''};
+}
+function addProductToCart(productName){
+  updateWorkSchedule();
+  if(currentScheduleState !== 'open') { alert('نعتذر، استقبال الطلبات مغلق حاليًا. يمكنك تصفح قائمة الأسعار.'); return; }
+  const product = productsData.find(p => p.name === productName);
+  if(!product || !product.available){ alert('هذا الصنف غير متاح حاليًا.'); return; }
+  const select = [...document.querySelectorAll('.quantity-select')].find(x => x.dataset.name === productName);
+  const chosen = getProductQuantityOptions(select);
+  if(!chosen || chosen.value === '0'){ alert('اختر الكمية أولًا.'); return; }
+  const existing = shoppingCart.find(x => x.name === productName);
+  if(existing){ existing.quantity = chosen.value; existing.quantityText = chosen.text; }
+  else shoppingCart.push({name:product.name, quantity:chosen.value, quantityText:chosen.text, unit:product.unit, category:product.category});
+  saveCart(); renderCart();
+  if(select) select.value = '0';
+}
+function renderCart(){
+  const dock=document.getElementById('cart-dock');
+  const count=document.getElementById('cart-count');
+  const total=shoppingCart.length;
+  if(count) count.textContent=total;
+  if(dock) dock.style.display=total && document.getElementById('price-list-view')?.style.display !== 'none' ? 'block':'none';
+  const host=document.getElementById('cart-review-items');
+  if(!host) return;
+  if(!total){host.innerHTML='<p class="p-5 text-center text-gray-500">السلة فارغة. ارجع لقائمة الأسعار وأضف الأصناف المطلوبة.</p>';return;}
+  host.innerHTML=shoppingCart.map((item,i)=>`<div class="cart-line"><div class="min-w-0"><div class="font-bold">${escapeCartText(item.name)}</div><div class="text-sm text-gray-600">${escapeCartText(item.quantityText || '')}</div></div><div class="cart-qty"><button type="button" aria-label="تقليل" onclick="changeCartQuantity(${i},-1)">−</button><button type="button" aria-label="زيادة" onclick="changeCartQuantity(${i},1)">+</button><button type="button" class="text-red-600 font-bold px-2" onclick="removeCartItem(${i})">حذف</button></div></div>`).join('');
+}
+function escapeCartText(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function changeCartQuantity(index,delta){
+  const item=shoppingCart[index]; if(!item)return;
+  const product=productsData.find(p=>p.name===item.name);
+  if(!product || !product.available){alert(`الصنف ${item.name} لم يعد متاحًا.`);return;}
+  const select=[...document.querySelectorAll('.quantity-select')].find(x=>x.dataset.name===item.name);
+  if(!select)return;
+  const current=Number(item.quantity); const target=current+delta;
+  const option=[...select.options].find(o=>Number(o.value)===target);
+  if(!option){alert('وصلت للحد الأدنى أو الأقصى للكمية المتاحة.');return;}
+  item.quantity=option.value; item.quantityText=option.text; saveCart();renderCart();
+}
+function removeCartItem(index){shoppingCart.splice(index,1);saveCart();renderCart();}
+function openCartReview(){renderCart();toggleView('cart-review-view');}
+function repeatLastOrder(){
+  let last=[]; try{last=JSON.parse(localStorage.getItem(LAST_ORDER_STORAGE_KEY)||'[]');}catch(e){}
+  if(!last.length){alert('لا يوجد طلب سابق محفوظ على هذا الجهاز.');return;}
+  const unavailable=[]; const restored=[];
+  last.forEach(old=>{
+    const p=productsData.find(x=>x.name===old.name);
+    if(!p || !p.available){unavailable.push(old.name);return;}
+    const select=[...document.querySelectorAll('.quantity-select')].find(x=>x.dataset.name===p.name);
+    const option=select && [...select.options].find(o=>String(o.value)===String(old.quantity));
+    if(!option){unavailable.push(old.name);return;}
+    restored.push({name:p.name,quantity:option.value,quantityText:option.text,unit:p.unit,category:p.category});
+  });
+  shoppingCart=restored;saveCart();renderCart();
+  alert((restored.length?'تم استعادة الأصناف المتاحة في آخر طلب.':'لم يتبقَّ صنف متاح من آخر طلب.')+(unavailable.length?'\nالأصناف التي لم تُضف لعدم توافرها أو تغير خياراتها:\n'+unavailable.join('، '):''));
+}
+
+function generateWhatsAppOrder(){
+  updateWorkSchedule();
+  if(currentScheduleState !== 'open'){alert('نعتذر، استقبال الطلبات مغلق حاليًا.');return;}
+  if(!shoppingCart.length){alert('السلة فارغة. أضف صنفًا واحدًا على الأقل.');return;}
+  // إعادة التحقق من التوافر قبل الإرسال
+  const unavailable=shoppingCart.filter(x=>{const p=productsData.find(p=>p.name===x.name);return !p || !p.available;});
+  if(unavailable.length){alert('الأصناف التالية لم تعد متاحة: '+unavailable.map(x=>x.name).join('، ')+'\nاحذفها من السلة ثم أعد المحاولة.');return;}
+  const name=document.getElementById('customer-name').value.trim();
+  const phone=document.getElementById('customer-phone').value.trim();
+  const address=document.getElementById('customer-address').value.trim();
+  const notes=document.getElementById('notes').value.trim();
+  if(!name||!phone||!address){alert('من فضلك أكمل الاسم ورقم الهاتف والعنوان.');return;}
+  let vegItems='',fruitItems='';
+  shoppingCart.forEach(item=>{const line=`• ${item.quantityText} ${item.name}\n`;if(item.category==='veg')vegItems+=line;else fruitItems+=line;});
+  let msg='📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n------------------\n';
+  if(vegItems)msg+='🥬 *الخضروات:*\n'+vegItems;
+  if(fruitItems)msg+='🍉 *الفواكه:*\n'+fruitItems;
+  msg+='------------------\n📦 *التوصيل:*\n💰 *الإجمالي:*\n------------------\n';
+  msg+=`👤 *الاسم:* ${name}\n📞 *رقم الهاتف:* ${phone}\n📌 *العنوان:* ${address}\n📝 *ملاحظات:* ${notes||'لا يوجد'}`;
+  try{localStorage.setItem(LAST_ORDER_STORAGE_KEY,JSON.stringify(shoppingCart));}catch(e){}
+  window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`,'_blank');
+}
 
         function confirmMyRating() {
             const selectedStar = document.querySelector('input[name="rating"]:checked');
