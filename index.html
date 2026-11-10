@@ -512,7 +512,6 @@ async function loadPricesFromSheet() {
             if (unit) product.unit = unit;
 
             const categoryText = get(row, 'القسم').toLowerCase();
-            // تصنيف دقيق: إذا احتوى عمود القسم على كلمة "فاكه" أو "فواكه" يتم اعتباره فواكه، وإلا فيعتبر خضروات
             if (categoryText.includes('فاكه') || categoryText.includes('فواكه') || categoryText.includes('fruit')) {
                 product.category = 'fruit';
             } else {
@@ -563,14 +562,16 @@ async function loadPricesFromSheet() {
 
             let trendArrow = '';
             if (p.trend === 'down') {
+                // رأس مثلث متجه لأسفل فقط باللون الأحمر
                 trendArrow = `
-                    <svg class="w-4 h-4 text-red-600 animate-pulse inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path>
+                    <svg class="w-3.5 h-3.5 text-red-600 animate-pulse inline-block" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 21l-10-18h20z"/>
                     </svg>`;
             } else if (p.trend === 'up') {
+                // رأس مثلث متجه لأعلى فقط باللون الأخضر
                 trendArrow = `
-                    <svg class="w-4 h-4 text-green-600 inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"></path>
+                    <svg class="w-3.5 h-3.5 text-green-600 inline-block" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3l10 18h-20z"/>
                     </svg>`;
             }
 
@@ -599,7 +600,6 @@ async function loadPricesFromSheet() {
                 <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
             </div>`;
 
-            // ضمان فرز العناصر بدقة شديدة بين الخضروات والفواكه
             if (p.category === 'fruit') {
                 sFruit += sRow;
             } else {
