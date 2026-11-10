@@ -265,16 +265,18 @@ let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
+    // 1. الأولوية القصوى لحالة التحكم اليدوي القادمة من جوجل شيت
     if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
         holidayMode = false;
-    } else if (manualWorkStatus === 'إجازة') {
+    } else if (manualWorkStatus === 'إجازة' || manualWorkStatus === 'اجازة') {
         holidayMode = true;
         closeAfterHoursMode = false;
     } else if (manualWorkStatus === 'مفتوح') {
         holidayMode = false;
         closeAfterHoursMode = false;
     } else {
+        // 2. الوضع التلقائي يعمل حصرياً إذا كانت الحالة "تلقائي"
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
             weekday: 'long',
@@ -419,7 +421,7 @@ setInterval(updateWorkSchedule, 30000);
             { name: "برتقال بصرة", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 1},
             { name: "كلمنتينا أخضر", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
             { name: "رمان", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 1},
-            { name: "رمان سكري", price: 50, unit: "kجم", category: "fruit", available: true, minWeight: 1},
+            { name: "رمان سكري", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
             { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
             { name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
         ];
@@ -470,15 +472,18 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
+        // فحص شامل لجميع خلايا الجدول لجلب الحالة اليدوية بدقة
+        let detectedStatus = 'تلقائي';
         rows.forEach(row => {
             row.forEach(cell => {
                 const txt = String(cell ?? '').trim();
-                if (txt === 'مغلق') manualWorkStatus = 'مغلق';
-                else if (txt === 'إجازة' || txt === 'اجازة') manualWorkStatus = 'إجازة';
-                else if (txt === 'مفتوح') manualWorkStatus = 'مفتوح';
-                else if (txt === 'تلقائي') manualWorkStatus = 'تلقائي';
+                if (txt === 'مغلق') detectedStatus = 'مغلق';
+                else if (txt === 'إجازة' || txt === 'اجازة') detectedStatus = 'إجازة';
+                else if (txt === 'مفتوح') detectedStatus = 'مفتوح';
+                else if (txt === 'تلقائي') detectedStatus = 'تلقائي';
             });
         });
+        manualWorkStatus = detectedStatus;
 
         const headers = rows[0].map((value, index) =>
             String(value).replace(/^\uFEFF/, '').trim()
@@ -541,7 +546,6 @@ async function loadPricesFromSheet() {
             const special = get(row, 'صنف مميز؟');
             product.isSpecial = yes(special);
 
-            // دعم عمود "مناسب للتخزين" من جوجل شيت
             const storageText = get(row, 'مناسب للتخزين');
             product.isStorage = yes(storageText);
 
