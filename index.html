@@ -264,6 +264,7 @@ let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
+    // 1. التحكم اليدوي يأخذ أولوية مطلقة ويعطل الحساب التلقائي تماماً
     if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
         holidayMode = false;
@@ -274,6 +275,7 @@ function updateWorkSchedule() {
         holidayMode = false;
         closeAfterHoursMode = false;
     } else {
+        // 2. الوضع التلقائي يعمل فقط إذا كانت الحالة "تلقائي"
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
             weekday: 'long',
@@ -469,6 +471,7 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
+        // البحث الدقيق عن الحالة اليدوية في أي صف بالجدول
         rows.forEach(row => {
             const firstCell = String(row[0] ?? '').trim();
             if (firstCell.includes('حالة العمل اليدوية') || firstCell.includes('حالة المحل')) {
@@ -562,13 +565,11 @@ async function loadPricesFromSheet() {
 
             let trendArrow = '';
             if (p.trend === 'down') {
-                // رأس مثلث متجه لأسفل فقط باللون الأحمر
                 trendArrow = `
                     <svg class="w-3.5 h-3.5 text-red-600 animate-pulse inline-block" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 21l-10-18h20z"/>
                     </svg>`;
             } else if (p.trend === 'up') {
-                // رأس مثلث متجه لأعلى فقط باللون الأخضر
                 trendArrow = `
                     <svg class="w-3.5 h-3.5 text-green-600 inline-block" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 3l10 18h-20z"/>
