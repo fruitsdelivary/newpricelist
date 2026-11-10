@@ -264,7 +264,6 @@ let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
-    // 1. التحقق من التحكم اليدوي أولاً
     if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
         holidayMode = false;
@@ -275,7 +274,6 @@ function updateWorkSchedule() {
         holidayMode = false;
         closeAfterHoursMode = false;
     } else {
-        // 2. الوضع التلقائي حسب التوقيت بمصر
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
             weekday: 'long',
@@ -471,7 +469,6 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
-        // البحث عن الحالة اليدوية في أي صف
         rows.forEach(row => {
             const firstCell = String(row[0] ?? '').trim();
             if (firstCell.includes('حالة العمل اليدوية') || firstCell.includes('حالة المحل')) {
@@ -514,8 +511,13 @@ async function loadPricesFromSheet() {
             const unit = get(row, 'الوحدة');
             if (unit) product.unit = unit;
 
-            const category = get(row, 'القسم');
-            if (category) product.category = category.includes('فاكه') ? 'fruit' : 'veg';
+            const categoryText = get(row, 'القسم').toLowerCase();
+            // تصنيف دقيق: إذا احتوى عمود القسم على كلمة "فاكه" أو "فواكه" يتم اعتباره فواكه، وإلا فيعتبر خضروات
+            if (categoryText.includes('فاكه') || categoryText.includes('فواكه') || categoryText.includes('fruit')) {
+                product.category = 'fruit';
+            } else {
+                product.category = 'veg';
+            }
 
             const availability = get(row, 'متاح؟');
             if (yes(availability)) product.available = true;
@@ -597,7 +599,12 @@ async function loadPricesFromSheet() {
                 <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
             </div>`;
 
-            if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
+            // ضمان فرز العناصر بدقة شديدة بين الخضروات والفواكه
+            if (p.category === 'fruit') {
+                sFruit += sRow;
+            } else {
+                sVeg += sRow;
+            }
             iAll += iRow;
         });
 
@@ -643,7 +650,7 @@ async function loadPricesFromSheet() {
 
         async function startApp() {
             await loadPricesFromSheet();
-            updateWorkSchedule(); // تحديث حالة العمل فور تحميل الشيت
+            updateWorkSchedule();
             init();
         }
 
