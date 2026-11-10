@@ -6,6 +6,8 @@
     <title>دليفري الخضار والفاكهة..قائمة الأسعار ونموذج الطلب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+
+
 .new-arrival-bar {
     background: linear-gradient(90deg, #ef4444, #dc2626);
     color: white;
@@ -18,18 +20,26 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+
 .scrolling-text {
     display: inline-block;
     white-space: nowrap;
+    /* تأكد من إضافة infinite للتكرار و linear للحركة الانسيابية */
     animation: scroll-right 25s linear infinite; 
     font-weight: bold;
     font-size: 0.9rem;
 }
 
+
 @keyframes scroll-right {
+    /* البداية: النص مختفي تماماً جهة اليسار */
     0% { transform: translateX(-100%); }
+    /* النهاية: النص يخرج تماماً من جهة اليمين */
     100% { transform: translateX(100vw); }
 }
+
+
+
 
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; }
         .flex-row-item {
@@ -37,6 +47,7 @@
             padding: 12px 16px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;
         }
         .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
+
 
         .rating-card {
             background: white; border: 2px dashed #fbbf24; border-radius: 20px;
@@ -52,11 +63,13 @@
         .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.8rem; white-space: nowrap; }
         .current-price { color: #dc2626; font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
 
+
         .item-action-part { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
         .quantity-select { 
             height: 38px; width: 95px; border: 2px solid #22c55e; border-radius: 8px; 
             font-weight: bold; background-color: #fff; font-size: 0.8rem; text-align: center;
         }
+
 
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
@@ -69,7 +82,9 @@
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
 
+
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/40">
+
 
         <header class="text-center mb-8">
             <h1 class="text-3xl font-extrabold text-green-700 mb-4" id="main-title">💰أسعار اليوم💰</h1>
@@ -84,6 +99,7 @@
             <button onclick="toggleView('order-form-view')" class="w-full mb-6 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-lg active:scale-95 transition">
                 🛒 ابدأ طلبك الآن!
             </button>
+
 
 <div id="share-btn-container" class="fixed top-4 right-4 z-50 flex items-center shadow-lg rounded-full">
     <button onclick="document.getElementById('share-btn-container').style.display='none'" 
@@ -103,10 +119,14 @@
     </button>
 </div>
 
+
+
+
             <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
                 <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
                 <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
             </div>
+
 
             <div style="text-align: center; padding: 8px 2px; background: #fdfdfd; border-radius: 8px; margin: 10px auto; border: 1px solid #eee; width: 95%; overflow: hidden;">
                 <div style="white-space: nowrap; font-family: sans-serif; display: flex; justify-content: center; align-items: center; gap: 4px;">
@@ -119,26 +139,33 @@
                 </div>
             </div>
 
+
 <div class="new-arrival-bar" style="overflow: hidden; direction: ltr;">
     <div class="scrolling-text">
      ✨اللهم صلِّ وسلم وبارك على نبينا محمد ﷺ✨ 
    </div>
 </div> 
 
+
 <div class="relative mb-6">
     <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
     class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
 </div>
+
+
+
 
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
                 <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
                 <div id="vegetables-list-static"></div>
             </section>
 
+
             <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
                 <h2 class="bg-yellow-500 text-white text-2xl font-bold p-3 text-center">🍎🥝 فواكه 🍉🍒</h2>
                 <div id="fruits-list-static"></div>
             </section>
+
 
             <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-12 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-xl active:scale-95 transition">
                 🛒 ابدأ طلبك الآن! 
@@ -146,12 +173,15 @@
     
         </div>
 
+
         <div id="order-form-view" style="display: none;">
             <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-3 rounded-xl">🔙 العودة لقائمة الأسعار</button>
+
 
 <button onclick="shareProject()" class="w-full mb-6 bg-yellow-500 text-black font-bold py-4 rounded-xl shadow-lg text-lg flex items-center justify-center gap-2 active:scale-95 transition">
     📢 شارك القائمة مع أصدقائك
 </button>
+
 
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="mb-6 border rounded-xl overflow-hidden shadow-md">
@@ -163,6 +193,7 @@
             </form>
         </div>
 
+
 <div id="reviews-view" style="display: none;" class="mb-10">
     <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-4 rounded-2xl shadow-md text-lg">
         🔙 العودة لقائمة الأسعار
@@ -170,6 +201,9 @@
     
     <div id="reviews-container" class="space-y-4"></div>
 </div>
+
+
+
 
         <div class="rating-card">
             <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
@@ -185,16 +219,20 @@
             <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
         </div>
 
+
         <footer class="mt-12 pt-6 border-t-2 text-center">
-            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
+            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 إستقبال الطلبات من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
+
 
 <button onclick="toggleView('reviews-view')" 
         class="w-full bg-orange-500 text-white font-bold py-4 rounded-xl inline-block shadow-md mb-4 text-lg active:scale-95 transition flex items-center justify-center gap-2">
     ⭐ مراجعات وآراء عملاءنا الكرام
 </button>
 
+
             <a href="https://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg">📨 مراسلة واتساب مباشرة</a>
             <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg">🔵 زيارة صفحة الفيسبوك</a>
+
 
 <div class="mt-8 mb-4 flex flex-col items-center justify-center w-full">
     <p class="text-xs text-gray-400 mb-2">عدد الزيارات</p>
@@ -212,40 +250,57 @@
     </noscript>
 </div>
 
+
+
+
+<!-- فقاعة المراجعات الدائرية (زر إغلاق أحمر ونص خارجي) -->
 <div id="floating-reviews" class="fixed bottom-24 left-4 z-50 animate-bounce flex flex-col items-center">
     
     <div class="relative">
+        <!-- زر الإغلاق (X) باللون الأحمر -->
         <button onclick="event.stopPropagation(); document.getElementById('floating-reviews').style.display='none';" 
                 class="absolute -top-1 -right-1 bg-red-600 text-white hover:bg-red-700 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shadow-md border border-white font-bold z-[60] transition-colors">
             ✕
         </button>
 
+
+        <!-- الدائرة الصغيرة -->
         <div onclick="toggleView('reviews-view')" 
              class="bg-orange-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center border-2 border-white cursor-pointer active:scale-95 transition-transform">
             <span class="text-xl">⭐</span>
         </div>
     </div>
 
+
+    <!-- النص أسفل الدائرة -->
     <span onclick="toggleView('reviews-view')" class="mt-1 text-[10px] font-bold text-orange-600 bg-white/90 px-2 py-0.5 rounded-full shadow-sm cursor-pointer border border-orange-100">
         شوف رأي الناس
     </span>
 </div>
 
+
+
+
         </footer>
     </div>
 
+
     <script>
+
+
 async function shareProject() {
     const shareData = {
         title: 'دليفري الخضار والفاكهة بشربين',
         text: ' 📢 شاهد الآن أسعار اليوم واطلب بسهولة عبر نموذج الواتساب 📲 ..!',
-        url: window.location.href
+        url: window.location.href // سيأخذ رابط موقعك تلقائياً
     };
+
 
     try {
         if (navigator.share) {
             await navigator.share(shareData);
         } else {
+            // حل بديل في حال كان المتصفح لا يدعم المشاركة المباشرة
             navigator.clipboard.writeText(window.location.href);
             alert("تم نسخ رابط القائمة، يمكنك الآن لصقه وإرساله لأصدقائك! ✅");
         }
@@ -254,49 +309,45 @@ async function shareProject() {
     }
 }
 
+
+
+
 // ==========================================
-// نظام التحكم اليدوي والتلقائي للعمل
+// نظام الإغلاق التلقائي والإجازة الأسبوعية
+// يعتمد على توقيت مصر Africa/Cairo
 // ==========================================
-let manualWorkStatus = 'تلقائي'; // القيم الممكنة: تلقائي، مفتوح، مغلق، إجازة
+
 let closeAfterHoursMode = false;
 let holidayMode = false;
 let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
-    // 1. التحقق من التحكم اليدوي بأولوية مطلقة
-    if (manualWorkStatus === 'مغلق') {
-        closeAfterHoursMode = true;
-        holidayMode = false;
-    } else if (manualWorkStatus === 'إجازة') {
-        holidayMode = true;
-        closeAfterHoursMode = false;
-    } else if (manualWorkStatus === 'مفتوح') {
-        holidayMode = false;
-        closeAfterHoursMode = false;
-    } else {
-        // 2. الوضع التلقائي حسب التوقيت بمصر (يتم التنفيذ فقط إذا كانت الحالة "تلقائي")
-        const parts = new Intl.DateTimeFormat('en-US', {
-            timeZone: 'Africa/Cairo',
-            weekday: 'long',
-            hour: '2-digit',
-            minute: '2-digit',
-            hourCycle: 'h23'
-        }).formatToParts(new Date());
+    // استخراج اليوم والوقت حسب توقيت مصر، وليس توقيت جهاز الزائر
+    const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Africa/Cairo',
+        weekday: 'long',
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23'
+    }).formatToParts(new Date());
 
-        const getPart = (type) => parts.find(part => part.type === type).value;
-        const day = getPart('weekday');
-        const hour = Number(getPart('hour'));
-        const minute = Number(getPart('minute'));
-        const currentTime = hour * 60 + minute;
+    const getPart = (type) => parts.find(part => part.type === type).value;
+    const day = getPart('weekday');
+    const hour = Number(getPart('hour'));
+    const minute = Number(getPart('minute'));
+    const currentTime = hour * 60 + minute;
 
-        closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
-        holidayMode =
-            (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
-            day === 'Friday' ||
-            (day === 'Saturday' && currentTime < 7 * 60);
-    }
+    // الإغلاق اليومي: من 4:15 مساءً حتى 7:00 صباحاً
+    closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
 
+    // الإجازة الأسبوعية: الخميس 4:15 مساءً حتى السبت 7:00 صباحاً
+    holidayMode =
+        (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
+        day === 'Friday' ||
+        (day === 'Saturday' && currentTime < 7 * 60);
+
+    // الإجازة لها أولوية على رسالة الإغلاق اليومي
     let overlayMode = null;
     if (holidayMode) {
         overlayMode = 'holiday';
@@ -304,6 +355,7 @@ function updateWorkSchedule() {
         overlayMode = 'closed';
     }
 
+    // لا تعِد إنشاء الشاشة إذا لم تتغير الحالة
     if (overlayMode === currentOverlayMode) return;
     currentOverlayMode = overlayMode;
 
@@ -312,6 +364,7 @@ function updateWorkSchedule() {
         scheduleOverlay = null;
     }
 
+    // وقت العمل: إزالة شاشة التنويه وفتح الموقع
     if (!overlayMode) return;
 
     scheduleOverlay = document.createElement('div');
@@ -331,7 +384,7 @@ function updateWorkSchedule() {
         text-align: center;
         padding: 20px;
         font-family: sans-serif;
-    `;
+    `;i
 
     if (overlayMode === 'holiday') {
         scheduleOverlay.innerHTML = `
@@ -356,8 +409,11 @@ function updateWorkSchedule() {
     document.documentElement.appendChild(scheduleOverlay);
 }
 
+// تشغيل الجدول فور فتح الصفحة، ثم مراجعته كل 30 ثانية
+updateWorkSchedule();
 setInterval(updateWorkSchedule, 30000);
 // ==========================================
+
 
         let productsData = [
             { name: "بصل أحمر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
@@ -369,184 +425,280 @@ setInterval(updateWorkSchedule, 30000);
             { name: "خيار", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
             { name: "كوسة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
             { name: "جزر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+
+
+         
             { name: "طماطم جامدة", price: 25, unit: "كجم", category: "veg", available: true,trend: "up", minWeight: 0.5 },
-            { name: "طماطم طبخ سليمة", price: 20, unit: "كجم", category: "veg", available: true,trend: "up", minWeight: 1 },
+
+
+{ name: "طماطم طبخ سليمة", price: 20, unit: "كجم", category: "veg", available: true,trend: "up", minWeight: 1 },
+
+
             { name: "ليمون", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
+
+
             { name: "فلفل أخضر بارد", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+
+
             { name: "فلفل أخضر حار", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.25},
-            { name: "شطة خضراء", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
-            { name: "فلفل أحمر بارد", price: 50, unit: "كجم", category: "veg", available: false, minWeight: 0.5},
-            { name: "فلفل أحمر حار", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
+
+
+{ name: "شطة خضراء", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+
+
+           { name: "فلفل أحمر بارد", price: 50, unit: "كجم", category: "veg", available: false, minWeight: 0.5},
+
+
+             { name: "فلفل أحمر حار", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
+
+
             { name: "فلفل ألوان", price: 80, unit: "كجم", category: "veg", available: true, minWeight: 0.25, trend: "up" },
-            { name: "قلقاس", price: 35, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
-            { name: "فاصوليا خضراء", price:  30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+
+
+{ name: "قلقاس", price: 35, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+
+
+{ name: "فاصوليا خضراء", price:  30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+
+
             { name: "شبت وكسبرة (صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true, trend: "up" },
+
+
             { name: "بقدونس", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "فجل", price: 10, unit: "ربطة", category: "veg", available: true },
             { name: "جرجير", price: 10, unit: "ربطة", category: "veg", available: true },
-            { name: "بصل أخضر", price: 10, unit: "ربطة", category: "veg", available: true },
-            { name: "سبانخ", price: 15, unit: "ربطة", category: "veg", available: true },
+
+
+{ name: "بصل أخضر", price: 10, unit: "ربطة", category: "veg", available: true },
+
+
+{ name: "سبانخ", price: 15, unit: "ربطة", category: "veg", available: true },
+
+
             { name: "نعناع", price: 10, unit: "ربطة", category: "veg", available: true },
+           
             { name: "خس كابوتشا", price: 25, unit: "حبة", category: "veg", available: true },
+
+
             { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
+
+
             { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+          
             { name: "بصل أبيض", price: 30, unit: "كجم", category: "veg", available: false, minWeight: 1},
-            { name: "بطاطا", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
-            { name: "خس بلدي", price: 15, unit: "ربطة", category: "veg", available: true },
+
+
+{ name: "بطاطا", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
+
+
+
+
+       { name:  "خس بلدي", price: 15, unit: "ربطة", category: "veg", available: true },
+
+
             { name: "كرنب أحمر (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
+
+
             { name: "كرنب أبيض (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
+
+
             { name: "ذرة أصفر", price: 55,oldPrice: 65, unit: "طبق", category: "veg", available: false },
-            { name: "مشروم فريش", price: 65,oldPrice: 70, unit: "طبق", category: "veg", available: false },
+
+
+{ name: "مشروم فريش", price: 65,oldPrice: 70, unit: "طبق", category: "veg", available: false },
+
+
             { name: "أرز رويزق 10ك", price: 295, oldPrice: 300, unit: "شيكارة", category: "veg", available: true },
+
+
             { name: "موز", price: 40, unit: "كجم", category: "fruit", available: true, trend: "down" },
+
+
             { name: "تفاح أصفر", price: 100, unit: "كجم", category: "fruit", available: true },
+
+
             { name: "تفاح سكري", price: 90, unit: "كجم", category: "fruit", available: true },
-            { name: "تفاح سكري٢", price: 80, unit: "كجم", category: "fruit", available: true },
-            { name: "تفاح أحمر لبناني", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+
+
+{ name: "تفاح سكري٢", price: 80, unit: "كجم", category: "fruit", available: true },
+
+
+{ name: "تفاح أحمر لبناني", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
             { name: "عنب أحمر كريمسون", price: 100, unit: "كجم", category: "fruit", available: true, trend: "up" },
-            { name: "عنب ببذر", price: 35, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
-            { name: "بلح أسمر", price: 40, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.5 },
-            { name: "برقوق يوناني", price: 120, unit: "كجم", category: "fruit", available: true },
-            { name: "كمثرى", price: 100, unit: "كجم", category: "fruit", available: false},
-            { name: "كاكا", price: 60, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
-            { name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 1},
-            { name: "كنتالوب", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: true},
-            { name: "مانجو كريمسون", price: 100, unit: "كجم", category: "fruit", available: false, isSpecial: false, minWeight: 0.5}, 
+
+
+  { name: "عنب ببذر", price: 35, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+
+
+{ name: "بلح أسمر", price: 40, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.5 },
+
+
+         { name: "برقوق يوناني", price: 120, unit: "كجم", category: "fruit", available: true },
+
+
+         { name: "كمثرى", price: 100, unit: "كجم", category: "fruit", available: false},
+
+
+{ name: "كاكا", price: 60, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+
+
+{ name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 1},
+
+
+
+
+{ name: "كنتالوب", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: true},
+
+
+{ name: "مانجو كريمسون", price: 100, unit: "كجم", category: "fruit", available: false, isSpecial: false, minWeight: 0.5}, 
+
+
             { name: "تمر القصيم ٩٠٠جم", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial:false },
+           
             { name: "جوافة بلطيمي", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
-            { name: "جوافة", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
-            { name: "بلح برحي", price: 120, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
-            { name: "بلح أحمر ", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
-            { name: "برتقال بصرة", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 1},
-            { name: "كلمنتينا أخضر", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
-            { name: "رمان", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 1},
-            { name: "رمان سكري", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
-            { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
-            { name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
+
+
+{ name: "جوافة", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
+
+
+      { name: "بلح برحي", price: 120, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+
+
+{ name: "بلح أحمر ", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+
+
+{ name: "برتقال بصرة", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+
+
+{ name: "كلمنتينا أخضر", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+
+
+{ name: "رمان", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 1},
+
+
+{ name: "رمان سكري", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+
+
+{ name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+
+
+{ name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
+
+
+
+
+
+
+
+
         ];
 
-const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv';
 
-function parseCSV(text) {
-    const rows = [];
-    let row = [], cell = '', quoted = false;
-    for (let i = 0; i < text.length; i++) {
-        const ch = text[i];
-        if (ch === '"') {
-            if (quoted && text[i + 1] === '"') { cell += '"'; i++; }
-            else quoted = !quoted;
-        } else if (ch === ',' && !quoted) {
-            row.push(cell); cell = '';
-        } else if ((ch === '\n' || ch === '\r') && !quoted) {
-            if (ch === '\r' && text[i + 1] === '\n') i++;
-            row.push(cell);
-            if (row.some(value => String(value).trim() !== '')) rows.push(row);
-            row = []; cell = '';
-        } else {
-            cell += ch;
-        }
-    }
-    row.push(cell);
-    if (row.some(value => String(value).trim() !== '')) rows.push(row);
-    return rows;
-}
 
-function cleanSheetNumber(value) {
-    const normalized = String(value ?? '')
-        .trim()
-        .replace(/[٠-٩]/g, digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit))
-        .replace(/[۰-۹]/g, digit => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
-        .replace(/[٫٬]/g, '.')
-        .replace(/,/g, '');
-    if (!normalized) return null;
-    const number = Number(normalized);
-    return Number.isFinite(number) ? number : null;
-}
+        // تحميل الأسعار والبيانات اليومية من Google Sheets
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv";
 
-async function loadPricesFromSheet() {
-    try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' });
-        if (!response.ok) throw new Error('تعذر تحميل جدول الأسعار');
-        const csvText = await response.text();
-        const rows = parseCSV(csvText);
-        if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
-
-        // البحث عن الحالة اليدوية في أصل البيانات في كل الصفوف
-        rows.forEach(row => {
-            const firstCell = String(row[0] ?? '').trim();
-            if (firstCell.includes('حالة العمل اليدوية') || firstCell.includes('حالة المحل')) {
-                const statusValue = String(row[1] ?? '').trim();
-                if (['مغلق', 'إجازة', 'مفتوح', 'تلقائي'].includes(statusValue)) {
-                    manualWorkStatus = statusValue;
-                }
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], cell = "", quoted = false;
+            for (let i = 0; i < text.length; i++) {
+                const ch = text[i], next = text[i + 1];
+                if (ch === '"' && quoted && next === '"') { cell += '"'; i++; }
+                else if (ch === '"') quoted = !quoted;
+                else if (ch === ',' && !quoted) { row.push(cell.trim()); cell = ""; }
+                else if ((ch === '\n' || ch === '\r') && !quoted) {
+                    if (ch === '\r' && next === '\n') i++;
+                    row.push(cell.trim());
+                    if (row.some(v => v !== "")) rows.push(row);
+                    row = []; cell = "";
+                } else cell += ch;
             }
-        });
-
-        const headers = rows[0].map((value, index) =>
-            String(value).replace(/^\uFEFF/, '').trim()
-        );
-        const column = name => headers.indexOf(name);
-        const requiredColumns = ['اسم الصنف', 'السعر بالجنيه', 'الوحدة', 'القسم', 'متاح؟'];
-        if (requiredColumns.some(name => column(name) === -1)) {
-            throw new Error('أسماء أعمدة جدول الأسعار لا تطابق القالب');
+            row.push(cell.trim());
+            if (row.some(v => v !== "")) rows.push(row);
+            return rows;
         }
 
-        const get = (row, name) => {
-            const index = column(name);
-            return index < 0 ? '' : String(row[index] ?? '').trim();
-        };
-        const yes = value => ['نعم', 'متاح', 'نعم متاح', 'yes', 'true', '1'].includes(value.toLowerCase());
-        const no = value => ['لا', 'غير متاح', 'نفد', 'no', 'false', '0'].includes(value.toLowerCase());
-        const updatedProducts = [];
+        function normalizeText(value) {
+            return String(value ?? "").trim().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").toLowerCase();
+        }
 
-        rows.slice(1).forEach(row => {
-            const name = get(row, 'اسم الصنف');
-            if (!name) return;
-            const price = cleanSheetNumber(get(row, 'السعر بالجنيه'));
-            if (price === null || price <= 0) return;
+        function parseSheetNumber(value) {
+            if (value == null || String(value).trim() === "") return null;
+            const normalized = String(value).trim()
+                .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+                .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+                .replace(/٫/g, ".").replace(/٬/g, "").replace(/,/g, "");
+            const n = Number(normalized);
+            return Number.isFinite(n) ? n : null;
+        }
 
-            const oldProduct = productsData.find(product => product.name.trim() === name);
-            const product = oldProduct ? { ...oldProduct, name } : {
-                name, price, unit: 'كجم', category: 'veg', available: true
-            };
-            product.price = price;
+        async function loadPricesFromSheet() {
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL + "&_=" + Date.now(), { cache: "no-store" });
+                if (!response.ok) throw new Error("تعذر تحميل جدول الأسعار");
+                const csv = await response.text();
+                const rows = parseCSV(csv);
+                if (rows.length < 2) throw new Error("جدول الأسعار فارغ");
 
-            const unit = get(row, 'الوحدة');
-            if (unit) product.unit = unit;
+                const headers = rows[0].map(normalizeText);
+                const col = name => headers.indexOf(normalizeText(name));
+                const nameCol = col("اسم الصنف");
+                const priceCol = col("السعر بالجنيه");
+                const unitCol = col("الوحدة");
+                const categoryCol = col("القسم");
+                const availableCol = col("متاح؟");
+                const minWeightCol = col("أقل وزن (كجم)");
+                const oldPriceCol = col("السعر القديم");
+                const trendCol = col("اتجاه السعر");
+                const specialCol = col("صنف مميز؟");
+                if (nameCol < 0 || priceCol < 0) throw new Error("أعمدة الاسم أو السعر غير موجودة");
 
-            const category = get(row, 'القسم');
-            if (category) product.category = category.includes('فاكه') ? 'fruit' : 'veg';
+                const byName = new Map();
+                rows.slice(1).forEach(row => {
+                    const name = row[nameCol]?.trim();
+                    if (name) byName.set(normalizeText(name), row);
+                });
 
-            const availability = get(row, 'متاح؟');
-            if (yes(availability)) product.available = true;
-            else if (no(availability)) product.available = false;
+                productsData.forEach(product => {
+                    const row = byName.get(normalizeText(product.name));
+                    if (!row) return;
 
-            const minWeightText = get(row, 'أقل وزن (كجم)');
-            const minWeight = cleanSheetNumber(minWeightText);
-            if (minWeight !== null && minWeight > 0) product.minWeight = minWeight;
-            else if (minWeightText === '') delete product.minWeight;
+                    const price = parseSheetNumber(row[priceCol]);
+                    if (price !== null) product.price = price;
+                    if (unitCol >= 0 && row[unitCol]) product.unit = row[unitCol].trim();
 
-            const oldPriceText = get(row, 'السعر القديم');
-            const oldPrice = cleanSheetNumber(oldPriceText);
-            if (oldPrice !== null && oldPrice > 0) product.oldPrice = oldPrice;
-            else delete product.oldPrice;
-
-            const trend = get(row, 'اتجاه السعر').toLowerCase();
-            if (['up', 'صاعد', 'مرتفع', 'زيادة', '🔺'].includes(trend)) product.trend = 'up';
-            else if (['down', 'هابط', 'منخفض', 'انخفاض', '🔻'].includes(trend)) product.trend = 'down';
-            else delete product.trend;
-
-            const special = get(row, 'صنف مميز؟');
-            product.isSpecial = yes(special);
-            updatedProducts.push(product);
-        });
-
-        if (!updatedProducts.length) throw new Error('لم يتم العثور على أصناف بأسعار صحيحة');
-        productsData = updatedProducts;
-    } catch (error) {
-        console.warn('تعذر تحديث الأسعار من Google Sheets:', error);
-    }
-}
+                    if (categoryCol >= 0 && row[categoryCol]) {
+                        const category = normalizeText(row[categoryCol]);
+                        product.category = (category.includes("فاكه") || category.includes("فواكه") || category.includes("fruit")) ? "fruit" : "veg";
+                    }
+                    if (availableCol >= 0 && row[availableCol] !== "") {
+                        const available = normalizeText(row[availableCol]);
+                        product.available = ["نعم", "متاح", "متوفر", "yes", "true", "1"].includes(available);
+                    }
+                    if (minWeightCol >= 0) {
+                        const minWeight = parseSheetNumber(row[minWeightCol]);
+                        if (minWeight !== null) product.minWeight = minWeight;
+                    }
+                    if (oldPriceCol >= 0) {
+                        const oldPrice = parseSheetNumber(row[oldPriceCol]);
+                        product.oldPrice = oldPrice !== null ? oldPrice : null;
+                    }
+                    if (trendCol >= 0) {
+                        const trend = normalizeText(row[trendCol]);
+                        if (["ارتفاع", "صعود", "up", "increase", "زيادة"].includes(trend)) product.trend = "up";
+                        else if (["انخفاض", "هبوط", "down", "decrease", "منخفض"].includes(trend)) product.trend = "down";
+                        else product.trend = "";
+                    }
+                    if (specialCol >= 0 && row[specialCol] !== "") {
+                        const special = normalizeText(row[specialCol]);
+                        product.isSpecial = ["نعم", "yes", "true", "1"].includes(special);
+                    }
+                });
+                console.log("تم تحديث الأسعار من Google Sheets");
+            } catch (error) {
+                console.warn("تعذر تحديث الأسعار من Google Sheets، سيتم استخدام الأسعار المحفوظة بالموقع:", error);
+            }
+        }
 
         function init() {
     try {
@@ -554,24 +706,22 @@ async function loadPricesFromSheet() {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
         document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
 
+
         let sVeg = '', sFruit = '', iAll = '';
         productsData.forEach(p => {
             const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
 
+
+            // مثلثات صغيرة لاتجاه السعر
             let trendArrow = '';
             if (p.trend === 'down') {
-                trendArrow = `
-                    <svg class="w-4 h-4 text-red-600 animate-pulse inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path>
-                    </svg>`;
+                trendArrow = '<span class="inline-block text-red-600 font-black text-sm leading-none" aria-label="انخفاض">▼</span>';
             } else if (p.trend === 'up') {
-                trendArrow = `
-                    <svg class="w-4 h-4 text-green-600 inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"></path>
-                    </svg>`;
+                trendArrow = '<span class="inline-block text-green-600 font-black text-sm leading-none" aria-label="ارتفاع">▲</span>';
             }
 
+            // تعديل الترتيب: وضع الـ trendArrow على يمين السعر الحالي مباشرة داخل الـ flex
             const priceDiv = `
                 <div class="item-price-part">
                     ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
@@ -581,11 +731,14 @@ async function loadPricesFromSheet() {
                     </div>
                 </div>`;
 
+
             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
             </div>`;
 
+
+            // تعديل الترتيب في القائمة التفاعلية أيضاً
             const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part text-sm"><div class="font-bold">${p.name}</div>
                 <div class="mt-1 flex items-center gap-1.5">
@@ -597,70 +750,110 @@ async function loadPricesFromSheet() {
                 <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
             </div>`;
 
+
             if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
             iAll += iRow;
         });
+
 
         document.getElementById('vegetables-list-static').innerHTML = sVeg;
         document.getElementById('fruits-list-static').innerHTML = sFruit;
         document.getElementById('interactive-lists-combined').innerHTML = iAll;
 
+
         document.querySelectorAll('.quantity-select').forEach(s => {
-            let opts = '<option value="0">-- طلب --</option>';
-            if (s.dataset.unit === 'كجم') {
-                const product = productsData.find(p => p.name === s.dataset.name);
-                const minWeight = product?.minWeight || 0.125;
-                const weights = [
-                    {v:0.125,t:'⅛ك'},
-                    {v:0.25,t:'¼ك'},
-                    {v:0.5,t:'½ك'},
-                    {v:0.75,t:'¾ك'}
-                ];
-                let filteredWeights = weights.filter(w => w.v >= minWeight);
-                for(let i=1; i<=10; i++){
-                    filteredWeights.push({v:i,t:i+'ك'});
-                    if(i<10){
-                        if(i+0.25 >= minWeight) filteredWeights.push({v:i+0.25,t:i+'و¼ك'});
-                        if(i+0.5 >= minWeight) filteredWeights.push({v:i+0.5,t:i+'و½ك'});
-                        if(i+0.75 >= minWeight) filteredWeights.push({v:i+0.75,t:i+'و¾ك'});
-                    }
-                }
-                for(let i=11;i<=25;i++){
-                    filteredWeights.push({v:i,t:i+'ك'});
-                }
-                filteredWeights.forEach(w=>{
-                    opts += `<option value="${w.v}">${w.t}</option>`;
-                });
-            } else {
-                for(let i=1;i<=20;i++){
-                    opts += `<option value="${i}">${i} ${s.dataset.unit}</option>`;
-                }
+
+
+    let opts = '<option value="0">-- طلب --</option>';
+
+
+    if (s.dataset.unit === 'كجم') {
+
+
+        const product = productsData.find(
+            p => p.name === s.dataset.name
+        );
+
+
+        const minWeight = product?.minWeight || 0.125;
+
+
+        const weights = [
+            {v:0.125,t:'⅛ك'},
+            {v:0.25,t:'¼ك'},
+            {v:0.5,t:'½ك'},
+            {v:0.75,t:'¾ك'}
+        ];
+
+
+        let filteredWeights = weights.filter(
+            w => w.v >= minWeight
+        );
+
+
+        for(let i=1; i<=10; i++){
+            filteredWeights.push({v:i,t:i+'ك'});
+
+
+            if(i<10){
+                if(i+0.25 >= minWeight)
+                    filteredWeights.push({v:i+0.25,t:i+'و¼ك'});
+
+
+                if(i+0.5 >= minWeight)
+                    filteredWeights.push({v:i+0.5,t:i+'و½ك'});
+
+
+                if(i+0.75 >= minWeight)
+                    filteredWeights.push({v:i+0.75,t:i+'و¾ك'});
             }
-            s.innerHTML = opts;
+        }
+
+
+        for(let i=11;i<=25;i++){
+            filteredWeights.push({v:i,t:i+'ك'});
+        }
+
+
+        filteredWeights.forEach(w=>{
+            opts += `<option value="${w.v}">${w.t}</option>`;
         });
+
+
+    } else {
+
+
+        for(let i=1;i<=20;i++){
+            opts += `<option value="${i}">${i} ${s.dataset.unit}</option>`;
+        }
+    }
+
+
+    s.innerHTML = opts;
+});
+       
     } catch (e) { console.error(e); }
 }
 
-        async function startApp() {
-            await loadPricesFromSheet();
-            updateWorkSchedule();
-            init();
-        }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', startApp);
-        } else {
-            startApp();
-        }
+
+
+        async function startApp() { await loadPricesFromSheet(); init(); }
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
+
 
        function toggleView(v) {
+    // تحديث حالة العمل لحظياً قبل السماح بفتح نموذج الطلب
     updateWorkSchedule();
 
+    // 1. تحديد كل الأقسام
     const priceView = document.getElementById('price-list-view');
     const orderView = document.getElementById('order-form-view');
     const reviewsView = document.getElementById('reviews-view');
     const mainTitle = document.getElementById('main-title');
 
+
+    // 2. منع فتح نموذج الطلب أثناء الإغلاق أو الإجازة
     if (v === 'order-form-view') {
         if (holidayMode) {
             alert("❤️ نحن في إجازتنا الأسبوعية.\nسنعاود استقبال الطلبات يوم السبت الساعة 7 صباحاً إن شاء الله.");
@@ -673,10 +866,14 @@ async function loadPricesFromSheet() {
         }
     }
 
+
+    // 3. إخفاء الجميع أولاً (تصفير الشاشة)
     if(priceView) priceView.style.display = 'none';
     if(orderView) orderView.style.display = 'none';
     if(reviewsView) reviewsView.style.display = 'none';
 
+
+    // 4. إظهار القسم المطلوب بناءً على الزر المضغوط
     if (v === 'order-form-view') {
         orderView.style.display = 'block';
         mainTitle.textContent = '🛒 نموذج طلب واتساب';
@@ -688,10 +885,20 @@ async function loadPricesFromSheet() {
         mainTitle.textContent = '💰أسعار اليوم💰';
     }
 
+
+    // 5. الصعود لأعلى الصفحة
     window.scrollTo(0, 0);
 }
 
+
+
+
+
+
+
+
         function generateWhatsAppOrder() {
+            // إعادة فحص الموعد قبل تجهيز أو إرسال الطلب
             updateWorkSchedule();
 
             if (holidayMode) {
@@ -725,11 +932,13 @@ async function loadPricesFromSheet() {
             window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
         }
 
+
         function confirmMyRating() {
             const selectedStar = document.querySelector('input[name="rating"]:checked');
             if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
             const stars = parseInt(selectedStar.value);
             const myWhatsAppNumber = "201032872750";
+
 
             if (stars >= 4) {
                 if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على صفحة فيسبوك؟`)) {
@@ -745,18 +954,22 @@ async function loadPricesFromSheet() {
             }
         }
 
+
         function finalizeRating() {
             const f = document.getElementById('rating-feedback'), b = document.getElementById('confirm-btn'), s = document.querySelector('.star-rating');
             if(f) f.classList.remove('hidden'); if(b) b.classList.add('hidden');
             if(s) { s.style.pointerEvents = 'none'; s.style.opacity = '0.5'; }
         }
 
+
 function filterProducts() {
     const term = document.getElementById('search-input').value.toLowerCase();
     const rows = document.querySelectorAll('.flex-row-item');
 
+
     rows.forEach(row => {
         const name = row.querySelector('.item-name-part').innerText.toLowerCase();
+        // إظهار الصف إذا كان يحتوي على نص البحث، وإخفاؤه إذا لم يحتوي
         if (name.includes(term)) {
             row.style.display = 'flex';
         } else {
@@ -765,29 +978,100 @@ function filterProducts() {
     });
 }
 
+
+// قائمة المراجعات - أضف هنا بسهولة دون زحام
 const allReviews = [
     { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
-    { name: "Aml Saad", text: `ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر` },
-    { name: "أ/سارة", text: `ايه تقييم حضرتك لنظام الطلب الجديد؟ جميل جدا جدا بيفكرنى بكل اللى محتاجاه` },
-    { name: "أ.مدحت", text: `السلام عليكم ملاحظه : البطيخه السابقه كانت أحلى بطيخه أكلناها فى حياتنا ، ربنا يوسع عليكم. بطيخه زى بتاعة المره اللى فاتت وشكرا` },
-    { name: "د.ميرفت", text: `السلام عليكم لسه فاتحه البطيخه النهارده سكككككككر تسلم ايدك` },
-    { name: "Om Eslam", text: `تمام الحمد لله أنا دوخت علي رقمك وصفحتك واضطريت اجيب من ناس تانيه بس بصراحه التعامل مع حضرتك حاجه تانيه` },
-    { name: "السيد حسن", text: `جزاك الله خيرا الحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله جزاك الله خيرا 🌹🌹` },
-    { name: "Adam", text: `خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا` },
-    { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
-    { name: "أ/سارة", text: `ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
-    { name: "dr.eman", text: `ربنا يجزيك الحسني و زياده كفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل ربنا يبارك لك يا ابني و يجعله في ميزان حسناتك` },
-    { name: "أ/هبه", text: `شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل` },
-    { name: "مدام سالي", text: `الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي يارب تفضل علي نفس المستوي علطول بإذن الله جزاكم الله خيرا` },
-    { name: "", text: `شكرا على حسن معاملتكم والبدنجان والفاكهه جميله جدا` },
-    { name: "مدام سالي", text: `شكرا ع الحاجه جميله جدااااا كالعاده يارب دايما متميزين` },
-    { name: "", text: `شكرا عالحاجة جميلة جدا والبلح نضيف ماشاءالله... كنت برة فمشوار وبناتي اللي استلموا الاوردر.. تسلموا ع امانتكم` },
-    { name: "أ/شيرين", text: `الف شكر عالاوردر كله و عالهدية ماشاءالله تبارك الرحمن روعة تسلم ايدك` },
-    { name: "أوشو", text: `ماشاء الله الفاكهه جميله جداا والله ومفيش فيها حاجه وحشه وخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜` },
-    { name: "", text: `الفاكهة جميلة جدا زي كل مرة طبعا ماشاءالله ربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة` },
-    { name: "", text: `البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك` }
+
+
+{ name: "Aml Saad", text:  `
+ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر` },
+
+
+     { name: "أ/سارة", text:  `
+ايه تقييم حضرتك لنظام الطلب الجديد؟ جميل جدا جدا 
+بيفكرنى بكل اللى محتاجاه` },
+
+
+    { name: "أ.مدحت", text: `السلام عليكم
+ملاحظه  : 
+البطيخه السابقه كانت أحلى بطيخه أكلناها فى حياتنا  ،  ربنا يوسع عليكم. 
+بطيخه زى بتاعة المره اللى فاتت
+وشكرا` },
+    { name: "د.ميرفت", text: `السلام عليكم
+لسه فاتحه البطيخه النهارده 
+سكككككككر
+تسلم ايدك` },
+
+
+{ name: "Om Eslam", text: `تمام الحمد لله أنا دوخت علي رقمك وصفحتك واضطريت اجيب من ناس تانيه بس بصراحه التعامل مع حضرتك حاجه تانيه` },
+
+
+            { name: "السيد حسن", text: `   جزاك الله خيرا
+الحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله 
+جزاك الله خيرا 🌹🌹` },
+
+
+        { name: "Adam", text: `خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا` },
+
+
+ { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
+
+
+      
+ { name: "أ/سارة", text:  `ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
+
+
+    { name: "dr.eman", text:  ` 
+ربنا يجزيك الحسني و زياده 
+كفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل
+ربنا يبارك لك يا ابني و يجعله في ميزان حسناتك` },
+
+
+      
+ { name: "أ/هبه", text: `شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل` },
+
+
+
+
+ { name: "مدام سالي", text:  `الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي 
+يارب تفضل علي نفس المستوي علطول بإذن الله 
+جزاكم الله خيرا` },
+
+
+{ name: "", text: `شكرا على حسن معاملتكم والبدنجان والفاكهه جميله جدا` },
+
+
+{ name: "مدام سالي", text: `شكرا ع الحاجه جميله جدااااا كالعاده يارب دايما متميزين` },
+
+
+{ name: "", text: `شكرا عالحاجة جميلة جدا والبلح نضيف ماشاءالله... كنت برة فمشوار وبناتي اللي استلموا الاوردر.. تسلموا ع امانتكم` },
+
+
+{ name: "أ/شيرين", text: `الف شكر عالاوردر كله و عالهدية ماشاءالله تبارك الرحمن روعة تسلم ايدك` },
+
+
+{ name: "أوشو", text: `ماشاء الله الفاكهه جميله جداا والله  ومفيش فيها حاجه وحشه 
+وخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜` },
+
+
+{ name: "", text: `
+الفاكهة جميلة جدا زي كل مرة طبعا 
+ماشاءالله 
+ربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة` },
+
+
+{ name: "", text: `
+البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك` },
+
+
+
+
+    // أضف مراجعات جديدة هنا بنفس التنسيق
 ];
 
+
+// دالة عرض المراجعات تلقائياً
 function loadReviews() {
     const container = document.getElementById('reviews-container');
     if(!container) return;
@@ -803,7 +1087,17 @@ function loadReviews() {
     `).join('');
 }
 
+
+// استدعي الدالة لتشغيلها عند تحميل الموقع
 window.addEventListener('DOMContentLoaded', loadReviews);
+
+
+
+
     </script>
+
+
+
+
 </body>
 </html>
