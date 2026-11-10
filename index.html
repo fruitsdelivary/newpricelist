@@ -72,6 +72,17 @@
 
 
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
+        .add-product-btn { background:#16a34a;color:#fff;border-radius:9px;padding:8px 11px;font-size:.78rem;font-weight:800;white-space:nowrap; }
+        .cart-bottom-bar { position:fixed;bottom:0;left:0;right:0;z-index:9000;background:#166534;color:#fff;padding:10px 14px;box-shadow:0 -4px 18px #0002;display:none; }
+        .picker-backdrop { position:fixed;inset:0;background:#0008;z-index:10000;display:none;align-items:center;justify-content:center;padding:18px; }
+        .picker-card { background:#fff;width:100%;max-width:380px;border-radius:18px;padding:20px;box-shadow:0 15px 40px #0003; }
+        .cart-line { display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #eee; }
+        .cart-line select { border:1px solid #16a34a;border-radius:8px;padding:7px;background:#fff;max-width:125px; }
+        .form-field { width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;text-align:right;margin-top:6px; }
+        .item-name-part { min-width:0; flex:1; }
+        .item-price-part { flex:0 0 auto; min-width:88px; gap:5px; }
+        .item-action-part { flex:0 0 auto; }
+        @media (max-width:380px) { .flex-row-item { padding:10px 8px; gap:6px; } .add-product-btn { padding:7px 8px; font-size:.7rem; } .current-price { font-size:1rem; } .item-price-part { min-width:75px; } }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
         
         .badge-container { display: flex; flex-direction: row-reverse; justify-content: flex-start; gap: 6px; margin-top: 5px; }
@@ -176,23 +187,52 @@
 
         <div id="order-form-view" style="display: none;">
             <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-3 rounded-xl">🔙 العودة لقائمة الأسعار</button>
+            <button onclick="shareProject()" class="w-full mb-5 bg-yellow-500 text-black font-bold py-3 rounded-xl shadow-lg text-lg">📢 شارك القائمة مع أصدقائك</button>
 
-
-<button onclick="shareProject()" class="w-full mb-6 bg-yellow-500 text-black font-bold py-4 rounded-xl shadow-lg text-lg flex items-center justify-center gap-2 active:scale-95 transition">
-    📢 شارك القائمة مع أصدقائك
-</button>
-
-
-            <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
-                <div class="mb-6 border rounded-xl overflow-hidden shadow-md">
-                    <h2 class="bg-green-600 text-white p-3 text-center font-bold">تحديد الأصناف المطلوبة</h2>
-                    <div id="interactive-lists-combined"></div>
+            <div id="order-main-view">
+                <div class="mb-5 border rounded-xl overflow-hidden shadow-sm">
+                    <h2 class="bg-green-600 text-white p-3 text-center font-bold">طلبك الحالي</h2>
+                    <div id="order-cart-summary" class="p-3 text-gray-600 text-sm">لم تضف أي أصناف بعد. ارجع إلى قائمة الأسعار واضغط «أضف للطلب» بجوار الصنف.</div>
                 </div>
-                <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none"></textarea>
-                <button type="submit" class="w-full mt-8 bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl">إرسال الطلب عبر واتساب ✅</button>
-            </form>
+                <button type="button" onclick="repeatLastOrder()" class="w-full mb-6 bg-indigo-600 text-white font-bold py-3 rounded-xl shadow">🔁 تكرار آخر طلب</button>
+                <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
+                    <h2 class="font-bold text-lg mb-3 text-green-700">بيانات استلام الطلب</h2>
+                    <label class="block font-bold text-sm">الاسم</label>
+                    <input id="customer-name" class="form-field" autocomplete="name" placeholder="اسم العميل">
+                    <label class="block font-bold text-sm mt-3">رقم الهاتف</label>
+                    <input id="customer-phone" class="form-field" inputmode="tel" autocomplete="tel" placeholder="رقم الموبايل">
+                    <label class="block font-bold text-sm mt-3">العنوان بالتفصيل</label>
+                    <input id="customer-address" class="form-field" autocomplete="street-address" placeholder="الشارع والمنطقة وأقرب علامة مميزة">
+                    <label class="block font-bold text-sm mt-3">ملاحظات إضافية</label>
+                    <textarea id="notes" rows="3" placeholder="أي تفاصيل أخرى تخص طلبك..." class="form-field"></textarea>
+                    <button type="submit" class="w-full mt-6 bg-green-600 text-white font-bold py-4 rounded-2xl text-xl shadow-xl">إرسال الطلب عبر واتساب ✅</button>
+                </form>
+            </div>
+            <div id="cart-review-view" style="display:none;">
+                <h2 class="bg-green-600 text-white p-3 text-center font-bold rounded-xl mb-3">مراجعة طلبك</h2>
+                <p class="text-xs text-gray-500 mb-3">يمكنك تعديل الكميات أو حذف أي صنف. الأسعار لا تظهر في هذه المرحلة.</p>
+                <div id="cart-review-items" class="border rounded-xl overflow-hidden mb-5"></div>
+                <button type="button" onclick="showOrderMain()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl mb-3">متابعة وإتمام الطلب</button>
+                <button type="button" onclick="toggleView('price-list-view')" class="w-full bg-gray-200 text-gray-700 font-bold py-3 rounded-xl">العودة لقائمة الأسعار لإضافة أصناف</button>
+            </div>
         </div>
 
+        <div id="product-picker" class="picker-backdrop" onclick="if(event.target===this) closeProductPicker()">
+            <div class="picker-card">
+                <h3 id="picker-product-name" class="font-extrabold text-lg mb-2"></h3>
+                <p class="text-sm text-gray-500 mb-3">اختر الوزن أو الوحدة المطلوبة</p>
+                <select id="picker-quantity" class="form-field mb-4"></select>
+                <button type="button" onclick="confirmAddToCart()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl">إضافة إلى الطلب</button>
+                <button type="button" onclick="closeProductPicker()" class="w-full mt-2 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl">إلغاء</button>
+            </div>
+        </div>
+
+        <div id="cart-bottom-bar" class="cart-bottom-bar">
+            <div class="max-w-3xl mx-auto flex items-center justify-between gap-3">
+                <div class="font-bold">🛒 <span id="cart-items-count">0</span> صنف في طلبك</div>
+                <button type="button" onclick="openCartReview()" class="bg-white text-green-800 font-extrabold rounded-lg px-5 py-2">مراجعة الطلب</button>
+            </div>
+        </div>
 
 <div id="reviews-view" style="display: none;" class="mb-10">
     <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-4 rounded-2xl shadow-md text-lg">
@@ -700,143 +740,154 @@ setInterval(updateWorkSchedule, 30000);
             }
         }
 
+        let cartItems = [];
+        let activeProductForPicker = null;
+        const LAST_ORDER_KEY = 'sharbin_grocery_last_order_v1';
+
+        function getQuantityOptions(product) {
+            const options = [];
+            if (product.unit === 'كجم') {
+                const minWeight = product.minWeight || 0.125;
+                const weights = [
+                    {v:0.125,t:'⅛ك'}, {v:0.25,t:'¼ك'}, {v:0.5,t:'½ك'}, {v:0.75,t:'¾ك'}
+                ].filter(w => w.v >= minWeight);
+                for (let i=1;i<=10;i++) {
+                    weights.push({v:i,t:i+'ك'});
+                    if (i<10) {
+                        if (i+0.25 >= minWeight) weights.push({v:i+0.25,t:i+'و¼ك'});
+                        if (i+0.5 >= minWeight) weights.push({v:i+0.5,t:i+'و½ك'});
+                        if (i+0.75 >= minWeight) weights.push({v:i+0.75,t:i+'و¾ك'});
+                    }
+                }
+                for (let i=11;i<=25;i++) weights.push({v:i,t:i+'ك'});
+                return weights;
+            }
+            for (let i=1;i<=20;i++) options.push({v:i,t:i+' '+product.unit});
+            return options;
+        }
+
         function init() {
-    try {
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-        document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
-
-
-        let sVeg = '', sFruit = '', iAll = '';
-        productsData.forEach(p => {
-            const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
-            const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
-
-
-            // مثلثات صغيرة لاتجاه السعر
-            let trendArrow = '';
-            if (p.trend === 'down') {
-                trendArrow = '<span class="inline-block text-red-600 font-black text-sm leading-none" aria-label="انخفاض">▼</span>';
-            } else if (p.trend === 'up') {
-                trendArrow = '<span class="inline-block text-green-600 font-black text-sm leading-none" aria-label="ارتفاع">▲</span>';
-            }
-
-            // تعديل الترتيب: وضع الـ trendArrow على يمين السعر الحالي مباشرة داخل الـ flex
-            const priceDiv = `
-                <div class="item-price-part">
-                    ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
-                    <div class="flex items-center gap-1.5">
-                        ${trendArrow}
-                        <span class="current-price">${p.price} ج</span>
-                    </div>
-                </div>`;
-
-
-            const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${p.available ? '' : '<span class="out-of-stock-msg"> (غير متوفر)</span>'}</div></div>
-                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
-            </div>`;
-
-
-            // تعديل الترتيب في القائمة التفاعلية أيضاً
-            const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part text-sm"><div class="font-bold">${p.name}</div>
-                <div class="mt-1 flex items-center gap-1.5">
-                    ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
-                    ${trendArrow}
-                    <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
-                </div>
-                <div class="badge-container" style="margin-top: 3px;">${offerBadge}${specialBadge}</div></div>
-                <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
-            </div>`;
-
-
-            if (p.category === 'veg') sVeg += sRow; else sFruit += sRow;
-            iAll += iRow;
-        });
-
-
-        document.getElementById('vegetables-list-static').innerHTML = sVeg;
-        document.getElementById('fruits-list-static').innerHTML = sFruit;
-        document.getElementById('interactive-lists-combined').innerHTML = iAll;
-
-
-        document.querySelectorAll('.quantity-select').forEach(s => {
-
-
-    let opts = '<option value="0">-- طلب --</option>';
-
-
-    if (s.dataset.unit === 'كجم') {
-
-
-        const product = productsData.find(
-            p => p.name === s.dataset.name
-        );
-
-
-        const minWeight = product?.minWeight || 0.125;
-
-
-        const weights = [
-            {v:0.125,t:'⅛ك'},
-            {v:0.25,t:'¼ك'},
-            {v:0.5,t:'½ك'},
-            {v:0.75,t:'¾ك'}
-        ];
-
-
-        let filteredWeights = weights.filter(
-            w => w.v >= minWeight
-        );
-
-
-        for(let i=1; i<=10; i++){
-            filteredWeights.push({v:i,t:i+'ك'});
-
-
-            if(i<10){
-                if(i+0.25 >= minWeight)
-                    filteredWeights.push({v:i+0.25,t:i+'و¼ك'});
-
-
-                if(i+0.5 >= minWeight)
-                    filteredWeights.push({v:i+0.5,t:i+'و½ك'});
-
-
-                if(i+0.75 >= minWeight)
-                    filteredWeights.push({v:i+0.75,t:i+'و¾ك'});
-            }
+            try {
+                const now = new Date();
+                const options = { weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true };
+                document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG',options).replace(' في ',' - ');
+                let sVeg='', sFruit='';
+                productsData.forEach((p,index) => {
+                    const specialBadge = p.isSpecial ? '<span class="special-badge">مميز ⭐</span>' : '';
+                    const offerBadge = p.oldPrice ? '<span class="offer-badge">عرض 🔥</span>' : '';
+                    let trendArrow='';
+                    if (p.trend==='down') trendArrow='<span class="inline-block text-red-600 font-black text-sm">▼</span>';
+                    else if (p.trend==='up') trendArrow='<span class="inline-block text-green-600 font-black text-sm">▲</span>';
+                    const priceDiv = `<div class="item-price-part">${p.oldPrice?`<span class="old-price">${p.oldPrice} ج</span>`:''}<div class="flex items-center gap-1.5">${trendArrow}<span class="current-price">${p.price} ج</span></div></div>`;
+                    const action = p.available ? `<button type="button" class="add-product-btn" data-add-index="${index}">أضف للطلب +</button>` : '<span class="out-of-stock-msg">غير متوفر</span>';
+                    const row = `<div class="flex-row-item ${p.available?'':'not-available'}"><div class="item-name-part"><div>${p.name}</div><div class="badge-container">${offerBadge}${specialBadge}${p.available?'':'<span class="out-of-stock-msg">(غير متوفر)</span>'}</div></div>${p.available?priceDiv:'<div class="text-red-500 font-bold text-xs">---</div>'}<div class="item-action-part">${action}</div></div>`;
+                    if (p.category==='veg') sVeg+=row; else sFruit+=row;
+                });
+                document.getElementById('vegetables-list-static').innerHTML=sVeg;
+                document.getElementById('fruits-list-static').innerHTML=sFruit;
+                document.querySelectorAll('[data-add-index]').forEach(button => {
+                    button.addEventListener('click', () => openProductPicker(Number(button.dataset.addIndex)));
+                });
+                renderCart();
+            } catch(e) { console.error(e); }
         }
 
-
-        for(let i=11;i<=25;i++){
-            filteredWeights.push({v:i,t:i+'ك'});
+        function openProductPicker(index) {
+            const product=productsData[index];
+            if (!product || !product.available) return alert('هذا الصنف غير متوفر حالياً.');
+            activeProductForPicker=product;
+            document.getElementById('picker-product-name').textContent=product.name;
+            const select=document.getElementById('picker-quantity');
+            select.innerHTML='<option value="">اختر الكمية</option>'+getQuantityOptions(product).map(o=>`<option value="${o.v}">${o.t}</option>`).join('');
+            document.getElementById('product-picker').style.display='flex';
         }
 
-
-        filteredWeights.forEach(w=>{
-            opts += `<option value="${w.v}">${w.t}</option>`;
-        });
-
-
-    } else {
-
-
-        for(let i=1;i<=20;i++){
-            opts += `<option value="${i}">${i} ${s.dataset.unit}</option>`;
+        function closeProductPicker() {
+            document.getElementById('product-picker').style.display='none';
+            activeProductForPicker=null;
         }
-    }
 
+        function confirmAddToCart() {
+            if (!activeProductForPicker) return;
+            const select=document.getElementById('picker-quantity');
+            if (!select.value) return alert('من فضلك اختر الوزن أو الوحدة أولاً.');
+            const value=Number(select.value);
+            const label=select.options[select.selectedIndex].text;
+            const existing=cartItems.find(item=>item.name===activeProductForPicker.name);
+            if (existing) { existing.value=value; existing.label=label; }
+            else cartItems.push({name:activeProductForPicker.name,value,label});
+            closeProductPicker();
+            renderCart();
+            const bar=document.getElementById('cart-bottom-bar');
+            if (bar) bar.style.display='block';
+        }
 
-    s.innerHTML = opts;
-});
-       
-    } catch (e) { console.error(e); }
-}
+        function renderCart() {
+            const count=cartItems.length;
+            const bar=document.getElementById('cart-bottom-bar');
+            if (bar) bar.style.display=count?'block':'none';
+            const countEl=document.getElementById('cart-items-count');
+            if (countEl) countEl.textContent=count;
+            const summary=document.getElementById('order-cart-summary');
+            if (summary) summary.innerHTML=count ? cartItems.map(item=>`<div class="flex justify-between py-1"><span>${item.name}</span><strong>${item.label}</strong></div>`).join('') : 'لم تضف أي أصناف بعد. ارجع إلى قائمة الأسعار واضغط «أضف للطلب» بجوار الصنف.';
+            if (document.getElementById('cart-review-view')?.style.display==='block') renderCartReview();
+        }
 
+        function openCartReview() {
+            if (!cartItems.length) return alert('لم تضف أي أصناف إلى طلبك بعد.');
+            if (document.getElementById('order-form-view').style.display!=='block') toggleView('order-form-view');
+            document.getElementById('order-main-view').style.display='none';
+            document.getElementById('cart-review-view').style.display='block';
+            renderCartReview();
+            window.scrollTo(0,0);
+        }
 
+        function renderCartReview() {
+            const container=document.getElementById('cart-review-items');
+            if (!container) return;
+            if (!cartItems.length) { container.innerHTML='<p class="p-4 text-center text-gray-500">لا توجد أصناف في الطلب.</p>'; return; }
+            container.innerHTML=cartItems.map((item,index)=>{
+                const product=productsData.find(p=>p.name===item.name);
+                if (!product || !product.available) return `<div class="cart-line"><div><strong>${item.name}</strong><div class="text-red-600 text-xs">أصبح غير متوفر</div></div><button type="button" class="text-red-600 font-bold" onclick="removeCartItem(${index})">حذف</button></div>`;
+                const opts=getQuantityOptions(product).map(o=>`<option value="${o.v}" ${Number(item.value)===o.v?'selected':''}>${o.t}</option>`).join('');
+                return `<div class="cart-line"><div class="min-w-0"><strong>${item.name}</strong><div class="text-xs text-gray-500 mt-1">الكمية</div><select onchange="changeCartQuantity(${index},this.value)">${opts}</select></div><button type="button" class="text-red-600 font-bold" onclick="removeCartItem(${index})">حذف ✕</button></div>`;
+            }).join('');
+        }
 
+        function changeCartQuantity(index,value) {
+            const item=cartItems[index], product=item && productsData.find(p=>p.name===item.name);
+            if (!item || !product) return;
+            const option=getQuantityOptions(product).find(o=>o.v===Number(value));
+            if (option) { item.value=option.v; item.label=option.t; renderCart(); }
+        }
+
+        function removeCartItem(index) { cartItems.splice(index,1); renderCart(); }
+
+        function showOrderMain() {
+            document.getElementById('cart-review-view').style.display='none';
+            document.getElementById('order-main-view').style.display='block';
+            renderCart();
+            window.scrollTo(0,0);
+        }
+
+        function repeatLastOrder() {
+            let saved;
+            try { saved=JSON.parse(localStorage.getItem(LAST_ORDER_KEY)||'null'); } catch(e) { saved=null; }
+            if (!Array.isArray(saved) || !saved.length) return alert('لا يوجد طلب سابق محفوظ على هذا الجهاز حتى الآن.');
+            const restored=[], unavailable=[];
+            saved.forEach(old=>{
+                const product=productsData.find(p=>p.name===old.name);
+                if (!product || !product.available) { unavailable.push(old.name); return; }
+                const option=getQuantityOptions(product).find(o=>o.v===Number(old.value));
+                if (option) restored.push({name:product.name,value:option.v,label:option.t});
+                else unavailable.push(old.name);
+            });
+            if (!restored.length) return alert('أصناف طلبك السابق لم تعد متاحة حالياً.');
+            cartItems=restored;
+            renderCart();
+            if (unavailable.length) alert('تم استعادة الأصناف المتاحة فقط. الأصناف غير المتاحة أو التي تغيرت وحداتها:\n'+unavailable.join('، '));
+            else alert('تم استعادة آخر طلب بنجاح. راجع الكميات قبل الإرسال.');
+        }
 
         async function startApp() { await loadPricesFromSheet(); init(); }
         if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
@@ -876,6 +927,8 @@ setInterval(updateWorkSchedule, 30000);
     // 4. إظهار القسم المطلوب بناءً على الزر المضغوط
     if (v === 'order-form-view') {
         orderView.style.display = 'block';
+        document.getElementById('order-main-view').style.display = 'block';
+        document.getElementById('cart-review-view').style.display = 'none';
         mainTitle.textContent = '🛒 نموذج طلب واتساب';
     } else if (v === 'reviews-view') {
         reviewsView.style.display = 'block';
@@ -898,40 +951,31 @@ setInterval(updateWorkSchedule, 30000);
 
 
         function generateWhatsAppOrder() {
-            // إعادة فحص الموعد قبل تجهيز أو إرسال الطلب
             updateWorkSchedule();
+            if (holidayMode) return alert("❤️ نحن في إجازتنا الأسبوعية.\nلا يمكن إرسال الطلبات حالياً، وسنعاود العمل السبت الساعة 7 صباحاً إن شاء الله.");
+            if (closeAfterHoursMode) return alert("🚨 انتهت مواعيد استقبال الطلبات اليوم.\nيمكنك إرسال طلبك بعد الساعة 7 صباحاً إن شاء الله.");
+            if (!cartItems.length) return alert('من فضلك أضف صنفاً واحداً على الأقل إلى طلبك.');
 
-            if (holidayMode) {
-                alert("❤️ نحن في إجازتنا الأسبوعية.\nلا يمكن إرسال الطلبات حالياً، وسنعاود العمل السبت الساعة 7 صباحاً إن شاء الله.");
-                return;
-            }
+            const vegItems=cartItems.filter(item=>productsData.find(p=>p.name===item.name)?.category==='veg');
+            const fruitItems=cartItems.filter(item=>productsData.find(p=>p.name===item.name)?.category!=='veg');
+            let msg='📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n------------------\n';
+            if (vegItems.length) msg+='🥬 *الخضروات:*\n'+vegItems.map(item=>`• ${item.label} ${item.name}\n`).join('');
+            if (fruitItems.length) msg+='🍉 *الفواكه:*\n'+fruitItems.map(item=>`• ${item.label} ${item.name}\n`).join('');
+            msg+='------------------\n📦 *التوصيل:*\n💰 *الإجمالي:*\n------------------\n';
+            const details=[];
+            const customerName=document.getElementById('customer-name').value.trim();
+            const customerPhone=document.getElementById('customer-phone').value.trim();
+            const customerAddress=document.getElementById('customer-address').value.trim();
+            const notes=document.getElementById('notes').value.trim();
+            if (customerName) details.push('الاسم: '+customerName);
+            if (customerPhone) details.push('رقم الهاتف: '+customerPhone);
+            if (customerAddress) details.push('العنوان: '+customerAddress);
+            if (notes) details.push('ملاحظات: '+notes);
+            msg+='📌 *الملاحظات والعنوان:*\n'+(details.join('\n')||'لا يوجد');
 
-            if (closeAfterHoursMode) {
-                alert("🚨 انتهت مواعيد استقبال الطلبات اليوم.\nيمكنك إرسال طلبك بعد الساعة 7 صباحاً إن شاء الله.");
-                return;
-            }
-
-            let vegItems = '', fruitItems = '', count = 0;
-            document.querySelectorAll('.quantity-select').forEach(s => {
-                if (s.value != "0") {
-                    const itemName = s.dataset.name, quantityText = s.options[s.selectedIndex].text;
-                    const itemLine = `• ${quantityText} ${itemName}\n`;
-                    const product = productsData.find(p => p.name === itemName);
-                    if (product && product.category === 'veg') vegItems += itemLine; else fruitItems += itemLine;
-                    count++;
-                }
-            });
-            if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-            
-            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n------------------\n';
-            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems;
-            if (fruitItems) msg += '🍉 *الفواكه:*\n' + fruitItems;
-            msg += '------------------\n📦 *التوصيل:*\n💰 *الإجمالي:*\n------------------\n';
-            msg += `📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
-            
-            window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
+            try { localStorage.setItem(LAST_ORDER_KEY,JSON.stringify(cartItems.map(item=>({name:item.name,value:item.value})))); } catch(e) { console.warn('تعذر حفظ آخر طلب على هذا الجهاز',e); }
+            window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`,'_blank');
         }
-
 
         function confirmMyRating() {
             const selectedStar = document.querySelector('input[name="rating"]:checked');
