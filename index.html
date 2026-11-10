@@ -594,131 +594,111 @@ setInterval(updateWorkSchedule, 30000);
         ];
 
 
-// ==========================================
-// تحديث الأسعار تلقائياً من Google Sheets
-// اسم الورقة: الأسعار
-// ==========================================
-const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv';
 
-function parseCSV(text) {
-    const rows = [];
-    let row = [], cell = '', quoted = false;
-    for (let i = 0; i < text.length; i++) {
-        const ch = text[i];
-        if (ch === '"') {
-            if (quoted && text[i + 1] === '"') { cell += '"'; i++; }
-            else quoted = !quoted;
-        } else if (ch === ',' && !quoted) {
-            row.push(cell); cell = '';
-        } else if ((ch === '\n' || ch === '\r') && !quoted) {
-            if (ch === '\r' && text[i + 1] === '\n') i++;
-            row.push(cell);
-            if (row.some(value => String(value).trim() !== '')) rows.push(row);
-            row = []; cell = '';
-        } else {
-            cell += ch;
-        }
-    }
-    row.push(cell);
-    if (row.some(value => String(value).trim() !== '')) rows.push(row);
-    return rows;
-}
+        // تحميل الأسعار والبيانات اليومية من Google Sheets
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv";
 
-function cleanSheetNumber(value) {
-    const normalized = String(value ?? '')
-        .trim()
-        .replace(/[٠-٩]/g, digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit))
-        .replace(/[۰-۹]/g, digit => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
-        .replace(/[٫٬]/g, '.')
-        .replace(/,/g, '');
-    if (!normalized) return null;
-    const number = Number(normalized);
-    return Number.isFinite(number) ? number : null;
-}
-
-async function loadPricesFromSheet() {
-    try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' });
-        if (!response.ok) throw new Error('تعذر تحميل جدول الأسعار');
-        const csvText = await response.text();
-        const rows = parseCSV(csvText);
-        if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
-
-        const headers = rows[0].map((value, index) =>
-            String(value).replace(/^\uFEFF/, '').trim()
-        );
-        const column = name => headers.indexOf(name);
-        const requiredColumns = ['اسم الصنف', 'السعر بالجنيه', 'الوحدة', 'القسم', 'متاح؟'];
-        if (requiredColumns.some(name => column(name) === -1)) {
-            throw new Error('أسماء أعمدة جدول الأسعار لا تطابق القالب');
-        }
-
-        const get = (row, name) => {
-            const index = column(name);
-            return index < 0 ? '' : String(row[index] ?? '').trim();
-        };
-        const yes = value => ['نعم', 'متاح', 'نعم متاح', 'yes', 'true', '1'].includes(value.toLowerCase());
-        const no = value => ['لا', 'غير متاح', 'نفد', 'no', 'false', '0'].includes(value.toLowerCase());
-        const updatedProducts = [];
-
-        rows.slice(1).forEach(row => {
-            const name = get(row, 'اسم الصنف');
-            if (!name) return;
-            const price = cleanSheetNumber(get(row, 'السعر بالجنيه'));
-            // لا نعرض صنفاً بسعر فارغ أو غير صحيح، ولا نحوّله إلى سعر صفر.
-            if (price === null || price <= 0) return;
-
-            const oldProduct = productsData.find(product => product.name.trim() === name);
-            const product = oldProduct ? { ...oldProduct, name } : {
-                name, price, unit: 'كجم', category: 'veg', available: true
-            };
-            product.price = price;
-
-            const unit = get(row, 'الوحدة');
-            if (unit) product.unit = unit;
-
-            const category = get(row, 'القسم').trim().toLowerCase();
-            if (category) {
-                // دعم الصيغ المختلفة لاسم قسم الفواكه في Google Sheets
-                const normalizedCategory = category.replace(/[أإآ]/g, 'ا').replace(/\s+/g, '');
-                const isFruit = normalizedCategory.includes('فاكه') ||
-                    normalizedCategory.includes('فواك') ||
-                    normalizedCategory.includes('fruit');
-                product.category = isFruit ? 'fruit' : 'veg';
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], cell = "", quoted = false;
+            for (let i = 0; i < text.length; i++) {
+                const ch = text[i], next = text[i + 1];
+                if (ch === '"' && quoted && next === '"') { cell += '"'; i++; }
+                else if (ch === '"') quoted = !quoted;
+                else if (ch === ',' && !quoted) { row.push(cell.trim()); cell = ""; }
+                else if ((ch === '\n' || ch === '\r') && !quoted) {
+                    if (ch === '\r' && next === '\n') i++;
+                    row.push(cell.trim());
+                    if (row.some(v => v !== "")) rows.push(row);
+                    row = []; cell = "";
+                } else cell += ch;
             }
+            row.push(cell.trim());
+            if (row.some(v => v !== "")) rows.push(row);
+            return rows;
+        }
 
-            const availability = get(row, 'متاح؟');
-            if (yes(availability)) product.available = true;
-            else if (no(availability)) product.available = false;
+        function normalizeText(value) {
+            return String(value ?? "").trim().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").toLowerCase();
+        }
 
-            const minWeightText = get(row, 'أقل وزن (كجم)');
-            const minWeight = cleanSheetNumber(minWeightText);
-            if (minWeight !== null && minWeight > 0) product.minWeight = minWeight;
-            else if (minWeightText === '') delete product.minWeight;
+        function parseSheetNumber(value) {
+            if (value == null || String(value).trim() === "") return null;
+            const normalized = String(value).trim()
+                .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+                .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+                .replace(/٫/g, ".").replace(/٬/g, "").replace(/,/g, "");
+            const n = Number(normalized);
+            return Number.isFinite(n) ? n : null;
+        }
 
-            const oldPriceText = get(row, 'السعر القديم');
-            const oldPrice = cleanSheetNumber(oldPriceText);
-            if (oldPrice !== null && oldPrice > 0) product.oldPrice = oldPrice;
-            else delete product.oldPrice;
+        async function loadPricesFromSheet() {
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL + "&_=" + Date.now(), { cache: "no-store" });
+                if (!response.ok) throw new Error("تعذر تحميل جدول الأسعار");
+                const csv = await response.text();
+                const rows = parseCSV(csv);
+                if (rows.length < 2) throw new Error("جدول الأسعار فارغ");
 
-            const trend = get(row, 'اتجاه السعر').toLowerCase();
-            if (['up', 'صاعد', 'مرتفع', 'زيادة', '↑'].includes(trend)) product.trend = 'up';
-            else if (['down', 'هابط', 'منخفض', 'انخفاض', '↓'].includes(trend)) product.trend = 'down';
-            else delete product.trend;
+                const headers = rows[0].map(normalizeText);
+                const col = name => headers.indexOf(normalizeText(name));
+                const nameCol = col("اسم الصنف");
+                const priceCol = col("السعر بالجنيه");
+                const unitCol = col("الوحدة");
+                const categoryCol = col("القسم");
+                const availableCol = col("متاح؟");
+                const minWeightCol = col("أقل وزن (كجم)");
+                const oldPriceCol = col("السعر القديم");
+                const trendCol = col("اتجاه السعر");
+                const specialCol = col("صنف مميز؟");
+                if (nameCol < 0 || priceCol < 0) throw new Error("أعمدة الاسم أو السعر غير موجودة");
 
-            const special = get(row, 'صنف مميز؟');
-            product.isSpecial = yes(special);
-            updatedProducts.push(product);
-        });
+                const byName = new Map();
+                rows.slice(1).forEach(row => {
+                    const name = row[nameCol]?.trim();
+                    if (name) byName.set(normalizeText(name), row);
+                });
 
-        if (!updatedProducts.length) throw new Error('لم يتم العثور على أصناف بأسعار صحيحة');
-        productsData = updatedProducts;
-        console.info(`تم تحديث ${productsData.length} صنفاً من جدول الأسعار`);
-    } catch (error) {
-        console.warn('تعذر تحديث الأسعار من Google Sheets، سيتم استخدام الأسعار المحفوظة بالموقع:', error);
-    }
-}
+                productsData.forEach(product => {
+                    const row = byName.get(normalizeText(product.name));
+                    if (!row) return;
 
+                    const price = parseSheetNumber(row[priceCol]);
+                    if (price !== null) product.price = price;
+                    if (unitCol >= 0 && row[unitCol]) product.unit = row[unitCol].trim();
+
+                    if (categoryCol >= 0 && row[categoryCol]) {
+                        const category = normalizeText(row[categoryCol]);
+                        product.category = (category.includes("فاكه") || category.includes("فواكه") || category.includes("fruit")) ? "fruit" : "veg";
+                    }
+                    if (availableCol >= 0 && row[availableCol] !== "") {
+                        const available = normalizeText(row[availableCol]);
+                        product.available = ["نعم", "متاح", "متوفر", "yes", "true", "1"].includes(available);
+                    }
+                    if (minWeightCol >= 0) {
+                        const minWeight = parseSheetNumber(row[minWeightCol]);
+                        if (minWeight !== null) product.minWeight = minWeight;
+                    }
+                    if (oldPriceCol >= 0) {
+                        const oldPrice = parseSheetNumber(row[oldPriceCol]);
+                        product.oldPrice = oldPrice !== null ? oldPrice : null;
+                    }
+                    if (trendCol >= 0) {
+                        const trend = normalizeText(row[trendCol]);
+                        if (["ارتفاع", "صعود", "up", "increase", "مرتفع"].includes(trend)) product.trend = "up";
+                        else if (["انخفاض", "هبوط", "down", "decrease", "منخفض"].includes(trend)) product.trend = "down";
+                        else product.trend = "";
+                    }
+                    if (specialCol >= 0 && row[specialCol] !== "") {
+                        const special = normalizeText(row[specialCol]);
+                        product.isSpecial = ["نعم", "yes", "true", "1"].includes(special);
+                    }
+                });
+                console.log("تم تحديث الأسعار من Google Sheets");
+            } catch (error) {
+                console.warn("تعذر تحديث الأسعار من Google Sheets، سيتم استخدام الأسعار المحفوظة بالموقع:", error);
+            }
+        }
 
         function init() {
     try {
@@ -733,22 +713,13 @@ async function loadPricesFromSheet() {
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
 
 
-            // --- تصميم الأسهم الهندسية الملونة والمحاذية جهة اليمين ---
+            // مثلثات صغيرة لاتجاه السعر
             let trendArrow = '';
             if (p.trend === 'down') {
-                // سهم أحمر صريح متجّه لأسفل مع تأثير النبض التفاعلي
-                trendArrow = `
-                    <svg class="w-4 h-4 text-red-600 animate-pulse inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path>
-                    </svg>`;
+                trendArrow = '<span class="inline-block text-red-600 font-black text-sm leading-none" aria-label="انخفاض">▼</span>';
             } else if (p.trend === 'up') {
-                // سهم أخضر صريح متجّه لأعلى
-                trendArrow = `
-                    <svg class="w-4 h-4 text-green-600 inline-block" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"></path>
-                    </svg>`;
+                trendArrow = '<span class="inline-block text-green-600 font-black text-sm leading-none" aria-label="ارتفاع">▲</span>';
             }
-
 
             // تعديل الترتيب: وضع الـ trendArrow على يمين السعر الحالي مباشرة داخل الـ flex
             const priceDiv = `
@@ -867,16 +838,8 @@ async function loadPricesFromSheet() {
 
 
 
-        async function startApp() {
-            await loadPricesFromSheet();
-            init();
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', startApp);
-        } else {
-            startApp();
-        }
+        async function startApp() { await loadPricesFromSheet(); init(); }
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
 
 
        function toggleView(v) {
