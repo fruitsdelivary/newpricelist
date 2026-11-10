@@ -264,7 +264,7 @@ let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
-    // 1. التحكم اليدوي يأخذ أولوية مطلقة ويعطل الحساب التلقائي تماماً
+    // 1. فحص التحكم اليدوي أولاً وبأولوية مطلقة
     if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
         holidayMode = false;
@@ -471,15 +471,20 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
-        // البحث الدقيق عن الحالة اليدوية في أي صف بالجدول
+        // فحص شامل لجميع خلايا الجدول بحثاً عن كلمة حالة العمل اليدوية بغض النظر عن مكانها
         rows.forEach(row => {
-            const firstCell = String(row[0] ?? '').trim();
-            if (firstCell.includes('حالة العمل اليدوية') || firstCell.includes('حالة المحل')) {
-                const statusValue = String(row[1] ?? '').trim();
-                if (['مغلق', 'إجازة', 'مفتوح', 'تلقائي'].includes(statusValue)) {
-                    manualWorkStatus = statusValue;
+            row.forEach(cell => {
+                const cellText = String(cell ?? '').trim();
+                if (cellText.includes('مغلق')) {
+                    manualWorkStatus = 'مغلق';
+                } else if (cellText.includes('إجازة') || cellText.includes('اجازة')) {
+                    manualWorkStatus = 'إجازة';
+                } else if (cellText.includes('مفتوح')) {
+                    manualWorkStatus = 'مفتوح';
+                } else if (cellText.includes('تلقائي')) {
+                    manualWorkStatus = 'تلقائي';
                 }
-            }
+            });
         });
 
         const headers = rows[0].map((value, index) =>
