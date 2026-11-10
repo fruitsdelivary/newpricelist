@@ -264,21 +264,18 @@ let scheduleOverlay = null;
 let currentOverlayMode = null;
 
 function updateWorkSchedule() {
-    //  1. التحقق من التحكم اليدوي بدقة
+    // 1. التحقق من التحكم اليدوي بأولوية مطلقة
     if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
-        holidayMode = false; // تأكد من إيقاف وضع الإجازة
+        holidayMode = false;
     } else if (manualWorkStatus === 'إجازة') {
         holidayMode = true;
-        closeAfterHoursMode = false; // تأكد من إيقاف وضع الإغلاق العادي
+        closeAfterHoursMode = false;
     } else if (manualWorkStatus === 'مفتوح') {
         holidayMode = false;
         closeAfterHoursMode = false;
     } else {
-      
-    }
-
-        // 2. الوضع التلقائي حسب التوقيت بمصر
+        // 2. الوضع التلقائي حسب التوقيت بمصر (يتم التنفيذ فقط إذا كانت الحالة "تلقائي")
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
             weekday: 'long',
@@ -474,7 +471,7 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
-        // البحث عن الحالة اليدوية في أي صف
+        // البحث عن الحالة اليدوية في أصل البيانات في كل الصفوف
         rows.forEach(row => {
             const firstCell = String(row[0] ?? '').trim();
             if (firstCell.includes('حالة العمل اليدوية') || firstCell.includes('حالة المحل')) {
@@ -646,7 +643,7 @@ async function loadPricesFromSheet() {
 
         async function startApp() {
             await loadPricesFromSheet();
-            updateWorkSchedule(); // تحديث حالة العمل فور تحميل الشيت
+            updateWorkSchedule();
             init();
         }
 
