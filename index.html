@@ -61,8 +61,9 @@
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
         
-        .badge-container { display: flex; flex-direction: row-reverse; justify-content: flex-start; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
-        .special-badge, .offer-badge, .storage-badge { padding: 1px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; }
+        /* تعديل الشارات لتظهر بجوار بعضها أفقياً بشكل دائم */
+        .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: nowrap; }
+        .special-badge, .offer-badge, .storage-badge { padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
         .special-badge { background: #fbbf24; color: #000; }
         .offer-badge { background: #ef4444; color: white; }
         .storage-badge { background: #3b82f6; color: white; }
@@ -187,7 +188,7 @@
         </div>
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
-            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد استقبال الطلبات من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
+            <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
 
 <button onclick="toggleView('reviews-view')" 
         class="w-full bg-orange-500 text-white font-bold py-4 rounded-xl inline-block shadow-md mb-4 text-lg active:scale-95 transition flex items-center justify-center gap-2">
@@ -264,23 +265,16 @@ let holidayMode = false;
 let scheduleOverlay = null;
 
 function updateWorkSchedule() {
-    // 1. إذا كانت الحالة "مفتوح" في جوجل شيت: يعمل الموقع في أي وقت تماماً
     if (manualWorkStatus === 'مفتوح') {
         closeAfterHoursMode = false;
         holidayMode = false;
-    }
-    // 2. إذا كانت الحالة "مغلق" في جوجل شيت: يتعطل فقط زر "أبدأ طلبك الآن!"
-    else if (manualWorkStatus === 'مغلق') {
+    } else if (manualWorkStatus === 'مغلق') {
         closeAfterHoursMode = true;
         holidayMode = false;
-    }
-    // 3. إذا كانت الحالة "إجازة" في جوجل شيت: يحجب الصفحة بالكامل
-    else if (manualWorkStatus === 'إجازة' || manualWorkStatus === 'اجازة') {
+    } else if (manualWorkStatus === 'إجازة' || manualWorkStatus === 'اجازة') {
         holidayMode = true;
         closeAfterHoursMode = false;
-    }
-    // 4. الوضع التلقائي: يفتح ويغلق وفق المواعيد الرسمية
-    else {
+    } else {
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'Africa/Cairo',
             weekday: 'long',
@@ -295,7 +289,6 @@ function updateWorkSchedule() {
         const minute = Number(getPart('minute'));
         const currentTime = hour * 60 + minute;
 
-        // تحديد ما إذا كان خارج ساعات العمل أو إجازة أسبوعية
         closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
         holidayMode =
             (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
@@ -303,7 +296,6 @@ function updateWorkSchedule() {
             (day === 'Saturday' && currentTime < 7 * 60);
     }
 
-    // إدارة شاشة حجب الموقع (تظهر فقط في وضع الإجازة)
     if (holidayMode) {
         if (!scheduleOverlay) {
             scheduleOverlay = document.createElement('div');
@@ -447,7 +439,6 @@ async function loadPricesFromSheet() {
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
-        // البحث الشامل عن حالة العمل اليدوية في الجدول
         let detectedStatus = 'تلقائي';
         rows.forEach(row => {
             row.forEach(cell => {
@@ -659,7 +650,7 @@ async function loadPricesFromSheet() {
         }
 
         if (closeAfterHoursMode) {
-            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار بحرية، وسنكون في انتظاركم عند بدء استقبال الطلبات الساعة 7 صباحاً إن شاء الله! ❤️");
+            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم تصفح قائمة الأسعار بحرية، وسنكون في انتظاركم عند بدء العمل الساعة 7 صباحاً إن شاء الله! ❤️");
             return;
         }
     }
@@ -766,7 +757,7 @@ const allReviews = [
     { name: "السيد حسن", text: `جزاك الله خيرا الحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله جزاك الله خيرا 🌹🌹` },
     { name: "Adam", text: `خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا` },
     { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
-    { name: "أ/سارة", text: `what ma sha Allah... الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
+    { name: "أ/سارة", text: `ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
     { name: "dr.eman", text: `ربنا يجزيك الحسني و زياده كفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل ربنا يبارك لك يا ابني و يجعله في ميزان حسناتك` },
     { name: "أ/هبه", text: `شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل` },
     { name: "مدام سالي", text: `الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي يارب تفضل علي نفس المستوي علطول بإذن الله جزاكم الله خيرا` },
