@@ -36,7 +36,7 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 16px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;
         }
-        .item-name-part { flex: 1.2; text-align: right; font-weight: 600; font-size: 1.05rem; }
+        .item-name-part { flex: 1.3; text-align: right; font-weight: 600; font-size: 1rem; }
 
         .rating-card {
             background: white; border: 2px dashed #fbbf24; border-radius: 20px;
@@ -48,9 +48,9 @@
         .star-rating label:hover { transform: scale(1.2); }
         .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #fbbf24; }  
    
-        .item-price-part { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 15px; min-width: 120px; }
-        .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.8rem; white-space: nowrap; }
-        .current-price { color: #dc2626; font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
+        .item-price-part { flex: 0.9; display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-width: 110px; }
+        .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.75rem; white-space: nowrap; }
+        .current-price { color: #dc2626; font-weight: 800; font-size: 1.1rem; white-space: nowrap; }
 
         .item-action-part { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
         .quantity-select { 
@@ -61,18 +61,18 @@
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
         
-        .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: nowrap; }
-        .offer-badge, .storage-badge { padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
+        .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: nowrap; }
+        .offer-badge, .storage-badge { padding: 2px 7px; border-radius: 99px; font-size: 9.5px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
         .offer-badge { background: #ef4444; color: white; }
         .storage-badge { background: #3b82f6; color: white; }
         
-        /* شارة النجمة المجاورة للاسم مع خاصية التلميح (Tooltip) */
+        /* شارة النجمة المجاورة للاسم في نفس السطر مع خاصية التلميح (Tooltip) */
         .special-star {
-            font-size: 14px;
+            font-size: 13.5px;
             cursor: pointer;
             position: relative;
             display: inline-block;
-            margin-right: 6px;
+            margin-right: 5px;
             vertical-align: middle;
             transition: transform 0.2s ease;
         }
@@ -569,9 +569,7 @@ async function loadPricesFromSheet() {
 
         let sVeg = '', sFruit = '', iAll = '';
         productsData.forEach(p => {
-            // النجمة بجوار اسم الصنف مباشرة
             const specialBadge = p.isSpecial ? `<span class="special-star" data-tooltip="مميز">⭐</span>` : '';
-            // باقي الشارات في السطر الأسفل
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
             const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
 
@@ -591,16 +589,16 @@ async function loadPricesFromSheet() {
             const priceDiv = `
                 <div class="item-price-part">
                     ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
-                    <div class="flex items-center gap-1.5">
+                    <div class="flex items-center gap-1">
                         ${trendArrow}
                         <span class="current-price">${p.price} ج</span>
                     </div>
                 </div>`;
 
-            // تنسيق نظيف ومنتظم للقائمة الثابتة والتفاعلية بحيث يكون الاسم والنجمة في سطر، والشارات أسفلها مباشرة
+            // اسم الصنف والنجمة في سطر واحد أفقي مانع للنزول، وباقي الشارات في سطر أسفل منه
             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part">
-                    <div><span>${p.name}</span>${specialBadge}</div>
+                    <div style="white-space: nowrap; display: inline-flex; align-items: center;"><span>${p.name}</span>${specialBadge}</div>
                     <div class="badge-container">${storageBadge}${offerBadge}</div>
                     ${p.available ? '' : '<div class="text-red-500 font-bold text-xs mt-1">(غير متوفر)</div>'}
                 </div>
@@ -609,7 +607,7 @@ async function loadPricesFromSheet() {
 
             const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part text-sm">
-                    <div class="font-bold"><span>${p.name}</span>${specialBadge}</div>
+                    <div class="font-bold" style="white-space: nowrap; display: inline-flex; align-items: center;"><span>${p.name}</span>${specialBadge}</div>
                     <div class="badge-container">${storageBadge}${offerBadge}</div>
                     <div class="mt-1 flex items-center justify-start gap-1.5">
                         ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
