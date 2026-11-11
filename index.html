@@ -61,10 +61,9 @@
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
         
-        /* تعديل الشارات لتظهر بجوار بعضها أفقياً بشكل دائم */
         .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: nowrap; }
         .special-badge, .offer-badge, .storage-badge { padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
-        .special-badge { background: #fbbf24; color: #000; }
+        .special-badge { background: #fbbf24; color: #000; font-size: 12px; padding: 1px 6px; }
         .offer-badge { background: #ef4444; color: white; }
         .storage-badge { background: #3b82f6; color: white; }
     </style>
@@ -533,7 +532,8 @@ async function loadPricesFromSheet() {
 
         let sVeg = '', sFruit = '', iAll = '';
         productsData.forEach(p => {
-            const specialBadge = p.isSpecial ? `<span class="special-badge">مميز ⭐</span>` : '';
+            // تم اختصار شارة مميز لتصبح نجمة فقط ⭐
+            const specialBadge = p.isSpecial ? `<span class="special-badge" title="مميز">⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
             const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
 
