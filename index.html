@@ -62,10 +62,45 @@
         .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
         
         .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: nowrap; }
-        .special-badge, .offer-badge, .storage-badge { padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
-        .special-badge { background: #fbbf24; color: #000; font-size: 12px; padding: 1px 6px; }
+        .offer-badge, .storage-badge { padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
         .offer-badge { background: #ef4444; color: white; }
         .storage-badge { background: #3b82f6; color: white; }
+        
+        /* شارة النجمة العارية مع خاصية تلميح النص (Tooltip) */
+        .special-star {
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        .special-star:hover {
+            transform: scale(1.25);
+        }
+        .special-star::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            right: 50%;
+            transform: translateX(50%);
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .special-star:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
@@ -532,8 +567,8 @@ async function loadPricesFromSheet() {
 
         let sVeg = '', sFruit = '', iAll = '';
         productsData.forEach(p => {
-            // تم اختصار شارة مميز لتصبح نجمة فقط ⭐
-            const specialBadge = p.isSpecial ? `<span class="special-badge" title="مميز">⭐</span>` : '';
+            // شارة النجمة العارية بدون خلفية وتظهر كلمة مميز عند اللمس/المؤشر
+            const specialBadge = p.isSpecial ? `<span class="special-star" data-tooltip="مميز">⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
             const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
 
