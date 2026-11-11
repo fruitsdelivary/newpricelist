@@ -66,13 +66,14 @@
         .offer-badge { background: #ef4444; color: white; }
         .storage-badge { background: #3b82f6; color: white; }
         
-        /* شارة النجمة العارية المجاورة للاسم مع خاصية التلميح (Tooltip) */
+        /* شارة النجمة المجاورة للاسم مع خاصية التلميح (Tooltip) */
         .special-star {
             font-size: 14px;
             cursor: pointer;
             position: relative;
             display: inline-block;
-            margin-right: 5px;
+            margin-right: 6px;
+            vertical-align: middle;
             transition: transform 0.2s ease;
         }
         .special-star:hover {
@@ -596,12 +597,11 @@ async function loadPricesFromSheet() {
                     </div>
                 </div>`;
 
+            // تنسيق نظيف ومنتظم للقائمة الثابتة والتفاعلية بحيث يكون الاسم والنجمة في سطر، والشارات أسفلها مباشرة
             const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part">
-                    <div class="flex items-center justify-end">
-                        <div class="badge-container">${storageBadge}${offerBadge}</div>
-                        <div><span>${p.name}</span>${specialBadge}</div>
-                    </div>
+                    <div><span>${p.name}</span>${specialBadge}</div>
+                    <div class="badge-container">${storageBadge}${offerBadge}</div>
                     ${p.available ? '' : '<div class="text-red-500 font-bold text-xs mt-1">(غير متوفر)</div>'}
                 </div>
                 ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
@@ -609,11 +609,9 @@ async function loadPricesFromSheet() {
 
             const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-name-part text-sm">
-                    <div class="flex items-center justify-end font-bold">
-                        <div class="badge-container">${storageBadge}${offerBadge}</div>
-                        <div><span>${p.name}</span>${specialBadge}</div>
-                    </div>
-                    <div class="mt-1 flex items-center justify-end gap-1.5">
+                    <div class="font-bold"><span>${p.name}</span>${specialBadge}</div>
+                    <div class="badge-container">${storageBadge}${offerBadge}</div>
+                    <div class="mt-1 flex items-center justify-start gap-1.5">
                         ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
                         ${trendArrow}
                         <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
