@@ -66,9 +66,9 @@
         .offer-badge { background: #ef4444; color: white; }
         .storage-badge { background: #3b82f6; color: white; }
         
-        /* شارة النجمة العارية مع خاصية تلميح النص (Tooltip) */
+        /* شارة النجمة العارية مع خاصية التلميح (Tooltip) */
         .special-star {
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             position: relative;
             display: inline-block;
@@ -80,7 +80,7 @@
         .special-star::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: 125%;
+            bottom: 130%;
             right: 50%;
             transform: translateX(50%);
             background-color: #333;
@@ -567,7 +567,7 @@ async function loadPricesFromSheet() {
 
         let sVeg = '', sFruit = '', iAll = '';
         productsData.forEach(p => {
-            // شارة النجمة العارية بدون خلفية وتظهر كلمة مميز عند اللمس/المؤشر
+            // شارة النجمة العارية بجوار باقي الشارات
             const specialBadge = p.isSpecial ? `<span class="special-star" data-tooltip="مميز">⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
             const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
@@ -800,7 +800,7 @@ const allReviews = [
     { name: "مدام سالي", text: `شكرا ع الحاجه جميله جدااااا كالعاده يارب دايما متميزين` },
     { name: "", text: `شكرا عالحاجة جميلة جدا والبلح نضيف ماشاءالله... كنت برة فمشوار وبناتي اللي استلموا الاوردر.. تسلموا ع امانتكم` },
     { name: "أ/شيرين", text: `الف شكر عالاوردر كله و عالهدية ماشاءالله تبارك الرحمن روعة تسلم ايدك` },
-    { name: "أوشو", text: `ماشاء الله الفاكهه جميله جداا والله ومفيش فيها حاجه وحشه وخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜` },
+    { name: "أوشو", text: `ماشاء الله الفاكهه جميلة جداا والله ومفيش فيها حاجه وحشه وخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜` },
     { name: "", text: `الفاكهة جميلة جدا زي كل مرة طبعا ماشاءالله ربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة` },
     { name: "", text: `البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك` }
 ];
