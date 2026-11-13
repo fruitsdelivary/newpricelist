@@ -17,7 +17,6 @@
     margin-bottom: 15px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
-
 .scrolling-text {
     display: inline-block;
     white-space: nowrap;
@@ -25,12 +24,10 @@
     font-weight: bold;
     font-size: 0.9rem;
 }
-
 @keyframes scroll-right {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100vw); }
 }
-
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; padding-bottom: 90px; }
         
         .flex-row-item {
@@ -41,7 +38,6 @@
         
         .item-right-group { display: flex; align-items: center; gap: 8px; flex: 1.3; text-align: right; min-width: 0; }
         .item-text-content { display: flex; flex-direction: column; justify-content: center; min-width: 0; flex: 1; }
-
         .item-main-title { 
             font-size: 0.95rem; 
             font-weight: 700; 
@@ -53,7 +49,6 @@
             word-break: break-word; 
             line-height: 1.3;
         }
-
         .rating-card {
             background: white; border: 2px dashed #fbbf24; border-radius: 20px;
             padding: 25px; margin: 30px auto; text-align: center; max-width: 500px;
@@ -63,9 +58,7 @@
         .item-price-part { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px; flex-shrink: 0; text-align: center; }
         .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.65rem; white-space: nowrap; }
         .current-price { color: #dc2626; font-weight: 800; font-size: 0.95rem; white-space: nowrap; }
-
         .item-action-container { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; }
-
         .quantity-select { 
             height: 32px; width: 84px; border: 2px solid #16a34a; border-radius: 8px; 
             font-weight: bold; background-color: #fff; font-size: 0.75rem; text-align: center; cursor: pointer;
@@ -74,7 +67,6 @@
             height: 30px; width: 84px; border: 1.5px solid #3b82f6; border-radius: 8px; 
             font-weight: 600; background-color: #eff6ff; font-size: 0.7rem; text-align: center; color: #1e40af; cursor: pointer;
         }
-
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fafafa; }
         
         .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 4px; margin-top: 2px; flex-wrap: nowrap; }
@@ -93,14 +85,12 @@
             opacity: 0; visibility: hidden; z-index: 10;
         }
         .special-star:hover::after { opacity: 1; visibility: visible; }
-
         .product-img {
             width: 38px; height: 38px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb; flex-shrink: 0; background-color: #f9fafb;
         }
         .product-img-placeholder {
             width: 38px; height: 38px; border-radius: 8px; border: 1.5px dashed #9ca3af; flex-shrink: 0; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 14px; filter: grayscale(100%); opacity: 0.7;
         }
-
         .hero-title-box {
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
             border: 2px solid #86efac;
@@ -116,7 +106,6 @@
             top: 0; right: 0; width: 6px; height: 100%;
             background: #16a34a;
         }
-
         @keyframes popIn {
             0% { opacity: 0; transform: scale(0.9) translateY(15px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
@@ -124,7 +113,6 @@
         .animate-pop-in {
             animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-
         .floating-reviews-bubble {
             position: fixed;
             bottom: 95px;
@@ -173,9 +161,7 @@
     </style>
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
-
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/45">
-
         <header class="text-center mb-6">
             <div class="hero-title-box mb-5">
                 <div class="inline-block bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm">
@@ -188,14 +174,12 @@
                     <span>📋</span> <span>قائمة الأسعار ونموذج الطلب</span> <span>📝</span>
                 </p>
             </div>
-
             <div class="mb-4">
                 <img src="https://i.ibb.co/Q7Yj5W9w/1777641348311.png" alt="الشعار" class="mx-auto w-32 h-32 rounded-full border-4 border-yellow-400 shadow-xl object-cover">
                 <p class="text-lg font-bold text-gray-600 mt-2">خُبراء الخضار والفاكهة</p>
                 <p id="date-display" class="text-sm font-bold text-blue-700 mt-3 bg-blue-50 inline-block px-4 py-2 rounded-full border border-blue-200"></p>
             </div>
         </header>
-
         <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-2xl p-4 mb-6 shadow-sm">
             <h2 class="text-xl font-extrabold text-green-800 mb-1">أهلاً بك 👋</h2>
             <p class="text-xl font-semibold text-gray-700 mb-2"> نورتنا،، نرجو لك تجربة تسوق سهلة وممتعة.</p>
@@ -206,7 +190,6 @@
                 </button>
             </div>
         </div>
-
         <div id="share-btn-container" class="fixed top-4 right-4 z-50 flex items-center shadow-lg rounded-full">
             <button onclick="document.getElementById('share-btn-container').style.display='none'" 
                     class="bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm -ml-2 z-10 hover:bg-red-600 transition">
@@ -223,12 +206,10 @@
                 </svg>
             </button>
         </div>
-
         <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
             <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
             <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
         </div>
-
         <div style="text-align: center; padding: 8px 2px; background: #fdfdfd; border-radius: 8px; margin: 10px auto; border: 1px solid #eee; width: 95%; overflow: hidden;">
             <div style="white-space: nowrap; font-family: sans-serif; display: flex; justify-content: center; align-items: center; gap: 4px;">
                 <span style="color: #888; font-size: 10px;">متاح الدفع عبر:</span>
@@ -239,28 +220,23 @@
                 <strong style="color: #28a745; font-size: 10px;">أو عند الاستلام</strong>
             </div>
         </div>
-
         <div id="marquee-bar-container" class="new-arrival-bar" style="overflow: hidden; direction: ltr;">
             <div id="scrolling-ticker-text" class="scrolling-text">
              ✨اللهم صلِّ وسلم وبارك على نبينا محمد ﷺ✨ 
            </div>
         </div> 
-
         <div class="relative mb-6">
             <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
-
         <section class="border rounded-xl overflow-hidden shadow-lg mb-8">
             <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 الخضروات 🌶️🥦</h2>
             <div id="vegetables-list-interactive"></div>
         </section>
-
         <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
             <h2 class="bg-yellow-500 text-white text-2xl font-bold p-3 text-center">🍎🥝 فواكه 🍉🍒</h2>
             <div id="fruits-list-interactive"></div>
         </section>
-
         <div id="order-checkout-section" class="bg-gray-50 border-4 border-green-600 rounded-3xl p-4 md:p-6 shadow-xl mb-12">
             <h2 class="text-2xl font-extrabold text-green-800 mb-4 text-center border-b pb-3">📝 بيانات التوصيل وإرسال الطلب</h2>
             
@@ -270,36 +246,29 @@
                         <label class="block text-xs font-bold text-gray-700 mb-1">الاسم :</label>
                         <input type="text" id="cust-name" oninput="saveCustomerData()" placeholder="اكتب اسمك..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
                     </div>
-
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1">رقم الموبايل للتواصل:</label>
                         <input type="tel" id="cust-phone" oninput="saveCustomerData()" placeholder="010xxxxxxxx" class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
                     </div>
-
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1">العنوان بالتفصيل:</label>
                         <input type="text" id="cust-address" oninput="saveCustomerData()" placeholder="اسم الشارع / الشارع الجانبي / رقم العمائر أو الدور..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
                     </div>
-
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1">علامة مميزة للعنوان (إن وجدت):</label>
                         <input type="text" id="cust-landmark" oninput="saveCustomerData()" placeholder="بجوار كذا / أمام سوبر ماركت..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
                     </div>
-
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1">ملاحظات إضافية للطلب:</label>
                         <textarea id="notes" rows="3" placeholder="أي ملاحظات خاصة بالتجهيز أو التوصيل..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white"></textarea>
                     </div>
                 </div>
-
                 <div class="bg-yellow-50 border border-yellow-300 p-4 rounded-xl text-center text-xs font-bold text-yellow-800 mb-6 shadow-sm">
                     ⚠️ سيتم تحديد الحساب النهائي بعد تجهيز الطلب والوزن الفعلي وإبلاغك بالقيمة الفعليّة.
                 </div>
-
                 <button type="submit" class="w-full bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl active:scale-95 transition hover:bg-green-700">تأكيد وإرسال الطلب عبر واتساب ✅</button>
             </form>
         </div>
-
         <!-- قسم المراجعات وآراء العملاء -->
         <div id="reviews-view" style="display: none;" class="mb-10 animate-pop-in">
             <div class="flex justify-between items-center mb-4 bg-orange-50 p-3 rounded-xl border border-orange-200">
@@ -311,7 +280,6 @@
                 🔙 إخفاء المراجعات والعودة للقائمة
             </button>
         </div>
-
         <!-- بطاقة التقييم المستقلة (تفتح Google Form) -->
         <div class="rating-card">
             <h3 class="text-xl font-extrabold text-gray-800 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
@@ -325,18 +293,14 @@
             </a>
             <p class="text-xs text-gray-400 mt-3 font-semibold">يفتح نموذج التقييم في صفحة مستقلة تماماً</p>
         </div>
-
         <footer class="mt-12 pt-6 border-t-2 text-center">
             <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
-
             <button onclick="toggleReviewsView()" 
                     class="w-full bg-orange-500 text-white font-bold py-4 rounded-xl inline-block shadow-md mb-4 text-lg active:scale-95 transition flex items-center justify-center gap-2 hover:bg-orange-600">
                 ⭐ مراجعات وآراء عملاءنا الكرام
             </button>
-
             <a href="https://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg hover:bg-green-600">📨 مراسلة واتساب مباشرة</a>
             <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg hover:bg-blue-800">🔵 زيارة صفحة الفيسبوك</a>
-
             <div class="mt-8 mb-4 flex flex-col items-center justify-center w-full">
                 <p class="text-xs text-gray-400 mb-2">عدد الزيارات</p>
                 <div id="sfcdbm85qbphbnfcgh4btfanww4m22gsq7b" class="flex justify-center"></div>
@@ -344,7 +308,6 @@
             </div>
         </footer>
     </div>
-
     <!-- فقاعة "شوف رأي الناس" الدائرية العائمة -->
     <div id="floating-bubble-container">
         <div onclick="toggleReviewsView()" class="floating-reviews-bubble">
@@ -353,7 +316,6 @@
             <span class="text-[10px] font-extrabold leading-tight">شوف رأى الناس</span>
         </div>
     </div>
-
     <!-- الشريط السفلي المدمج والمحدث -->
     <div id="sticky-cart-bar" style="display: none;" class="fixed bottom-0 left-0 right-0 bg-green-700 text-white p-3 shadow-2xl z-40 border-t-2 border-yellow-400 flex justify-between items-center px-4 max-w-3xl mx-auto rounded-t-2xl gap-2">
         <button onclick="openCartPreviewModal()" class="flex-1 bg-yellow-400 text-black font-extrabold py-2.5 px-3 rounded-xl text-xs sm:text-sm shadow hover:bg-yellow-300 active:scale-95 transition flex items-center justify-center gap-1.5 whitespace-nowrap">
@@ -366,7 +328,6 @@
             <span>📝</span>
         </button>
     </div>
-
     <!-- نافذة منبثقة لمراجعة وتعديل الكميات -->
     <div id="cart-preview-modal" style="display: none;" class="fixed inset-0 bg-black/60 z-[10000] flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl border-t-4 sm:border-2 border-green-600 relative max-h-[85vh] flex flex-col">
@@ -376,7 +337,6 @@
             </div>
             
             <div id="cart-preview-items-list" class="space-y-3 overflow-y-auto flex-1 p-1 mb-4"></div>
-
             <div class="pt-2 border-t flex gap-2">
                 <button onclick="closeCartPreviewModal(); scrollToCheckout();" class="flex-1 bg-green-600 text-white font-bold py-3 rounded-xl shadow hover:bg-green-700 transition text-sm">
                     الذهاب لتأكيد بيانات التوصيل 📝
@@ -384,7 +344,6 @@
             </div>
         </div>
     </div>
-
     <div id="repeat-orders-modal" style="display: none;" class="fixed inset-0 bg-black/60 z-[10000] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl border-2 border-green-500 relative">
             <button onclick="closeRepeatOrdersModal()" class="absolute top-3 left-3 bg-gray-200 text-gray-700 w-7 h-7 rounded-full font-bold text-xs hover:bg-gray-300">✕</button>
@@ -392,7 +351,6 @@
             <div id="previous-orders-container" class="space-y-3 max-h-80 overflow-y-auto p-1"></div>
         </div>
     </div>
-
     <!-- النافذة العائمة الترحيبية -->
     <div id="welcome-popup-modal" style="display: none;" class="fixed inset-0 bg-black/65 backdrop-blur-sm z-[99999] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border-4 border-green-500 overflow-hidden animate-pop-in relative">
@@ -416,7 +374,6 @@
             </div>
         </div>
     </div>
-
     <script>
 let staticReviews = [
     { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
@@ -440,10 +397,8 @@ let staticReviews = [
     { name: "", text: "الفاكهة جميلة جدا زي كل مرة طبعا\nماشاءالله\nربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة" },
     { name: "", text: "البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك" }
 ];
-
 let dynamicReviews = [];
 const REVIEWS_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/190JiCNDIszJipXgd1BPPs4Gb6jqa0jmcT8uafwd-l50/export?format=csv';
-
 async function loadReviewsFromSheet() {
     try {
         const response = await fetch(REVIEWS_SHEET_CSV_URL, { cache: 'no-store' });
@@ -451,13 +406,10 @@ async function loadReviewsFromSheet() {
         const csvText = await response.text();
         const rows = parseCSV(csvText);
         if (rows.length < 2) return;
-
         const headers = rows[0].map(h => String(h).replace(/^\uFEFF/, '').trim());
         const getCol = (name) => headers.findIndex(h => h.includes(name));
-
         const nameIdx = getCol('اسبك') !== -1 ? getCol('اسبك') : getCol('اسم');
         const textIdx = headers.findIndex(h => h.includes('اكتب') || h.includes('رأيك') || h.includes('تعليق'));
-
         const parsed = [];
         for (let i = 1; i < rows.length; i++) {
             const r = rows[i];
@@ -477,14 +429,11 @@ async function loadReviewsFromSheet() {
         console.warn('تعذر جلب التقييمات الجديدة:', e);
     }
 }
-
 async function renderReviews() {
     await loadReviewsFromSheet();
     const container = document.getElementById('reviews-container');
     if (!container) return;
-
     const combinedReviews = [...dynamicReviews, ...staticReviews];
-
     container.innerHTML = combinedReviews.map(r => `
         <div class="bg-white border-2 border-orange-100 rounded-2xl p-4 shadow-sm">
             <div class="flex items-center justify-between mb-2 border-b pb-2">
@@ -495,7 +444,6 @@ async function renderReviews() {
         </div>
     `).join('');
 }
-
 function toggleReviewsView() {
     const rv = document.getElementById('reviews-view');
     if (rv) {
@@ -507,12 +455,10 @@ function toggleReviewsView() {
         }
     }
 }
-
 function closeFloatingBubble() {
     const bubble = document.getElementById('floating-bubble-container');
     if (bubble) bubble.style.display = 'none';
 }
-
 async function shareProject() {
     const shareData = {
         title: 'دليفري الخضار والفاكهة بشربين',
@@ -528,18 +474,15 @@ async function shareProject() {
         }
     } catch (err) { console.log(err); }
 }
-
 let manualWorkStatus = 'تلقائي';
 let closeAfterHoursMode = false;
 let holidayMode = false;
 let scheduleOverlay = null;
-
 let sheetTickerText = '✨اللهم صلِّ وسلم وبارك على نبينا محمد ﷺ✨';
 let sheetPopupEnabled = false;
 let sheetPopupTitle = 'تنبيه هام';
 let sheetPopupContent = '';
 let popupShownOnce = false;
-
 function updateWorkSchedule() {
     if (manualWorkStatus === 'مفتوح') {
         closeAfterHoursMode = false;
@@ -558,20 +501,17 @@ function updateWorkSchedule() {
             minute: '2-digit',
             hourCycle: 'h23'
         }).formatToParts(new Date());
-
         const getPart = (type) => parts.find(part => part.type === type).value;
         const day = getPart('weekday');
         const hour = Number(getPart('hour'));
         const minute = Number(getPart('minute'));
         const currentTime = hour * 60 + minute;
-
         closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
         holidayMode =
             (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
             day === 'Friday' ||
             (day === 'Saturday' && currentTime < 7 * 60);
     }
-
     if (holidayMode) {
         if (!scheduleOverlay) {
             scheduleOverlay = document.createElement('div');
@@ -598,7 +538,6 @@ function updateWorkSchedule() {
             scheduleOverlay = null;
         }
     }
-
     const isClosedOrHoliday = holidayMode || closeAfterHoursMode;
     document.querySelectorAll('.quantity-select, .note-select').forEach(sel => {
         if (isClosedOrHoliday) {
@@ -618,7 +557,6 @@ function updateWorkSchedule() {
             sel.style.cursor = 'pointer';
         }
     });
-
     if (isClosedOrHoliday) {
         const stickyBar = document.getElementById('sticky-cart-bar');
         if (stickyBar) stickyBar.style.display = 'none';
@@ -626,12 +564,10 @@ function updateWorkSchedule() {
     }
 }
 setInterval(updateWorkSchedule, 30000);
-
 function closeWelcomePopup() {
     const popup = document.getElementById('welcome-popup-modal');
     if (popup) popup.style.display = 'none';
 }
-
 function applySheetUIControls() {
     const tickerEl = document.getElementById('scrolling-ticker-text');
     const marqueeContainer = document.getElementById('marquee-bar-container');
@@ -643,12 +579,10 @@ function applySheetUIControls() {
             marqueeContainer.style.display = 'none';
         }
     }
-
     if (sheetPopupEnabled && sheetPopupContent.trim() !== '' && !holidayMode && !popupShownOnce) {
         const titleEl = document.getElementById('welcome-popup-title');
         const bodyEl = document.getElementById('welcome-popup-body');
         const modalEl = document.getElementById('welcome-popup-modal');
-
         if (titleEl) titleEl.textContent = sheetPopupTitle || 'تنبيه هام';
         if (bodyEl) {
             const lines = sheetPopupContent.split(/\r?\n|\|/).filter(l => l.trim() !== '');
@@ -660,7 +594,6 @@ function applySheetUIControls() {
         }
     }
 }
-
 let productsData = [
     { name: "بصل أحمر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
     { name: "ثوم بلدي", price: 70, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
@@ -726,9 +659,7 @@ let productsData = [
     { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
     { name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
 ];
-
 const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv';
-
 function parseCSV(text) {
     const rows = [];
     let row = [], cell = '', quoted = false;
@@ -752,7 +683,6 @@ function parseCSV(text) {
     if (row.some(value => String(value).trim() !== '')) rows.push(row);
     return rows;
 }
-
 function cleanSheetNumber(value) {
     const normalized = String(value ?? '')
         .trim()
@@ -764,7 +694,6 @@ function cleanSheetNumber(value) {
     const number = Number(normalized);
     return Number.isFinite(number) ? number : null;
 }
-
 async function loadPricesFromSheet() {
     try {
         const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' });
@@ -772,9 +701,7 @@ async function loadPricesFromSheet() {
         const csvText = await response.text();
         const rows = parseCSV(csvText);
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
-
         let detectedStatus = 'تلقائي';
-
         rows.forEach(row => {
             row.forEach(cell => {
                 const txt = String(cell ?? '').trim();
@@ -788,111 +715,88 @@ async function loadPricesFromSheet() {
             });
         });
         manualWorkStatus = detectedStatus;
-
         const headers = rows[0].map((value, index) =>
             String(value).replace(/^\uFEFF/, '').trim()
         );
         const column = name => headers.indexOf(name);
-
         const requiredColumns = ['اسم الصنف', 'السعر بالجنيه', 'الوحدة', 'القسم', 'متاح؟'];
         if (requiredColumns.some(name => column(name) === -1)) {
             throw new Error('أسماء أعمدة جدول الأسعار لا تطابق القالب');
         }
-
         const get = (row, name) => {
             const index = column(name);
             return index < 0 ? '' : String(row[index] ?? '').trim();
         };
         const yes = value => ['نعم', 'متاح', 'نعم متاح', 'مفعل', 'تفعيل', 'yes', 'true', '1'].includes(String(value).toLowerCase());
         const no = value => ['لا', 'غير متاح', 'نفد', 'معطل', 'تعطيل', 'no', 'false', '0'].includes(String(value).toLowerCase());
-
         for (let i = 1; i < rows.length; i++) {
             const tickerColVal = get(rows[i], 'الشريط المتحرك');
             if (tickerColVal) { sheetTickerText = tickerColVal; break; }
         }
-
         for (let i = 1; i < rows.length; i++) {
             const popStatusVal = get(rows[i], 'حالة النافذة');
             if (popStatusVal) { sheetPopupEnabled = yes(popStatusVal); break; }
         }
-
         for (let i = 1; i < rows.length; i++) {
             const popTitleVal = get(rows[i], 'عنوان النافذة');
             if (popTitleVal) { sheetPopupTitle = popTitleVal; break; }
         }
-
         for (let i = 1; i < rows.length; i++) {
             const popBodyVal = get(rows[i], 'محتوى النافذة');
             if (popBodyVal) { sheetPopupContent = popBodyVal; break; }
         }
-
         const updatedProducts = [];
-
         rows.slice(1).forEach(row => {
             const name = get(row, 'اسم الصنف');
             if (!name) return;
             const price = cleanSheetNumber(get(row, 'السعر بالجنيه'));
             if (price === null || price <= 0) return;
-
             const oldProduct = productsData.find(product => product.name.trim() === name);
             const product = oldProduct ? { ...oldProduct, name } : {
                 name, price, unit: 'كجم', category: 'veg', available: true
             };
             product.price = price;
-
             const unit = get(row, 'الوحدة');
             if (unit) product.unit = unit;
-
             const categoryText = get(row, 'القسم').toLowerCase();
             if (categoryText.includes('فاكه') || categoryText.includes('فواكه') || categoryText.includes('fruit')) {
                 product.category = 'fruit';
             } else {
                 product.category = 'veg';
             }
-
             const availability = get(row, 'متاح؟');
             if (yes(availability)) product.available = true;
             else if (no(availability)) product.available = false;
-
             const minWeightText = get(row, 'أقل وزن (كجم)');
             const minWeight = cleanSheetNumber(minWeightText);
             if (minWeight !== null && minWeight > 0) product.minWeight = minWeight;
             else if (minWeightText === '') delete product.minWeight;
-
             const oldPriceText = get(row, 'السعر القديم');
             const oldPrice = cleanSheetNumber(oldPriceText);
             if (oldPrice !== null && oldPrice > 0) product.oldPrice = oldPrice;
             else delete product.oldPrice;
-
             const trend = get(row, 'اتجاه السعر').toLowerCase();
             if (['up', 'صاعد', 'مرتفع', 'زيادة', '🔺'].includes(trend)) product.trend = 'up';
             else if (['down', 'هابط', 'منخفض', 'انخفاض', '🔻'].includes(trend)) product.trend = 'down';
             else delete product.trend;
-
             const special = get(row, 'صنف مميز؟');
             product.isSpecial = yes(special);
-
             const storageText = get(row, 'مناسب للتخزين');
             product.isStorage = yes(storageText);
-
             const sizeText = get(row, 'الحجم؟') || get(row, 'حجم؟') || get(row, 'الحجم') || get(row, 'حجم');
             if (sizeText) {
                 product.hasSize = yes(sizeText);
             }
-
             const imgUrl = get(row, 'رابط الصورة');
             if (imgUrl) product.img = imgUrl;
-
             updatedProducts.push(product);
         });
-
         if (!updatedProducts.length) throw new Error('لم يتم العثور على أصناف بأسعار صحيحة');
         productsData = updatedProducts;
     } catch (error) {
         console.warn('تعذر تحديث الأسعار من Google Sheets:', error);
     }
 }
-
 function init(preserveCart = false) {
     try {
         const savedQuantities = {};
@@ -905,11 +809,9 @@ function init(preserveCart = false) {
                 if (s.value) savedNotes[s.dataset.name] = s.value;
             });
         }
-
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
         document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
-
         let iVeg = '', iFruit = '';
         productsData.forEach(p => {
             const specialBadge = p.isSpecial ? `<span class="special-star" data-tooltip="مميز">⭐</span>` : '';
@@ -917,14 +819,12 @@ function init(preserveCart = false) {
             const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
             
             const imgTag = p.img ? `<img src="${p.img}" alt="${p.name}" class="product-img">` : `<div class="product-img-placeholder">🛒</div>`;
-
             let trendArrow = '';
             if (p.trend === 'down') {
                 trendArrow = `<svg class="w-3 h-3 text-red-600 animate-pulse inline-block" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21l-10-18h20z"/></svg>`;
             } else if (p.trend === 'up') {
                 trendArrow = `<svg class="w-3 h-3 text-green-600 inline-block" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3l10 18h-20z"/></svg>`;
             }
-
             const priceDiv = p.available ? `
                 <div class="item-price-part">
                     ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
@@ -936,7 +836,6 @@ function init(preserveCart = false) {
                 <div class="item-price-part">
                     <span class="text-gray-400 font-bold text-xs">غير متوفر</span>
                 </div>`;
-
             const sizeSelectHTML = p.hasSize ? `
                 <div class="item-action-row">
                     <select class="note-select" onchange="updateStickyCartBar()" data-name="${p.name}">
@@ -947,7 +846,6 @@ function init(preserveCart = false) {
                         <option value="مشكل">مشكل</option>
                     </select>
                 </div>` : '';
-
             const actionPart = p.available ? `
                 <div class="item-action-container">
                     <div class="item-action-row">
@@ -957,7 +855,6 @@ function init(preserveCart = false) {
                     </div>
                     ${sizeSelectHTML}
                 </div>` : '';
-
             const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
                 <div class="item-right-group">
                     ${imgTag}
@@ -976,17 +873,14 @@ function init(preserveCart = false) {
                     ${actionPart}
                 </div>
             </div>`;
-
             if (p.category === 'fruit') {
                 iFruit += iRow;
             } else {
                 iVeg += iRow;
             }
         });
-
         document.getElementById('vegetables-list-interactive').innerHTML = iVeg;
         document.getElementById('fruits-list-interactive').innerHTML = iFruit;
-
         document.querySelectorAll('.quantity-select').forEach(s => {
             let opts = '<option value="0">-- الكمية --</option>';
             if (s.dataset.unit === 'كجم') {
@@ -1019,12 +913,10 @@ function init(preserveCart = false) {
                 }
             }
             s.innerHTML = opts;
-
             if (preserveCart && savedQuantities[s.dataset.name]) {
                 s.value = savedQuantities[s.dataset.name];
             }
         });
-
         if (preserveCart) {
             document.querySelectorAll('.note-select').forEach(s => {
                 if (savedNotes[s.dataset.name]) {
@@ -1036,19 +928,16 @@ function init(preserveCart = false) {
             loadCustomerData();
             checkPreviousOrdersCount();
         }
-
         updateWorkSchedule();
         applySheetUIControls();
         if (preserveCart) updateStickyCartBar();
     } catch (e) { console.error(e); }
 }
-
 async function startApp() {
     await loadPricesFromSheet();
     updateWorkSchedule();
     init(false);
 }
-
 // التحديث التلقائي الذكي في الخلفية كل دقيقتين (مع الحفاظ على مكان الشاشة والسلة)
 setInterval(async () => {
     try {
@@ -1061,20 +950,17 @@ setInterval(async () => {
         console.warn("تعذر التحديث التلقائي في الخلفية:", e);
     }
 }, 120000);
-
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startApp);
 } else {
     startApp();
 }
-
 function scrollToCheckout() {
     const checkoutSec = document.getElementById('order-checkout-section');
     if (checkoutSec) {
         checkoutSec.scrollIntoView({ behavior: 'smooth' });
     }
 }
-
 function getSelectedCartItems() {
     let items = [];
     document.querySelectorAll('.quantity-select').forEach(s => {
@@ -1091,15 +977,12 @@ function getSelectedCartItems() {
     });
     return items;
 }
-
 function updateStickyCartBar() {
     if (holidayMode || closeAfterHoursMode) return;
     const selectedItems = getSelectedCartItems();
     const count = selectedItems.length;
-
     const stickyBar = document.getElementById('sticky-cart-bar');
     const stickyCount = document.getElementById('sticky-cart-count');
-
     if (count > 0) {
         stickyCount.textContent = `${count} أصناف`;
         stickyBar.style.display = 'flex';
@@ -1107,13 +990,11 @@ function updateStickyCartBar() {
         stickyBar.style.display = 'none';
         closeCartPreviewModal();
     }
-
     const modal = document.getElementById('cart-preview-modal');
     if (modal.style.display === 'flex') {
         renderCartPreviewItems();
     }
 }
-
 function generateModalQuantityOptions(unit, selectedVal, productName) {
     let opts = '<option value="0">حذف</option>';
     if (unit === 'كجم') {
@@ -1149,18 +1030,15 @@ function generateModalQuantityOptions(unit, selectedVal, productName) {
     }
     return opts;
 }
-
 function openCartPreviewModal() {
     if (holidayMode || closeAfterHoursMode) return;
     renderCartPreviewItems();
     document.getElementById('cart-preview-modal').style.display = 'flex';
 }
-
 function renderCartPreviewItems() {
     const listContainer = document.getElementById('cart-preview-items-list');
     const selectedItems = getSelectedCartItems();
     let html = '';
-
     if (selectedItems.length === 0) {
         html = '<p class="text-center text-gray-500 py-6 text-sm">لم تقم باختيار أي أصناف بعد!</p>';
     } else {
@@ -1168,9 +1046,7 @@ function renderCartPreviewItems() {
             const noteSelect = document.querySelector(`.note-select[data-name="${item.name}"]`);
             const noteValue = noteSelect ? noteSelect.value : "";
             const notePart = noteValue ? ` (${noteValue})` : "";
-
             const quantityOptions = generateModalQuantityOptions(item.unit, item.val, item.name);
-
             html += `
                 <div class="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl p-3 gap-2">
                     <div class="flex-1 min-w-0">
@@ -1189,10 +1065,8 @@ function renderCartPreviewItems() {
             `;
         });
     }
-
     listContainer.innerHTML = html;
 }
-
 function updateQuantityFromModal(itemName, newVal) {
     const mainSelect = document.querySelector(`.quantity-select[data-name="${itemName}"]`);
     if (mainSelect) {
@@ -1204,11 +1078,9 @@ function updateQuantityFromModal(itemName, newVal) {
         }
     }
 }
-
 function closeCartPreviewModal() {
     document.getElementById('cart-preview-modal').style.display = 'none';
 }
-
 function removeItemFromCart(itemName) {
     const select = document.querySelector(`.quantity-select[data-name="${itemName}"]`);
     if (select) {
@@ -1220,7 +1092,6 @@ function removeItemFromCart(itemName) {
     }
     updateStickyCartBar();
 }
-
 function saveCustomerData() {
     const data = {
         name: document.getElementById('cust-name').value,
@@ -1230,7 +1101,6 @@ function saveCustomerData() {
     };
     localStorage.setItem('shirbin_customer_info', JSON.stringify(data));
 }
-
 function loadCustomerData() {
     const saved = localStorage.getItem('shirbin_customer_info');
     if (saved) {
@@ -1243,22 +1113,18 @@ function loadCustomerData() {
         } catch(e) {}
     }
 }
-
 function saveOrderToHistory(orderItems) {
     let history = [];
     try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
-
     const newOrder = {
         date: new Date().toLocaleDateString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
         items: orderItems
     };
-
     history.unshift(newOrder);
     if (history.length > 5) history = history.slice(0, 5);
     localStorage.setItem('shirbin_orders_history', JSON.stringify(history));
     checkPreviousOrdersCount();
 }
-
 function checkPreviousOrdersCount() {
     let history = [];
     try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
@@ -1270,7 +1136,6 @@ function checkPreviousOrdersCount() {
         subtext.textContent = `(لديك ${history.length} طلبات سابقة)`;
     }
 }
-
 function openRepeatOrdersModal() {
     let history = [];
     try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
@@ -1278,7 +1143,6 @@ function openRepeatOrdersModal() {
         alert("لا توجد طلبات سابقة محفوظة على هذا الجهاز بعد.");
         return;
     }
-
     const container = document.getElementById('previous-orders-container');
     container.innerHTML = history.map((ord, idx) => `
         <div class="border-2 border-green-200 rounded-xl p-3 bg-green-50/50 hover:bg-green-100/50 transition">
@@ -1291,14 +1155,11 @@ function openRepeatOrdersModal() {
             <p class="text-xs text-gray-600 leading-relaxed">${ord.items.map(i => i.name + (i.note ? ' (' + i.note + ')' : '') + ' (' + i.qText + ')').join(' ، ')}</p>
         </div>
     `).join('');
-
     document.getElementById('repeat-orders-modal').style.display = 'flex';
 }
-
 function closeRepeatOrdersModal() {
     document.getElementById('repeat-orders-modal').style.display = 'none';
 }
-
 function restoreOrder(index) {
     if (holidayMode || closeAfterHoursMode) {
         alert("نعتذر، المتجر مغلق حالياً ولا يمكن استعادة الطلبات.");
@@ -1308,11 +1169,9 @@ function restoreOrder(index) {
     try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
     const selected = history[index];
     if (!selected) return;
-
     let unavailableCount = 0;
     document.querySelectorAll('.quantity-select').forEach(s => s.value = "0");
     document.querySelectorAll('.note-select').forEach(s => s.value = "");
-
     selected.items.forEach(item => {
         const product = productsData.find(p => p.name === item.name);
         if (product && product.available) {
@@ -1324,29 +1183,24 @@ function restoreOrder(index) {
             unavailableCount++;
         }
     });
-
     closeRepeatOrdersModal();
     window.scrollTo(0, 0);
     updateStickyCartBar();
-
     if (unavailableCount > 0) {
         alert(`تم استعادة طلبك بنجاح! ⚠️ ولكن تعذر إضافة ${unavailableCount} صنف لعدم توفرها اليوم.`);
     } else {
         alert("تم استعادة جميع أصناف طلبك بنجاح! ✅");
     }
 }
-
 function generateWhatsAppOrder() {
     updateWorkSchedule();
-
     if (holidayMode) { alert("❤️ نحن في إجازتنا الأسبوعية."); return; }
     if (closeAfterHoursMode) { alert("🚨 انتهت مواعيد استقبال الطلبات اليوم."); return; }
-
     const selectedItems = getSelectedCartItems();
     if (selectedItems.length === 0) return alert("من فضلك اختر صنف واحد على الأقل من القائمة!");
-
     let vegItems = '', fruitItems = '';
     let currentOrderItems = [];
+    let orderDetailsText = '';
 
     selectedItems.forEach(item => {
         const select = item.selectElement;
@@ -1355,8 +1209,8 @@ function generateWhatsAppOrder() {
         const noteSelect = document.querySelector(`.note-select[data-name="${item.name}"]`);
         const noteValue = noteSelect ? noteSelect.value : "";
         const notePart = noteValue ? ` (${noteValue})` : "";
-
         const itemLine = `• ${quantityText} ${item.name}${notePart}\n`;
+        orderDetailsText += itemLine;
         
         const product = productsData.find(p => p.name === item.name);
         if (product && product.category === 'fruit') {
@@ -1364,18 +1218,32 @@ function generateWhatsAppOrder() {
         } else {
             vegItems += itemLine;
         }
-
         currentOrderItems.push({ name: item.name, val: item.val, qText: quantityText, note: noteValue });
     });
-
     saveCustomerData();
     saveOrderToHistory(currentOrderItems);
+    const cName = document.getElementById('cust-name').value || 'بدون اسم';
+    const cPhone = document.getElementById('cust-phone').value || '';
+    const cAddress = document.getElementById('cust-address').value || '';
+    const cLandmark = document.getElementById('cust-landmark').value || '';
+    const cNotes = document.getElementById('notes').value || '';
 
-    const cName = document.getElementById('cust-name').value;
-    const cPhone = document.getElementById('cust-phone').value;
-    const cAddress = document.getElementById('cust-address').value;
-    const cLandmark = document.getElementById('cust-landmark').value;
-    const cNotes = document.getElementById('notes').value;
+    // إرسال البيانات إلى جوجل شيت في الخلفية
+    const formData = {
+        name: cName,
+        phone: cPhone,
+        address: cAddress + (cLandmark ? ' - علامة مميزة: ' + cLandmark : ''),
+        orderDetails: orderDetailsText
+    };
+
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyVIhcTZF7hwab0C8C9IBDi1WKeTv6EsEAnaEP84wEkzpn4vh7rUvg39JDDgFtmSOf1aQ/exec"; 
+
+    fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+    }).catch(err => console.log("خطأ في حفظ الشيت:", err));
 
     let fullNotesAndAddr = '';
     if (cName) fullNotesAndAddr += `الاسم: ${cName}\n`;
@@ -1383,7 +1251,6 @@ function generateWhatsAppOrder() {
     if (cAddress) fullNotesAndAddr += `العنوان: ${cAddress}\n`;
     if (cLandmark) fullNotesAndAddr += `علامة مميزة: ${cLandmark}\n`;
     if (cNotes) fullNotesAndAddr += `ملاحظات: ${cNotes}\n`;
-
     let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية*\n';
     msg += '-----------------------------\n';
     
@@ -1398,22 +1265,19 @@ function generateWhatsAppOrder() {
     
     msg += `🛒 *عدد الأصناف: ${selectedItems.length}*\n`;
     msg += '-----------------------------\n';
-
     msg += '📦 *التوصيل:*\n';
     msg += '-----------------------------\n';
     msg += '💰 *الإجمالي:*\n';
     msg += '-----------------------------\n';
     msg += '📌 *الملاحظات والعنوان:*\n' + (fullNotesAndAddr || 'لا يوجد');
-
     window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
-
+    
     // تفريغ السلة وإعادة الصفحة للقائمة الرئيسية فوراً
     document.querySelectorAll('.quantity-select').forEach(s => s.value = "0");
     document.querySelectorAll('.note-select').forEach(s => s.value = "");
     updateStickyCartBar();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
 function filterProducts() {
     const term = document.getElementById('search-input').value.toLowerCase();
     document.querySelectorAll('.flex-row-item').forEach(row => {
