@@ -351,7 +351,7 @@
             <div id="previous-orders-container" class="space-y-3 max-h-80 overflow-y-auto p-1"></div>
         </div>
     </div>
-    <!-- النافذة العائمة الترحيبية -->
+    <!-- النافذة العائمة الترحيبية (النصية) -->
     <div id="welcome-popup-modal" style="display: none;" class="fixed inset-0 bg-black/65 backdrop-blur-sm z-[99999] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border-4 border-green-500 overflow-hidden animate-pop-in relative">
             <div class="bg-gradient-to-l from-green-600 to-emerald-700 p-4 text-white flex justify-between items-center">
@@ -372,6 +372,15 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- النافذة العائمة للصورة الإعلانية (تظهر حتى في الإجازة) -->
+    <div id="image-popup-modal" style="display: none;" onclick="closeImagePopup()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-[100001] flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="relative w-full max-w-sm md:max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-white animate-pop-in bg-white">
+            <button onclick="closeImagePopup()" title="إغلاق" class="absolute top-3 left-3 bg-red-600 hover:bg-red-700 text-white w-9 h-9 rounded-full font-extrabold text-base flex items-center justify-center shadow-lg border-2 border-white z-10 active:scale-90 transition">
+                ✕
+            </button>
+            <img id="popup-promo-image" src="" alt="إعلان" class="w-full h-auto max-h-[80vh] object-contain block mx-auto">
         </div>
     </div>
     <script>
@@ -483,6 +492,12 @@ let sheetPopupEnabled = false;
 let sheetPopupTitle = 'تنبيه هام';
 let sheetPopupContent = '';
 let popupShownOnce = false;
+
+// متغيرات نافذة الصورة الإعلانية
+let sheetImagePopupEnabled = false;
+let sheetImagePopupUrl = '';
+let imagePopupShownOnce = false;
+
 function updateWorkSchedule() {
     if (manualWorkStatus === 'مفتوح') {
         closeAfterHoursMode = false;
@@ -568,6 +583,10 @@ function closeWelcomePopup() {
     const popup = document.getElementById('welcome-popup-modal');
     if (popup) popup.style.display = 'none';
 }
+function closeImagePopup() {
+    const imgPopup = document.getElementById('image-popup-modal');
+    if (imgPopup) imgPopup.style.display = 'none';
+}
 function applySheetUIControls() {
     const tickerEl = document.getElementById('scrolling-ticker-text');
     const marqueeContainer = document.getElementById('marquee-bar-container');
@@ -579,6 +598,17 @@ function applySheetUIControls() {
             marqueeContainer.style.display = 'none';
         }
     }
+    // التحكم في نافذة الصورة الإعلانية (تظهر بغض النظر عن حالة الإجازة)
+    if (sheetImagePopupEnabled && sheetImagePopupUrl.trim() !== '' && !imagePopupShownOnce) {
+        const imgEl = document.getElementById('popup-promo-image');
+        const imgModalEl = document.getElementById('image-popup-modal');
+        if (imgEl && imgModalEl) {
+            imgEl.src = sheetImagePopupUrl.trim();
+            imgModalEl.style.display = 'flex';
+            imagePopupShownOnce = true;
+        }
+    }
+    // التحكم في النافذة النصية
     if (sheetPopupEnabled && sheetPopupContent.trim() !== '' && !holidayMode && !popupShownOnce) {
         const titleEl = document.getElementById('welcome-popup-title');
         const bodyEl = document.getElementById('welcome-popup-body');
@@ -745,6 +775,16 @@ async function loadPricesFromSheet() {
             const popBodyVal = get(rows[i], 'محتوى النافذة');
             if (popBodyVal) { sheetPopupContent = popBodyVal; break; }
         }
+        // قراءة إعدادات نافذة الصورة الإعلانية من الأعمدة الجديدة
+        for (let i = 1; i < rows.length; i++) {
+            const imgPopStatusVal = get(rows[i], 'حالة صورة النافذة');
+            if (imgPopStatusVal) { sheetImagePopupEnabled = yes(imgPopStatusVal); break; }
+        }
+        for (let i = 1; i < rows.length; i++) {
+            const imgPopUrlVal = get(rows[i], 'رابط صورة النافذة');
+            if (imgPopUrlVal) { sheetImagePopupUrl = imgPopUrlVal; break; }
+        }
+
         const updatedProducts = [];
         rows.slice(1).forEach(row => {
             const name = get(row, 'اسم الصنف');
