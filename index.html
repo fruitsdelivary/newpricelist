@@ -31,255 +31,494 @@
     100% { transform: translateX(100vw); }
 }
 
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; padding-bottom: 90px; }
+        
         .flex-row-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 16px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;
+            padding: 10px 12px; border-bottom: 1px solid #eee; transition: background-color 0.2s;
+            gap: 8px;
         }
-        .item-name-part { flex: 1.3; text-align: right; font-weight: 600; font-size: 1rem; }
+        
+        .item-right-group { display: flex; align-items: center; gap: 8px; flex: 1.3; text-align: right; min-width: 0; }
+        .item-text-content { display: flex; flex-direction: column; justify-content: center; min-width: 0; flex: 1; }
+
+        .item-main-title { 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            color: #1f2937; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 4px; 
+            white-space: normal; 
+            word-break: break-word; 
+            line-height: 1.3;
+        }
 
         .rating-card {
             background: white; border: 2px dashed #fbbf24; border-radius: 20px;
             padding: 25px; margin: 30px auto; text-align: center; max-width: 500px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.1);
         }
-        .star-rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 12px; }
-        .star-rating input { display: none; }
-        .star-rating label { font-size: 2.8rem; color: #e5e7eb; cursor: pointer; transition: transform 0.2s, color 0.2s; }
-        .star-rating label:hover { transform: scale(1.2); }
-        .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #fbbf24; }  
    
-        .item-price-part { flex: 0.9; display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-width: 110px; }
-        .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.75rem; white-space: nowrap; }
-        .current-price { color: #dc2626; font-weight: 800; font-size: 1.1rem; white-space: nowrap; }
+        .item-price-part { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px; flex-shrink: 0; text-align: center; }
+        .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.65rem; white-space: nowrap; }
+        .current-price { color: #dc2626; font-weight: 800; font-size: 0.95rem; white-space: nowrap; }
 
-        .item-action-part { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+        .item-action-container { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; }
+
         .quantity-select { 
-            height: 38px; width: 95px; border: 2px solid #22c55e; border-radius: 8px; 
-            font-weight: bold; background-color: #fff; font-size: 0.8rem; text-align: center;
+            height: 32px; width: 84px; border: 2px solid #16a34a; border-radius: 8px; 
+            font-weight: bold; background-color: #fff; font-size: 0.75rem; text-align: center; cursor: pointer;
+        }
+        .note-select {
+            height: 30px; width: 84px; border: 1.5px solid #3b82f6; border-radius: 8px; 
+            font-weight: 600; background-color: #eff6ff; font-size: 0.7rem; text-align: center; color: #1e40af; cursor: pointer;
         }
 
-        .not-available { opacity: 0.4; pointer-events: none; background-color: #fcfcfc; }
-        .out-of-stock-msg { color: #dc2626; font-size: 0.75rem; font-weight: bold; }
+        .not-available { opacity: 0.4; pointer-events: none; background-color: #fafafa; }
         
-        .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: nowrap; }
-        .offer-badge, .storage-badge { padding: 2px 7px; border-radius: 99px; font-size: 9.5px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
+        .badge-container { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 4px; margin-top: 2px; flex-wrap: nowrap; }
+        .offer-badge, .storage-badge { padding: 1px 5px; border-radius: 99px; font-size: 8px; font-weight: bold; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
         .offer-badge { background: #ef4444; color: white; }
         .storage-badge { background: #3b82f6; color: white; }
         
-        /* شارة النجمة المجاورة للاسم في نفس السطر مع خاصية التلميح (Tooltip) */
         .special-star {
-            font-size: 13.5px;
-            cursor: pointer;
-            position: relative;
-            display: inline-block;
-            margin-right: 5px;
-            vertical-align: middle;
-            transition: transform 0.2s ease;
-        }
-        .special-star:hover {
-            transform: scale(1.25);
+            font-size: 11px; cursor: pointer; position: relative; display: inline-block; vertical-align: middle; flex-shrink: 0;
         }
         .special-star::after {
             content: attr(data-tooltip);
+            position: absolute; bottom: 130%; right: 50%; transform: translateX(50%);
+            background-color: #333; color: #fff; text-align: center; padding: 3px 8px;
+            border-radius: 6px; font-size: 10px; font-weight: bold; white-space: nowrap;
+            opacity: 0; visibility: hidden; z-index: 10;
+        }
+        .special-star:hover::after { opacity: 1; visibility: visible; }
+
+        .product-img {
+            width: 38px; height: 38px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb; flex-shrink: 0; background-color: #f9fafb;
+        }
+        .product-img-placeholder {
+            width: 38px; height: 38px; border-radius: 8px; border: 1.5px dashed #9ca3af; flex-shrink: 0; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 14px; filter: grayscale(100%); opacity: 0.7;
+        }
+
+        .hero-title-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #86efac;
+            border-radius: 20px;
+            padding: 20px 15px;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-title-box::before {
+            content: '';
             position: absolute;
-            bottom: 130%;
-            right: 50%;
-            transform: translateX(50%);
-            background-color: #333;
-            color: #fff;
+            top: 0; right: 0; width: 6px; height: 100%;
+            background: #16a34a;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(15px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop-in {
+            animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .floating-reviews-bubble {
+            position: fixed;
+            bottom: 95px;
+            left: 15px;
+            width: 62px;
+            height: 62px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+            z-index: 35;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            animation: bounceSlow 3s infinite;
+            border: 2px solid white;
             text-align: center;
-            padding: 3px 8px;
-            border-radius: 6px;
+        }
+        .floating-reviews-bubble:hover {
+            transform: scale(1.1);
+        }
+        .floating-close-btn {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
             font-size: 10px;
             font-weight: bold;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease;
-            z-index: 10;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .special-star:hover::after {
-            opacity: 1;
-            visibility: visible;
+        @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
     </style>
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
 
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/40">
+    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/45">
 
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-extrabold text-green-700 mb-4" id="main-title">💰أسعار اليوم💰</h1>
-            <div class="mb-6">
+        <header class="text-center mb-6">
+            <div class="hero-title-box mb-5">
+                <div class="inline-block bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm">
+                    🌿 جودة وسعر وع الفرازة 
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-green-800 tracking-wide mb-1">
+                    دليفري الخضار والفاكهة بشربين
+                </h1>
+                <p class="text-sm md:text-base font-bold text-gray-700 flex items-center justify-center gap-1.5 mt-1">
+                    <span>📋</span> <span>قائمة الأسعار ونموذج الطلب</span> <span>📝</span>
+                </p>
+            </div>
+
+            <div class="mb-4">
                 <img src="https://i.ibb.co/Q7Yj5W9w/1777641348311.png" alt="الشعار" class="mx-auto w-32 h-32 rounded-full border-4 border-yellow-400 shadow-xl object-cover">
                 <p class="text-lg font-bold text-gray-600 mt-2">خُبراء الخضار والفاكهة</p>
                 <p id="date-display" class="text-sm font-bold text-blue-700 mt-3 bg-blue-50 inline-block px-4 py-2 rounded-full border border-blue-200"></p>
             </div>
         </header>
-        
-        <div id="price-list-view">
-            <button onclick="toggleView('order-form-view')" class="w-full mb-6 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-lg active:scale-95 transition">
-                🛒 ابدأ طلبك الآن!
-            </button>
 
-<div id="share-btn-container" class="fixed top-4 right-4 z-50 flex items-center shadow-lg rounded-full">
-    <button onclick="document.getElementById('share-btn-container').style.display='none'" 
-            class="bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm -ml-2 z-10 hover:bg-red-600 transition">
-        ✕
-    </button>
-    
-    <button onclick="shareProject()" class="bg-yellow-400 p-2 px-3 rounded-full flex items-center gap-1.5 border border-yellow-500 active:scale-95 transition">
-        <span class="text-black font-bold text-xs">مشاركة القائمة</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-        </svg>
-    </button>
-</div>
-
-            <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
-                <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
-                <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-2xl p-4 mb-6 shadow-sm">
+            <h2 class="text-xl font-extrabold text-green-800 mb-1">أهلاً بك 👋</h2>
+            <p class="text-xl font-semibold text-gray-700 mb-2"> نورتنا،، نرجو لك تجربة تسوق سهلة وممتعة.</p>
+            <div>
+                <button id="repeat-order-btn" onclick="openRepeatOrdersModal()" class="w-full bg-white border-2 border-green-600 text-green-700 font-bold py-3 px-4 rounded-xl shadow-sm hover:bg-green-50 active:scale-95 transition text-center flex justify-center items-center gap-2">
+                    <span class="text-base">🔄 كرر طلبًا سابقًا</span>
+                    <span id="repeat-order-subtext" class="text-xs font-normal text-gray-500"></span>
+                </button>
             </div>
-
-            <div style="text-align: center; padding: 8px 2px; background: #fdfdfd; border-radius: 8px; margin: 10px auto; border: 1px solid #eee; width: 95%; overflow: hidden;">
-                <div style="white-space: nowrap; font-family: sans-serif; display: flex; justify-content: center; align-items: center; gap: 4px;">
-                    <span style="color: #888; font-size: 10px;">متاح الدفع عبر:</span>
-                    <strong style="color: #e60000; font-size: 10px;">Vodafone Cash</strong>
-                    <span style="color: #ddd;">|</span>
-                    <strong style="color: #5b2d82; font-size: 10px;">InstaPay</strong>
-                    <span style="color: #ddd;">|</span>
-                    <strong style="color: #28a745; font-size: 10px;">أو عند الاستلام</strong>
-                </div>
-            </div>
-
-<div class="new-arrival-bar" style="overflow: hidden; direction: ltr;">
-    <div class="scrolling-text">
-     ✨اللهم صلِّ وسلم وبارك على نبينا محمد ﷺ✨ 
-   </div>
-</div> 
-
-<div class="relative mb-6">
-    <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
-    class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
-</div>
-
-            <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
-                <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
-                <div id="vegetables-list-static"></div>
-            </section>
-
-            <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
-                <h2 class="bg-yellow-500 text-white text-2xl font-bold p-3 text-center">🍎🥝 فواكه 🍉🍒</h2>
-                <div id="fruits-list-static"></div>
-            </section>
-
-            <button onclick="toggleView('order-form-view')" class="w-full mt-4 mb-12 bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl text-xl active:scale-95 transition">
-                🛒 ابدأ طلبك الآن! 
-            </button>
-    
         </div>
 
-        <div id="order-form-view" style="display: none;">
-            <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-3 rounded-xl">🔙 العودة لقائمة الأسعار</button>
+        <div id="share-btn-container" class="fixed top-4 right-4 z-50 flex items-center shadow-lg rounded-full">
+            <button onclick="document.getElementById('share-btn-container').style.display='none'" 
+                    class="bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm -ml-2 z-10 hover:bg-red-600 transition">
+                ✕
+            </button>
+            <button onclick="shareProject()" class="bg-yellow-400 p-2 px-3 rounded-full flex items-center gap-1.5 border border-yellow-500 active:scale-95 transition">
+                <span class="text-black font-bold text-xs">مشاركة القائمة</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            </button>
+        </div>
 
-<button onclick="shareProject()" class="w-full mb-6 bg-yellow-500 text-black font-bold py-4 rounded-xl shadow-lg text-lg flex items-center justify-center gap-2 active:scale-95 transition">
-    📢 شارك القائمة مع أصدقائك
-</button>
+        <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
+            <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
+            <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
+        </div>
 
+        <div style="text-align: center; padding: 8px 2px; background: #fdfdfd; border-radius: 8px; margin: 10px auto; border: 1px solid #eee; width: 95%; overflow: hidden;">
+            <div style="white-space: nowrap; font-family: sans-serif; display: flex; justify-content: center; align-items: center; gap: 4px;">
+                <span style="color: #888; font-size: 10px;">متاح الدفع عبر:</span>
+                <strong style="color: #e60000; font-size: 10px;">Vodafone Cash</strong>
+                <span style="color: #ddd;">|</span>
+                <strong style="color: #5b2d82; font-size: 10px;">InstaPay</strong>
+                <span style="color: #ddd;">|</span>
+                <strong style="color: #28a745; font-size: 10px;">أو عند الاستلام</strong>
+            </div>
+        </div>
+
+        <div id="marquee-bar-container" class="new-arrival-bar" style="overflow: hidden; direction: ltr;">
+            <div id="scrolling-ticker-text" class="scrolling-text">
+             ✨اللهم صلِّ وسلم وبارك على نبينا محمد ﷺ✨ 
+           </div>
+        </div> 
+
+        <div class="relative mb-6">
+            <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
+            class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
+        </div>
+
+        <section class="border rounded-xl overflow-hidden shadow-lg mb-8">
+            <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 الخضروات 🌶️🥦</h2>
+            <div id="vegetables-list-interactive"></div>
+        </section>
+
+        <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
+            <h2 class="bg-yellow-500 text-white text-2xl font-bold p-3 text-center">🍎🥝 فواكه 🍉🍒</h2>
+            <div id="fruits-list-interactive"></div>
+        </section>
+
+        <div id="order-checkout-section" class="bg-gray-50 border-4 border-green-600 rounded-3xl p-4 md:p-6 shadow-xl mb-12">
+            <h2 class="text-2xl font-extrabold text-green-800 mb-4 text-center border-b pb-3">📝 بيانات التوصيل وإرسال الطلب</h2>
+            
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
-                <div class="mb-6 border rounded-xl overflow-hidden shadow-md">
-                    <h2 class="bg-green-600 text-white p-3 text-center font-bold">تحديد الأصناف المطلوبة</h2>
-                    <div id="interactive-lists-combined"></div>
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">الاسم :</label>
+                        <input type="text" id="cust-name" oninput="saveCustomerData()" placeholder="اكتب اسمك..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">رقم الموبايل للتواصل:</label>
+                        <input type="tel" id="cust-phone" oninput="saveCustomerData()" placeholder="010xxxxxxxx" class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">العنوان بالتفصيل:</label>
+                        <input type="text" id="cust-address" oninput="saveCustomerData()" placeholder="اسم الشارع / الشارع الجانبي / رقم العمائر أو الدور..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">علامة مميزة للعنوان (إن وجدت):</label>
+                        <input type="text" id="cust-landmark" oninput="saveCustomerData()" placeholder="بجوار كذا / أمام سوبر ماركت..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">ملاحظات إضافية للطلب:</label>
+                        <textarea id="notes" rows="3" placeholder="أي ملاحظات خاصة بالتجهيز أو التوصيل..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white"></textarea>
+                    </div>
                 </div>
-                <textarea id="notes" rows="4" placeholder="العنوان بالتفصيل ورقم الموبايل..." class="w-full p-4 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none"></textarea>
-                <button type="submit" class="w-full mt-8 bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl">إرسال الطلب عبر واتساب ✅</button>
+
+                <div class="bg-yellow-50 border border-yellow-300 p-4 rounded-xl text-center text-xs font-bold text-yellow-800 mb-6 shadow-sm">
+                    ⚠️ سيتم تحديد الحساب النهائي بعد تجهيز الطلب والوزن الفعلي وإبلاغك بالقيمة الفعليّة.
+                </div>
+
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-5 rounded-2xl text-2xl shadow-xl active:scale-95 transition hover:bg-green-700">تأكيد وإرسال الطلب عبر واتساب ✅</button>
             </form>
         </div>
 
-<div id="reviews-view" style="display: none;" class="mb-10">
-    <button onclick="toggleView('price-list-view')" class="w-full mb-6 bg-gray-400 text-white font-bold py-4 rounded-2xl shadow-md text-lg">
-        🔙 العودة لقائمة الأسعار
-    </button>
-    
-    <div id="reviews-container" class="space-y-4"></div>
-</div>
-
-        <div class="rating-card">
-            <h3 class="text-lg font-bold text-gray-700 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
-            <p class="text-sm text-gray-500 mb-4">قيم تجربتك معنا لمساعدتنا على تطوير خدماتنا (أعلى تقييم ناحية اليسار)</p>
-            <div class="star-rating mb-4">
-                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+        <!-- قسم المراجعات وآراء العملاء -->
+        <div id="reviews-view" style="display: none;" class="mb-10 animate-pop-in">
+            <div class="flex justify-between items-center mb-4 bg-orange-50 p-3 rounded-xl border border-orange-200">
+                <h3 class="text-xl font-extrabold text-orange-800 flex items-center gap-2">⭐ آراء ومراجعات عملائنا الكرام</h3>
+                <button onclick="toggleReviewsView()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center transition">✕</button>
             </div>
-            <button onclick="confirmMyRating()" id="confirm-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-600 transition">تأكيد التقييم ✅</button>
-            <div id="rating-feedback" class="mt-4 font-bold text-green-600 hidden">شكراً لوقتك، نعدكم بالأفضل دائماً بإذن الله. ! ❤️</div>
+            <div id="reviews-container" class="space-y-4 max-h-[600px] overflow-y-auto p-2"></div>
+            <button onclick="toggleReviewsView()" class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 rounded-xl shadow-md text-base transition">
+                🔙 إخفاء المراجعات والعودة للقائمة
+            </button>
+        </div>
+
+        <!-- بطاقة التقييم المستقلة (تفتح Google Form) -->
+        <div class="rating-card">
+            <h3 class="text-xl font-extrabold text-gray-800 mb-2">⭐ رأيك يهمنا جداً ⭐</h3>
+            <p class="text-sm text-gray-600 mb-5">شاركنا تجربتك وتقييمك واكتب رأيك في خدمتنا في صفحة التقييمات</p>
+            
+            <a href="https://forms.gle/PRYj4v6xLDV3AW5A9" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-extrabold py-4 px-6 rounded-2xl shadow-md hover:from-yellow-500 hover:to-amber-600 active:scale-95 transition text-base md:text-lg border-2 border-yellow-600">
+                <span>⭐</span>
+                <span>قيّم تجربتك واكتب رأيك الآن</span>
+                <span>✍️</span>
+            </a>
+            <p class="text-xs text-gray-400 mt-3 font-semibold">يفتح نموذج التقييم في صفحة مستقلة تماماً</p>
         </div>
 
         <footer class="mt-12 pt-6 border-t-2 text-center">
             <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-6 font-bold text-gray-700 text-sm italic">🕒 مواعيد العمل من 7 ص إلى 4:15 م يومياً عدا الجمعة</div>
 
-<button onclick="toggleView('reviews-view')" 
-        class="w-full bg-orange-500 text-white font-bold py-4 rounded-xl inline-block shadow-md mb-4 text-lg active:scale-95 transition flex items-center justify-center gap-2">
-    ⭐ مراجعات وآراء عملاءنا الكرام
-</button>
+            <button onclick="toggleReviewsView()" 
+                    class="w-full bg-orange-500 text-white font-bold py-4 rounded-xl inline-block shadow-md mb-4 text-lg active:scale-95 transition flex items-center justify-center gap-2 hover:bg-orange-600">
+                ⭐ مراجعات وآراء عملاءنا الكرام
+            </button>
 
-            <a href="https://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg">📨 مراسلة واتساب مباشرة</a>
-            <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg">🔵 زيارة صفحة الفيسبوك</a>
+            <a href="https://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg hover:bg-green-600">📨 مراسلة واتساب مباشرة</a>
+            <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg hover:bg-blue-800">🔵 زيارة صفحة الفيسبوك</a>
 
-<div class="mt-8 mb-4 flex flex-col items-center justify-center w-full">
-    <p class="text-xs text-gray-400 mb-2">عدد الزيارات</p>
-    
-    <div id="sfcdbm85qbphbnfcgh4btfanww4m22gsq7b" class="flex justify-center"></div>
-    
-    <script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=dbm85qbphbnfcgh4btfanww4m22gsq7b&down=async" async></script>
-    
-    <noscript>
-        <div class="flex justify-center">
-            <a href="https://www.freecounterstat.com" title="website counter code">
-                <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=dbm85qbphbnfcgh4btfanww4m22gsq7b" border="0" title="website counter code" alt="website counter code">
-            </a>
-        </div>
-    </noscript>
-</div>
-
-<div id="floating-reviews" class="fixed bottom-24 left-4 z-50 animate-bounce flex flex-col items-center">
-    
-    <div class="relative">
-        <button onclick="event.stopPropagation(); document.getElementById('floating-reviews').style.display='none';" 
-                class="absolute -top-1 -right-1 bg-red-600 text-white hover:bg-red-700 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shadow-md border border-white font-bold z-[60] transition-colors">
-            ✕
-        </button>
-
-        <div onclick="toggleView('reviews-view')" 
-             class="bg-orange-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center border-2 border-white cursor-pointer active:scale-95 transition-transform">
-            <span class="text-xl">⭐</span>
-        </div>
-    </div>
-
-    <span onclick="toggleView('reviews-view')" class="mt-1 text-[10px] font-bold text-orange-600 bg-white/90 px-2 py-0.5 rounded-full shadow-sm cursor-pointer border border-orange-100">
-        شوف رأي الناس
-    </span>
-</div>
-
+            <div class="mt-8 mb-4 flex flex-col items-center justify-center w-full">
+                <p class="text-xs text-gray-400 mb-2">عدد الزيارات</p>
+                <div id="sfcdbm85qbphbnfcgh4btfanww4m22gsq7b" class="flex justify-center"></div>
+                <script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=dbm85qbphbnfcgh4btfanww4m22gsq7b&down=async" async></script>
+            </div>
         </footer>
     </div>
 
+    <!-- فقاعة "شوف رأي الناس" الدائرية العائمة -->
+    <div id="floating-bubble-container">
+        <div onclick="toggleReviewsView()" class="floating-reviews-bubble">
+            <div onclick="event.stopPropagation(); closeFloatingBubble();" class="floating-close-btn" title="إغلاق">✕</div>
+            <span class="text-base">💬</span>
+            <span class="text-[10px] font-extrabold leading-tight">شوف رأى الناس</span>
+        </div>
+    </div>
+
+    <!-- الشريط السفلي المدمج والمحدث -->
+    <div id="sticky-cart-bar" style="display: none;" class="fixed bottom-0 left-0 right-0 bg-green-700 text-white p-3 shadow-2xl z-40 border-t-2 border-yellow-400 flex justify-between items-center px-4 max-w-3xl mx-auto rounded-t-2xl gap-2">
+        <button onclick="openCartPreviewModal()" class="flex-1 bg-yellow-400 text-black font-extrabold py-2.5 px-3 rounded-xl text-xs sm:text-sm shadow hover:bg-yellow-300 active:scale-95 transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+            <span class="bg-black text-yellow-400 px-2 py-0.5 rounded-full text-xs font-black" id="sticky-cart-count">0 أصناف</span>
+            <span>المراجعة والتعديل</span>
+            <span>🛒</span>
+        </button>
+        <button onclick="scrollToCheckout()" class="flex-1 bg-white text-green-800 font-extrabold py-2.5 px-3 rounded-xl text-xs sm:text-sm shadow hover:bg-green-50 active:scale-95 transition flex items-center justify-center gap-1 whitespace-nowrap">
+            <span>بيانات التوصيل</span>
+            <span>📝</span>
+        </button>
+    </div>
+
+    <!-- نافذة منبثقة لمراجعة وتعديل الكميات -->
+    <div id="cart-preview-modal" style="display: none;" class="fixed inset-0 bg-black/60 z-[10000] flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl border-t-4 sm:border-2 border-green-600 relative max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h3 class="text-lg font-extrabold text-green-800 flex items-center gap-1">🛒 مراجعة وتعديل الأصناف</h3>
+                <button onclick="closeCartPreviewModal()" class="bg-gray-200 text-gray-700 w-8 h-8 rounded-full font-bold text-sm hover:bg-gray-300 flex items-center justify-center">✕</button>
+            </div>
+            
+            <div id="cart-preview-items-list" class="space-y-3 overflow-y-auto flex-1 p-1 mb-4"></div>
+
+            <div class="pt-2 border-t flex gap-2">
+                <button onclick="closeCartPreviewModal(); scrollToCheckout();" class="flex-1 bg-green-600 text-white font-bold py-3 rounded-xl shadow hover:bg-green-700 transition text-sm">
+                    الذهاب لتأكيد بيانات التوصيل 📝
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="repeat-orders-modal" style="display: none;" class="fixed inset-0 bg-black/60 z-[10000] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl border-2 border-green-500 relative">
+            <button onclick="closeRepeatOrdersModal()" class="absolute top-3 left-3 bg-gray-200 text-gray-700 w-7 h-7 rounded-full font-bold text-xs hover:bg-gray-300">✕</button>
+            <h3 class="text-lg font-bold text-green-800 mb-3 border-b pb-2 text-center">📋 اختر طلبًا لتكراره</h3>
+            <div id="previous-orders-container" class="space-y-3 max-h-80 overflow-y-auto p-1"></div>
+        </div>
+    </div>
+
+    <!-- النافذة العائمة الترحيبية -->
+    <div id="welcome-popup-modal" style="display: none;" class="fixed inset-0 bg-black/65 backdrop-blur-sm z-[99999] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border-4 border-green-500 overflow-hidden animate-pop-in relative">
+            <div class="bg-gradient-to-l from-green-600 to-emerald-700 p-4 text-white flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">📢</span>
+                    <h3 id="welcome-popup-title" class="text-lg font-extrabold tracking-wide">تنبيه هام</h3>
+                </div>
+                <button onclick="closeWelcomePopup()" class="bg-white/20 hover:bg-white/30 text-white w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center transition">
+                    ✕
+                </button>
+            </div>
+            
+            <div class="p-6 text-right">
+                <div id="welcome-popup-body" class="text-gray-700 text-sm md:text-base font-semibold leading-relaxed space-y-2.5"></div>
+                <div class="mt-6 pt-3 border-t border-gray-100">
+                    <button onclick="closeWelcomePopup()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-md active:scale-95 transition text-base">
+                        حسناً، ابدأ التصفح الآن 👍
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+let staticReviews = [
+    { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
+    { name: "Aml Saad", text: "ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر" },
+    { name: "أ/سارة", text: "ايه تقييم حضرتك لنظام الطلب الجديد؟ جميل جدا جدا بيفكرنى بكل اللى محتاجاه" },
+    { name: "أ.مدحت", text: "السلام عليكم\nملاحظه :\nالبطيخه السابقه كانت أحلى بطيخه أكلناها فى حياتنا ، ربنا يوسع عليكم.\nبطيخه زى بتاعة المره اللي فاتت\nوشكرا" },
+    { name: "د.ميرفت", text: "السلام عليكم\nلسه فاتحه البطيخه النهارده\nسكككككككر\nتسلم ايدك" },
+    { name: "Om Eslam", text: "تمام الحمد لله أنا دوخت علي رقمك وصفحتك واضطريت اجيب من ناس تانيه بس بصراحه التعامل مع حضرتك حاجه تانيه" },
+    { name: "السيد حسن", text: "جزاك الله خيرا\nالحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله\nجزاك الله خيرا 🌹🌹" },
+    { name: "Adam", text: "خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا" },
+    { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
+    { name: "أ/سارة", text: "ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل" },
+    { name: "dr.eman", text: "ربنا يجزيك الحسني و زياده\nكفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل\nربنا يبارك لك يا ابني و يجعله في ميزان حسناتك" },
+    { name: "أ/هبه", text: "شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل" },
+    { name: "مدام سالي", text: "الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي\nيارب تفضل علي نفس المستوي علطول بإذن الله\nجزاكم الله خيرا" },
+    { name: "", text: "شكرا على حسن معاملتكم والبدنجان والفاكهه جميله جدا" },
+    { name: "مدام سالي", text: "شكرا ع الحاجه جميله جدااااا كالعاده يارب دايما متميزين" },
+    { name: "", text: "شكرا عالحاجة جميلة جدا والبلح نضيف ماشاءالله... كنت برة فمشوار وبناتي اللي استلموا الاوردر.. تسلموا ع امانتكم" },
+    { name: "أ/شيرين", text: "الف شكر عالاوردر كله و عالهدية ماشاءالله تبارك الرحمن روعة تسلم ايدك" },
+    { name: "أوشو", text: "ماشاء الله الفاكهه جميلة جداا والله ومفيش فيها حاجه وحشه\nوخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜" },
+    { name: "", text: "الفاكهة جميلة جدا زي كل مرة طبعا\nماشاءالله\nربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة" },
+    { name: "", text: "البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك" }
+];
+
+let dynamicReviews = [];
+const REVIEWS_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/190JiCNDIszJipXgd1BPPs4Gb6jqa0jmcT8uafwd-l50/export?format=csv';
+
+async function loadReviewsFromSheet() {
+    try {
+        const response = await fetch(REVIEWS_SHEET_CSV_URL, { cache: 'no-store' });
+        if (!response.ok) return;
+        const csvText = await response.text();
+        const rows = parseCSV(csvText);
+        if (rows.length < 2) return;
+
+        const headers = rows[0].map(h => String(h).replace(/^\uFEFF/, '').trim());
+        const getCol = (name) => headers.findIndex(h => h.includes(name));
+
+        const nameIdx = getCol('اسبك') !== -1 ? getCol('اسبك') : getCol('اسم');
+        const textIdx = headers.findIndex(h => h.includes('اكتب') || h.includes('رأيك') || h.includes('تعليق'));
+
+        const parsed = [];
+        for (let i = 1; i < rows.length; i++) {
+            const r = rows[i];
+            const name = nameIdx !== -1 ? String(r[nameIdx] || '').trim() : '';
+            let text = '';
+            if (textIdx !== -1) {
+                text = String(r[textIdx] || '').trim();
+            } else if (r.length >= 4) {
+                text = String(r[3] || r[2] || '').trim();
+            }
+            if (text) {
+                parsed.unshift({ name: name, text: text });
+            }
+        }
+        dynamicReviews = parsed;
+    } catch (e) {
+        console.warn('تعذر جلب التقييمات الجديدة:', e);
+    }
+}
+
+async function renderReviews() {
+    await loadReviewsFromSheet();
+    const container = document.getElementById('reviews-container');
+    if (!container) return;
+
+    const combinedReviews = [...dynamicReviews, ...staticReviews];
+
+    container.innerHTML = combinedReviews.map(r => `
+        <div class="bg-white border-2 border-orange-100 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-center justify-between mb-2 border-b pb-2">
+                <span class="font-bold text-orange-800 text-sm">${r.name ? '👤 ' + r.name : ''}</span>
+                <span class="text-yellow-500 text-xs">⭐⭐⭐⭐⭐</span>
+            </div>
+            <p class="text-gray-800 text-sm md:text-base font-medium whitespace-pre-line leading-relaxed">${r.text}</p>
+        </div>
+    `).join('');
+}
+
+function toggleReviewsView() {
+    const rv = document.getElementById('reviews-view');
+    if (rv) {
+        const isHidden = rv.style.display === 'none';
+        rv.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) {
+            renderReviews();
+            window.scrollTo({ top: rv.offsetTop - 20, behavior: 'smooth' });
+        }
+    }
+}
+
+function closeFloatingBubble() {
+    const bubble = document.getElementById('floating-bubble-container');
+    if (bubble) bubble.style.display = 'none';
+}
+
 async function shareProject() {
     const shareData = {
         title: 'دليفري الخضار والفاكهة بشربين',
         text: ' 📢 شاهد الآن أسعار اليوم واطلب بسهولة عبر نموذج الواتساب 📲 ..!',
         url: window.location.href
     };
-
     try {
         if (navigator.share) {
             await navigator.share(shareData);
@@ -287,18 +526,19 @@ async function shareProject() {
             navigator.clipboard.writeText(window.location.href);
             alert("تم نسخ رابط القائمة، يمكنك الآن لصقه وإرساله لأصدقائك! ✅");
         }
-    } catch (err) {
-        console.log("Error: " + err);
-    }
+    } catch (err) { console.log(err); }
 }
 
-// ==========================================
-// نظام التحكم في العمل (حسب الطلب بدقة)
-// ==========================================
-let manualWorkStatus = 'تلقائي'; // القيم الممكنة من جوجل شيت: تلقائي، مفتوح، مغلق، إجازة
+let manualWorkStatus = 'تلقائي';
 let closeAfterHoursMode = false;
 let holidayMode = false;
 let scheduleOverlay = null;
+
+let sheetTickerText = '✨اللهم صلِّ وسلم وبارك على نبينا محمد ﷺ✨';
+let sheetPopupEnabled = false;
+let sheetPopupTitle = 'تنبيه هام';
+let sheetPopupContent = '';
+let popupShownOnce = false;
 
 function updateWorkSchedule() {
     if (manualWorkStatus === 'مفتوح') {
@@ -337,17 +577,17 @@ function updateWorkSchedule() {
             scheduleOverlay = document.createElement('div');
             scheduleOverlay.style.cssText = `
                 position: fixed; inset: 0; width: 100%; height: 100%;
-                background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px);
+                background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px); z-index: 100000;
                 display: flex; flex-direction: column; align-items: center;
                 justify-content: center; text-align: center; padding: 20px; font-family: sans-serif;
             `;
             scheduleOverlay.innerHTML = `
-                <div style="background:white;padding:30px;border-radius:20px;border:1px solid #eee;box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+                <div style="background:white;padding:30px;border-radius:20px;border:1px solid #eee;box-shadow:0 10px 25px rgba(0,0,0,0.1); max-width: 90%;">
                     <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" width="80" style="margin:0 auto 20px;">
-                    <h2 style="color:#333;margin-bottom:10px;">نعتذر عن استقبال طلبات التوصيل حالياً</h2>
-                    <p style="color:#666;font-size:18px;">  <br>سنعاود استقبال الطلبات في وقت لاحق إن شاء الله  </p>
-                    <p style="color:#22c55e;font-weight:bold;margin-top:15px;font-size:20px;">شكراً لتفهمكم ❤️</p>
+                    <h2 style="color:#333;margin-bottom:10px;">نعتذر لكم</h2>
+                    <p style="color:#666;font-size:16px;">الخدمة غير متاحة حالياً.<br>سنعاود استقبال الطلبات في وقت لاحق إن شاء الله.</p>
+                    <p style="color:#22c55e;font-weight:bold;margin-top:15px;font-size:18px;">شكراً لتفهمكم ❤️</p>
                 </div>
             `;
             document.documentElement.appendChild(scheduleOverlay);
@@ -358,76 +598,134 @@ function updateWorkSchedule() {
             scheduleOverlay = null;
         }
     }
+
+    const isClosedOrHoliday = holidayMode || closeAfterHoursMode;
+    document.querySelectorAll('.quantity-select, .note-select').forEach(sel => {
+        if (isClosedOrHoliday) {
+            sel.disabled = true;
+            sel.style.opacity = '0.45';
+            sel.style.backgroundColor = '#f3f4f6';
+            sel.style.borderColor = '#d1d5db';
+            sel.style.cursor = 'not-allowed';
+            if(sel.classList.contains('quantity-select')) {
+                sel.value = '0';
+            }
+        } else {
+            sel.disabled = false;
+            sel.style.opacity = '1';
+            sel.style.backgroundColor = sel.classList.contains('note-select') ? '#eff6ff' : '#fff';
+            sel.style.borderColor = sel.classList.contains('note-select') ? '#3b82f6' : '#16a34a';
+            sel.style.cursor = 'pointer';
+        }
+    });
+
+    if (isClosedOrHoliday) {
+        const stickyBar = document.getElementById('sticky-cart-bar');
+        if (stickyBar) stickyBar.style.display = 'none';
+        closeCartPreviewModal();
+    }
+}
+setInterval(updateWorkSchedule, 30000);
+
+function closeWelcomePopup() {
+    const popup = document.getElementById('welcome-popup-modal');
+    if (popup) popup.style.display = 'none';
 }
 
-setInterval(updateWorkSchedule, 30000);
-// ==========================================
+function applySheetUIControls() {
+    const tickerEl = document.getElementById('scrolling-ticker-text');
+    const marqueeContainer = document.getElementById('marquee-bar-container');
+    if (tickerEl && marqueeContainer) {
+        if (sheetTickerText && sheetTickerText.trim() !== '') {
+            tickerEl.textContent = sheetTickerText;
+            marqueeContainer.style.display = 'block';
+        } else {
+            marqueeContainer.style.display = 'none';
+        }
+    }
 
-        let productsData = [
-            { name: "بصل أحمر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
-            { name: "ثوم بلدي", price: 70, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
-            { name: "بطاطس تحمير", price: 35, unit: "كجم", category: "veg", available: true,minWeight: 1 },
-            { name: "بطاطس صغيرة", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 1},
-            { name: "باذنجان مكبب", price: 15, unit: "كجم", category: "veg", available: true },
-            { name: "باذنجان حشو", price: 20, unit: "كجم", category: "veg", available: true },
-            { name: "خيار", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
-            { name: "كوسة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
-            { name: "جزر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
-            { name: "طماطم جامدة", price: 25, unit: "كجم", category: "veg", available: true,trend: "up", minWeight: 0.5 },
-            { name: "طماطم طبخ سليمة", price: 20, unit: "كجم", category: "veg", available: true,trend: "up", minWeight: 1 },
-            { name: "ليمون", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
-            { name: "فلفل أخضر بارد", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
-            { name: "فلفل أخضر حار", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.25},
-            { name: "شطة خضراء", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
-            { name: "فلفل أحمر بارد", price: 50, unit: "كجم", category: "veg", available: false, minWeight: 0.5},
-            { name: "فلفل أحمر حار", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
-            { name: "فلفل ألوان", price: 80, unit: "كجم", category: "veg", available: true, minWeight: 0.25, trend: "up" },
-            { name: "قلقاس", price: 35, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
-            { name: "فاصوليا خضراء", price:  30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
-            { name: "شبت وكسبرة (صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true, trend: "up" },
-            { name: "بقدونس", price: 10, unit: "ربطة", category: "veg", available: true },
-            { name: "فجل", price: 10, unit: "ربطة", category: "veg", available: true },
-            { name: "جرجير", price: 10, unit: "ربطة", category: "veg", available: true },
-            { name: "بصل أخضر", price: 10, unit: "ربطة", category: "veg", available: true },
-            { name: "سبانخ", price: 15, unit: "ربطة", category: "veg", available: true },
-            { name: "نعناع", price: 10, unit: "ربطة", category: "veg", available: true },
-            { name: "خس كابوتشا", price: 25, unit: "حبة", category: "veg", available: true },
-            { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
-            { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
-            { name: "بصل أبيض", price: 30, unit: "كجم", category: "veg", available: false, minWeight: 1},
-            { name: "بطاطا", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
-            { name: "خس بلدي", price: 15, unit: "ربطة", category: "veg", available: true },
-            { name: "كرنب أحمر (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
-            { name: "كرنب أبيض (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
-            { name: "ذرة أصفر", price: 55,oldPrice: 65, unit: "طبق", category: "veg", available: false },
-            { name: "مشروم فريش", price: 65,oldPrice: 70, unit: "طبق", category: "veg", available: false },
-            { name: "أرز رويزق 10ك", price: 295, oldPrice: 300, unit: "شيكارة", category: "veg", available: true },
-            { name: "موز", price: 40, unit: "كجم", category: "fruit", available: true, trend: "down" },
-            { name: "تفاح أصفر", price: 100, unit: "كجم", category: "fruit", available: true },
-            { name: "تفاح سكري", price: 90, unit: "كجم", category: "fruit", available: true },
-            { name: "تفاح سكري٢", price: 80, unit: "كجم", category: "fruit", available: true },
-            { name: "تفاح أحمر لبناني", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
-            { name: "عنب أحمر كريمسون", price: 100, unit: "كجم", category: "fruit", available: true, trend: "up" },
-            { name: "عنب ببذر", price: 35, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
-            { name: "بلح أسمر", price: 40, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.5 },
-            { name: "برقوق يوناني", price: 120, unit: "كجم", category: "fruit", available: true },
-            { name: "كمثرى", price: 100, unit: "كجم", category: "fruit", available: false},
-            { name: "كاكا", price: 60, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
-            { name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 1},
-            { name: "كنتالوب", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: true},
-            { name: "مانجو كريمسون", price: 100, unit: "كجم", category: "fruit", available: false, isSpecial: false, minWeight: 0.5}, 
-            { name: "تمر القصيم ٩٠٠جم", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial:false },
-            { name: "جوافة بلطيمي", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
-            { name: "جوافة", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
-            { name: "بلح برحي", price: 120, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
-            { name: "بلح أحمر ", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
-            { name: "برتقال بصرة", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 1},
-            { name: "كلمنتينا أخضر", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
-            { name: "رمان", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 1},
-            { name: "رمان سكري", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
-            { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
-            { name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
-        ];
+    if (sheetPopupEnabled && sheetPopupContent.trim() !== '' && !holidayMode && !popupShownOnce) {
+        const titleEl = document.getElementById('welcome-popup-title');
+        const bodyEl = document.getElementById('welcome-popup-body');
+        const modalEl = document.getElementById('welcome-popup-modal');
+
+        if (titleEl) titleEl.textContent = sheetPopupTitle || 'تنبيه هام';
+        if (bodyEl) {
+            const lines = sheetPopupContent.split(/\r?\n|\|/).filter(l => l.trim() !== '');
+            bodyEl.innerHTML = lines.map(line => `<p class="flex items-start gap-2"><span class="text-green-600 mt-0.5">•</span><span>${line.trim()}</span></p>`).join('');
+        }
+        if (modalEl) {
+            modalEl.style.display = 'flex';
+            popupShownOnce = true;
+        }
+    }
+}
+
+let productsData = [
+    { name: "بصل أحمر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5}, 
+    { name: "ثوم بلدي", price: 70, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+    { name: "بطاطس تحمير", price: 35, unit: "كجم", category: "veg", available: true, minWeight: 1 },
+    { name: "بطاطس صغيرة", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 1},
+    { name: "باذنجان مكبب", price: 15, unit: "كجم", category: "veg", available: true, hasSize: true },
+    { name: "باذنجان حشو", price: 20, unit: "كجم", category: "veg", available: true, hasSize: true },
+    { name: "خيار", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+    { name: "كوسة", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5, hasSize: true },
+    { name: "جزر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+    { name: "طماطم جامدة", price: 25, unit: "كجم", category: "veg", available: true, trend: "up", minWeight: 0.5 },
+    { name: "طماطم طبخ سليمة", price: 20, unit: "كجم", category: "veg", available: true, trend: "up", minWeight: 1 },
+    { name: "ليمون", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25 },
+    { name: "فلفل أخضر بارد", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.5, hasSize: true },
+    { name: "فلفل أخضر حار", price: 25, unit: "كجم", category: "veg", available: true, minWeight: 0.25, hasSize: true },
+    { name: "شطة خضراء", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5 },
+    { name: "فلفل أحمر بارد", price: 50, unit: "كجم", category: "veg", available: false, minWeight: 0.5 },
+    { name: "فلفل أحمر حار", price: 50, unit: "كجم", category: "veg", available: true, minWeight: 0.25, hasSize: true },
+    { name: "فلفل ألوان", price: 80, unit: "كجم", category: "veg", available: true, minWeight: 0.25, trend: "up" },
+    { name: "قلقاس", price: 35, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+    { name: "فاصوليا خضراء", price:  30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+    { name: "شبت وكسبرة (صغيرة) ", price: 10, unit: "ربطة", category: "veg", available: true, trend: "up" },
+    { name: "بقدونس", price: 10, unit: "ربطة", category: "veg", available: true },
+    { name: "فجل", price: 10, unit: "ربطة", category: "veg", available: true },
+    { name: "جرجير", price: 10, unit: "ربطة", category: "veg", available: true },
+    { name: "بصل أخضر", price: 10, unit: "ربطة", category: "veg", available: true },
+    { name: "سبانخ", price: 15, unit: "ربطة", category: "veg", available: true },
+    { name: "نعناع", price: 10, unit: "ربطة", category: "veg", available: true },
+    { name: "خس كابوتشا", price: 25, unit: "حبة", category: "veg", available: true },
+    { name: "زنجبيل فريش", price: 280, unit: "كجم", category: "veg", available: true },
+    { name: "بنجر", price: 30, unit: "كجم", category: "veg", available: true, minWeight: 0.5},
+    { name: "بصل أبيض", price: 30, unit: "كجم", category: "veg", available: false, minWeight: 1},
+    { name: "بطاطا", price: 20, unit: "كجم", category: "veg", available: true, minWeight: 1},
+    { name: "خس بلدي", price: 15, unit: "ربطة", category: "veg", available: true },
+    { name: "كرنب أحمر (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
+    { name: "كرنب أبيض (سلطة)", price: 30, unit: "حبة", category: "veg", available: true },
+    { name: "ذرة أصفر", price: 55, oldPrice: 65, unit: "طبق", category: "veg", available: false },
+    { name: "مشروم فريش", price: 65, oldPrice: 70, unit: "طبق", category: "veg", available: false },
+    { name: "أرز رويزق 10ك", price: 295, oldPrice: 300, unit: "شيكارة", category: "veg", available: true },
+    { name: "موز", price: 40, unit: "كجم", category: "fruit", available: true, trend: "down" },
+    { name: "تفاح أصفر", price: 100, unit: "كجم", category: "fruit", available: true },
+    { name: "تفاح سكري", price: 90, unit: "كجم", category: "fruit", available: true },
+    { name: "تفاح سكري٢", price: 80, unit: "كجم", category: "fruit", available: true },
+    { name: "تفاح أحمر لبناني", price: 70, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+    { name: "عنب أحمر كريمسون", price: 100, unit: "كجم", category: "fruit", available: true, trend: "up" },
+    { name: "عنب ببذر", price: 35, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+    { name: "بلح أسمر", price: 40, unit: "كجم", category: "fruit", available: true, trend: "up", minWeight: 0.5 },
+    { name: "برقوق يوناني", price: 120, unit: "كجم", category: "fruit", available: true },
+    { name: "كمثرى", price: 100, unit: "كجم", category: "fruit", available: false},
+    { name: "كاكا", price: 60, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+    { name: "مانجو كيت", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 1},
+    { name: "كنتالوب", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: true},
+    { name: "مانجو كريمسون", price: 100, unit: "كجم", category: "fruit", available: false, isSpecial: false, minWeight: 0.5}, 
+    { name: "تمر القصيم ٩٠٠جم", price: 130, unit: "علبة", category: "fruit", available: true, isSpecial: false },
+    { name: "جوافة بلطيمي", price: 70, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
+    { name: "جوافة", price: 50, unit: "كجم", category: "fruit", available: true, isSpecial: false, minWeight: 0.5 },
+    { name: "بلح برحي", price: 120, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+    { name: "بلح أحمر ", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+    { name: "برتقال بصرة", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+    { name: "كلمنتينا أخضر", price: 25, unit: "كجم", category: "fruit", available: true, minWeight: 0.5},
+    { name: "رمان", price: 40, unit: "كجم", category: "fruit", available: false, minWeight: 1},
+    { name: "رمان سكري", price: 50, unit: "كجم", category: "fruit", available: true, minWeight: 1},
+    { name: "قشطة عبدالرازق", price: 150, unit: "كجم", category: "fruit", available: true, minWeight: 0.5 },
+    { name: "كيوي", price: 170, unit: "كجم", category: "fruit", available: true, minWeight: 0.25 },
+];
 
 const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1J_pWLrzl6k8AlkY98wCT7tm-mKAn03Mv/export?format=csv';
 
@@ -476,6 +774,7 @@ async function loadPricesFromSheet() {
         if (rows.length < 2) throw new Error('جدول الأسعار فارغ أو غير صالح');
 
         let detectedStatus = 'تلقائي';
+
         rows.forEach(row => {
             row.forEach(cell => {
                 const txt = String(cell ?? '').trim();
@@ -483,6 +782,9 @@ async function loadPricesFromSheet() {
                 else if (txt === 'إجازة' || txt === 'اجازة') detectedStatus = 'إجازة';
                 else if (txt === 'مفتوح') detectedStatus = 'مفتوح';
                 else if (txt === 'تلقائي') detectedStatus = 'تلقائي';
+                else if (txt.startsWith('شريط:')) {
+                    sheetTickerText = txt.replace('شريط:', '').trim();
+                }
             });
         });
         manualWorkStatus = detectedStatus;
@@ -491,6 +793,7 @@ async function loadPricesFromSheet() {
             String(value).replace(/^\uFEFF/, '').trim()
         );
         const column = name => headers.indexOf(name);
+
         const requiredColumns = ['اسم الصنف', 'السعر بالجنيه', 'الوحدة', 'القسم', 'متاح؟'];
         if (requiredColumns.some(name => column(name) === -1)) {
             throw new Error('أسماء أعمدة جدول الأسعار لا تطابق القالب');
@@ -500,8 +803,29 @@ async function loadPricesFromSheet() {
             const index = column(name);
             return index < 0 ? '' : String(row[index] ?? '').trim();
         };
-        const yes = value => ['نعم', 'متاح', 'نعم متاح', 'yes', 'true', '1'].includes(value.toLowerCase());
-        const no = value => ['لا', 'غير متاح', 'نفد', 'no', 'false', '0'].includes(value.toLowerCase());
+        const yes = value => ['نعم', 'متاح', 'نعم متاح', 'مفعل', 'تفعيل', 'yes', 'true', '1'].includes(String(value).toLowerCase());
+        const no = value => ['لا', 'غير متاح', 'نفد', 'معطل', 'تعطيل', 'no', 'false', '0'].includes(String(value).toLowerCase());
+
+        for (let i = 1; i < rows.length; i++) {
+            const tickerColVal = get(rows[i], 'الشريط المتحرك');
+            if (tickerColVal) { sheetTickerText = tickerColVal; break; }
+        }
+
+        for (let i = 1; i < rows.length; i++) {
+            const popStatusVal = get(rows[i], 'حالة النافذة');
+            if (popStatusVal) { sheetPopupEnabled = yes(popStatusVal); break; }
+        }
+
+        for (let i = 1; i < rows.length; i++) {
+            const popTitleVal = get(rows[i], 'عنوان النافذة');
+            if (popTitleVal) { sheetPopupTitle = popTitleVal; break; }
+        }
+
+        for (let i = 1; i < rows.length; i++) {
+            const popBodyVal = get(rows[i], 'محتوى النافذة');
+            if (popBodyVal) { sheetPopupContent = popBodyVal; break; }
+        }
+
         const updatedProducts = [];
 
         rows.slice(1).forEach(row => {
@@ -551,6 +875,14 @@ async function loadPricesFromSheet() {
             const storageText = get(row, 'مناسب للتخزين');
             product.isStorage = yes(storageText);
 
+            const sizeText = get(row, 'الحجم؟') || get(row, 'حجم؟') || get(row, 'الحجم') || get(row, 'حجم');
+            if (sizeText) {
+                product.hasSize = yes(sizeText);
+            }
+
+            const imgUrl = get(row, 'رابط الصورة');
+            if (imgUrl) product.img = imgUrl;
+
             updatedProducts.push(product);
         });
 
@@ -561,77 +893,102 @@ async function loadPricesFromSheet() {
     }
 }
 
-        function init() {
+function init(preserveCart = false) {
     try {
+        const savedQuantities = {};
+        const savedNotes = {};
+        if (preserveCart) {
+            document.querySelectorAll('.quantity-select').forEach(s => {
+                if (s.value && s.value !== '0') savedQuantities[s.dataset.name] = s.value;
+            });
+            document.querySelectorAll('.note-select').forEach(s => {
+                if (s.value) savedNotes[s.dataset.name] = s.value;
+            });
+        }
+
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
         document.getElementById('date-display').innerText = now.toLocaleDateString('ar-EG', options).replace(" في ", " - ");
 
-        let sVeg = '', sFruit = '', iAll = '';
+        let iVeg = '', iFruit = '';
         productsData.forEach(p => {
             const specialBadge = p.isSpecial ? `<span class="special-star" data-tooltip="مميز">⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
             const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
+            
+            const imgTag = p.img ? `<img src="${p.img}" alt="${p.name}" class="product-img">` : `<div class="product-img-placeholder">🛒</div>`;
 
             let trendArrow = '';
             if (p.trend === 'down') {
-                trendArrow = `
-                    <svg class="w-3.5 h-3.5 text-red-600 animate-pulse inline-block" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 21l-10-18h20z"/>
-                    </svg>`;
+                trendArrow = `<svg class="w-3 h-3 text-red-600 animate-pulse inline-block" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21l-10-18h20z"/></svg>`;
             } else if (p.trend === 'up') {
-                trendArrow = `
-                    <svg class="w-3.5 h-3.5 text-green-600 inline-block" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 3l10 18h-20z"/>
-                    </svg>`;
+                trendArrow = `<svg class="w-3 h-3 text-green-600 inline-block" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3l10 18h-20z"/></svg>`;
             }
 
-            const priceDiv = `
+            const priceDiv = p.available ? `
                 <div class="item-price-part">
                     ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج</span>` : ''}
-                    <div class="flex items-center gap-1">
+                    <div class="flex items-center gap-0.5">
                         ${trendArrow}
                         <span class="current-price">${p.price} ج</span>
                     </div>
+                </div>` : `
+                <div class="item-price-part">
+                    <span class="text-gray-400 font-bold text-xs">غير متوفر</span>
                 </div>`;
 
-            // اسم الصنف والنجمة في سطر واحد أفقي مانع للنزول، وباقي الشارات في سطر أسفل منه
-            const sRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part">
-                    <div style="white-space: nowrap; display: inline-flex; align-items: center;"><span>${p.name}</span>${specialBadge}</div>
-                    <div class="badge-container">${storageBadge}${offerBadge}</div>
-                    ${p.available ? '' : '<div class="text-red-500 font-bold text-xs mt-1">(غير متوفر)</div>'}
-                </div>
-                ${p.available ? priceDiv : '<div class="text-red-500 font-bold text-xs">---</div>'}
-            </div>`;
+            const sizeSelectHTML = p.hasSize ? `
+                <div class="item-action-row">
+                    <select class="note-select" onchange="updateStickyCartBar()" data-name="${p.name}">
+                        <option value="">-- الحجم --</option>
+                        <option value="صغير">صغير</option>
+                        <option value="وسط">وسط</option>
+                        <option value="كبير">كبير</option>
+                        <option value="مشكل">مشكل</option>
+                    </select>
+                </div>` : '';
+
+            const actionPart = p.available ? `
+                <div class="item-action-container">
+                    <div class="item-action-row">
+                        <select class="quantity-select" onchange="updateStickyCartBar()" data-unit="${p.unit}" data-name="${p.name}">
+                            <option value="0">-- الكمية --</option>
+                        </select>
+                    </div>
+                    ${sizeSelectHTML}
+                </div>` : '';
 
             const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
-                <div class="item-name-part text-sm">
-                    <div class="font-bold" style="white-space: nowrap; display: inline-flex; align-items: center;"><span>${p.name}</span>${specialBadge}</div>
-                    <div class="badge-container">${storageBadge}${offerBadge}</div>
-                    <div class="mt-1 flex items-center justify-start gap-1.5">
-                        ${p.oldPrice ? `<span class="old-price" style="font-size: 0.7rem; margin-left: 5px;">${p.oldPrice} ج</span>` : ''}
-                        ${trendArrow}
-                        <span class="text-green-600 font-bold text-xs">${p.price} ج / ${p.unit}</span>
+                <div class="item-right-group">
+                    ${imgTag}
+                    <div class="item-text-content">
+                        <div class="item-main-title">
+                            <span>${p.name}</span>${specialBadge}
+                        </div>
+                        <div class="badge-container">
+                            ${storageBadge}
+                            ${offerBadge}
+                        </div>
                     </div>
                 </div>
-                <div class="item-action-part">${p.available ? `<select class="quantity-select" data-unit="${p.unit}" data-name="${p.name}"></select>` : '<span class="text-red-500 font-bold text-xs">غير متوفر</span>'}</div>
+                ${priceDiv}
+                <div class="item-action-part">
+                    ${actionPart}
+                </div>
             </div>`;
 
             if (p.category === 'fruit') {
-                sFruit += sRow;
+                iFruit += iRow;
             } else {
-                sVeg += sRow;
+                iVeg += iRow;
             }
-            iAll += iRow;
         });
 
-        document.getElementById('vegetables-list-static').innerHTML = sVeg;
-        document.getElementById('fruits-list-static').innerHTML = sFruit;
-        document.getElementById('interactive-lists-combined').innerHTML = iAll;
+        document.getElementById('vegetables-list-interactive').innerHTML = iVeg;
+        document.getElementById('fruits-list-interactive').innerHTML = iFruit;
 
         document.querySelectorAll('.quantity-select').forEach(s => {
-            let opts = '<option value="0">-- طلب --</option>';
+            let opts = '<option value="0">-- الكمية --</option>';
             if (s.dataset.unit === 'كجم') {
                 const product = productsData.find(p => p.name === s.dataset.name);
                 const minWeight = product?.minWeight || 0.125;
@@ -662,173 +1019,408 @@ async function loadPricesFromSheet() {
                 }
             }
             s.innerHTML = opts;
+
+            if (preserveCart && savedQuantities[s.dataset.name]) {
+                s.value = savedQuantities[s.dataset.name];
+            }
         });
+
+        if (preserveCart) {
+            document.querySelectorAll('.note-select').forEach(s => {
+                if (savedNotes[s.dataset.name]) {
+                    s.value = savedNotes[s.dataset.name];
+                }
+            });
+            filterProducts();
+        } else {
+            loadCustomerData();
+            checkPreviousOrdersCount();
+        }
+
+        updateWorkSchedule();
+        applySheetUIControls();
+        if (preserveCart) updateStickyCartBar();
     } catch (e) { console.error(e); }
 }
 
-        async function startApp() {
-            await loadPricesFromSheet();
-            updateWorkSchedule();
-            init();
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', startApp);
-        } else {
-            startApp();
-        }
-
-       function toggleView(v) {
+async function startApp() {
+    await loadPricesFromSheet();
     updateWorkSchedule();
-
-    const priceView = document.getElementById('price-list-view');
-    const orderView = document.getElementById('order-form-view');
-    const reviewsView = document.getElementById('reviews-view');
-    const mainTitle = document.getElementById('main-title');
-
-    if (v === 'order-form-view') {
-        if (holidayMode) {
-            alert("❤️ نحن في إجازتنا الأسبوعية.\nسنعاود استقبال الطلبات يوم السبت الساعة 7 صباحاً إن شاء الله.");
-            return;
-        }
-
-        if (closeAfterHoursMode) {
-            alert("🚨 نحن الآن خارج أوقات العمل.\n\nيمكنكم الإطلاع على قائمة الأسعار، وسنكون في انتظاركم عند بدء استقبال الطلبات الساعة 7 صباحاً إن شاء الله! ❤️");
-            return;
-        }
-    }
-
-    if(priceView) priceView.style.display = 'none';
-    if(orderView) orderView.style.display = 'none';
-    if(reviewsView) reviewsView.style.display = 'none';
-
-    if (v === 'order-form-view') {
-        orderView.style.display = 'block';
-        mainTitle.textContent = '🛒 نموذج طلب واتساب';
-    } else if (v === 'reviews-view') {
-        reviewsView.style.display = 'block';
-        mainTitle.textContent = '⭐⭐ مراجعات وآراء عملاءنا الكرام ⭐⭐';
-    } else {
-        priceView.style.display = 'block';
-        mainTitle.textContent = '💰أسعار اليوم💰';
-    }
-
-    window.scrollTo(0, 0);
+    init(false);
 }
 
-        function generateWhatsAppOrder() {
-            updateWorkSchedule();
+// التحديث التلقائي الذكي في الخلفية كل دقيقتين (مع الحفاظ على مكان الشاشة والسلة)
+setInterval(async () => {
+    try {
+        const currentScroll = window.scrollY;
+        await loadPricesFromSheet();
+        updateWorkSchedule();
+        init(true);
+        window.scrollTo(0, currentScroll);
+    } catch (e) {
+        console.warn("تعذر التحديث التلقائي في الخلفية:", e);
+    }
+}, 120000);
 
-            if (holidayMode) {
-                alert("❤️ نحن في إجازتنا الأسبوعية.\nلا يمكن إرسال الطلبات حالياً، وسنعاود العمل السبت الساعة 7 صباحاً إن شاء الله.");
-                return;
-            }
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startApp);
+} else {
+    startApp();
+}
 
-            if (closeAfterHoursMode) {
-                alert("🚨 انتهت مواعيد استقبال الطلبات اليوم.\nيمكنك تصفح القائمة الآن وإرسال طلبك صباحاً.");
-                return;
-            }
+function scrollToCheckout() {
+    const checkoutSec = document.getElementById('order-checkout-section');
+    if (checkoutSec) {
+        checkoutSec.scrollIntoView({ behavior: 'smooth' });
+    }
+}
 
-            let vegItems = '', fruitItems = '', count = 0;
-            document.querySelectorAll('.quantity-select').forEach(s => {
-                if (s.value != "0") {
-                    const itemName = s.dataset.name, quantityText = s.options[s.selectedIndex].text;
-                    const itemLine = `• ${quantityText} ${itemName}\n`;
-                    const product = productsData.find(p => p.name === itemName);
-                    if (product && product.category === 'veg') vegItems += itemLine; else fruitItems += itemLine;
-                    count++;
-                }
+function getSelectedCartItems() {
+    let items = [];
+    document.querySelectorAll('.quantity-select').forEach(s => {
+        const val = s.value;
+        const itemName = s.dataset.name;
+        if (val && val !== "0" && val !== "0.0" && val !== "undefined" && itemName) {
+            items.push({
+                name: itemName,
+                val: val,
+                unit: s.dataset.unit,
+                selectElement: s
             });
-            if (count === 0) return alert("من فضلك اختر صنف واحد على الأقل!");
-            
-            let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية:*\n------------------\n';
-            if (vegItems) msg += '🥬 *الخضروات:*\n' + vegItems;
-            if (fruitItems) msg += '🍉 *الفواكه:*\n' + fruitItems;
-            msg += '------------------\n📦 *التوصيل:*\n💰 *الإجمالي:*\n------------------\n';
-            msg += `📌 *الملاحظات والعنوان:*\n${document.getElementById('notes').value || 'لا يوجد'}`;
-            
-            window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
         }
+    });
+    return items;
+}
 
-        function confirmMyRating() {
-            const selectedStar = document.querySelector('input[name="rating"]:checked');
-            if (!selectedStar) return alert("من فضلك اختر عدد النجوم أولاً! 😊");
-            const stars = parseInt(selectedStar.value);
-            const myWhatsAppNumber = "201032872750";
+function updateStickyCartBar() {
+    if (holidayMode || closeAfterHoursMode) return;
+    const selectedItems = getSelectedCartItems();
+    const count = selectedItems.length;
 
-            if (stars >= 4) {
-                if (confirm(`شكراً لتقييمك الراقي بـ ${stars} نجوم! ⭐\nهل تود دعمنا بكتابة رأيك الجميل على صفحة فيسبوك؟`)) {
-                    finalizeRating(); window.open("https://www.facebook.com/3oroadtawfeer", '_blank');
-                }
-            } else {
-                if (confirm(`نعتذر عن أي تقصير (تقييمك ${stars} نجوم) ⭐\nهل تود مراسلتنا على واتساب لنعرف سبب التقييم ونقدم الحل المناسب بإذن الله`)) {
-                    finalizeRating();
-                    let starEmojis = '⭐'.repeat(stars);
-                    let msg = `⚠️ ملاحظة عميل: تقييم  ${stars} نجوم ${starEmojis}(من فضلك اكتب ملاحظاتك هنا)`;
-                    window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-                }
+    const stickyBar = document.getElementById('sticky-cart-bar');
+    const stickyCount = document.getElementById('sticky-cart-count');
+
+    if (count > 0) {
+        stickyCount.textContent = `${count} أصناف`;
+        stickyBar.style.display = 'flex';
+    } else {
+        stickyBar.style.display = 'none';
+        closeCartPreviewModal();
+    }
+
+    const modal = document.getElementById('cart-preview-modal');
+    if (modal.style.display === 'flex') {
+        renderCartPreviewItems();
+    }
+}
+
+function generateModalQuantityOptions(unit, selectedVal, productName) {
+    let opts = '<option value="0">حذف</option>';
+    if (unit === 'كجم') {
+        const product = productsData.find(p => p.name === productName);
+        const minWeight = product?.minWeight || 0.125;
+        const weights = [
+            {v:0.125,t:'⅛ك'},
+            {v:0.25,t:'¼ك'},
+            {v:0.5,t:'½ك'},
+            {v:0.75,t:'¾ك'}
+        ];
+        let filteredWeights = weights.filter(w => w.v >= minWeight);
+        for(let i=1; i<=10; i++){
+            filteredWeights.push({v:i,t:i+'ك'});
+            if(i<10){
+                if(i+0.25 >= minWeight) filteredWeights.push({v:i+0.25,t:i+'و¼ك'});
+                if(i+0.5 >= minWeight) filteredWeights.push({v:i+0.5,t:i+'و½ك'});
+                if(i+0.75 >= minWeight) filteredWeights.push({v:i+0.75,t:i+'و¾ك'});
             }
         }
-
-        function finalizeRating() {
-            const f = document.getElementById('rating-feedback'), b = document.getElementById('confirm-btn'), s = document.querySelector('.star-rating');
-            if(f) f.classList.remove('hidden'); if(b) b.classList.add('hidden');
-            if(s) { s.style.pointerEvents = 'none'; s.style.opacity = '0.5'; }
+        for(let i=11;i<=25;i++){
+            filteredWeights.push({v:i,t:i+'ك'});
         }
+        filteredWeights.forEach(w=>{
+            const isSel = String(selectedVal) === String(w.v) ? 'selected' : '';
+            opts += `<option value="${w.v}" ${isSel}>${w.t}</option>`;
+        });
+    } else {
+        for(let i=1;i<=20;i++){
+            const isSel = String(selectedVal) === String(i) ? 'selected' : '';
+            opts += `<option value="${i}" ${isSel}>${i} ${unit}</option>`;
+        }
+    }
+    return opts;
+}
+
+function openCartPreviewModal() {
+    if (holidayMode || closeAfterHoursMode) return;
+    renderCartPreviewItems();
+    document.getElementById('cart-preview-modal').style.display = 'flex';
+}
+
+function renderCartPreviewItems() {
+    const listContainer = document.getElementById('cart-preview-items-list');
+    const selectedItems = getSelectedCartItems();
+    let html = '';
+
+    if (selectedItems.length === 0) {
+        html = '<p class="text-center text-gray-500 py-6 text-sm">لم تقم باختيار أي أصناف بعد!</p>';
+    } else {
+        selectedItems.forEach(item => {
+            const noteSelect = document.querySelector(`.note-select[data-name="${item.name}"]`);
+            const noteValue = noteSelect ? noteSelect.value : "";
+            const notePart = noteValue ? ` (${noteValue})` : "";
+
+            const quantityOptions = generateModalQuantityOptions(item.unit, item.val, item.name);
+
+            html += `
+                <div class="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl p-3 gap-2">
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold text-gray-800 text-sm truncate">${item.name}${notePart}</div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <select onchange="updateQuantityFromModal('${item.name}', this.value)" class="quantity-select text-xs h-8 w-20">
+                            ${quantityOptions}
+                        </select>
+                        <button onclick="removeItemFromCart('${item.name}')" class="bg-red-100 text-red-600 hover:bg-red-200 px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                            <span>🗑️</span>
+                            <span>حذف</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    listContainer.innerHTML = html;
+}
+
+function updateQuantityFromModal(itemName, newVal) {
+    const mainSelect = document.querySelector(`.quantity-select[data-name="${itemName}"]`);
+    if (mainSelect) {
+        if (newVal === "0") {
+            removeItemFromCart(itemName);
+        } else {
+            mainSelect.value = newVal;
+            updateStickyCartBar();
+        }
+    }
+}
+
+function closeCartPreviewModal() {
+    document.getElementById('cart-preview-modal').style.display = 'none';
+}
+
+function removeItemFromCart(itemName) {
+    const select = document.querySelector(`.quantity-select[data-name="${itemName}"]`);
+    if (select) {
+        select.value = "0";
+    }
+    const noteSelect = document.querySelector(`.note-select[data-name="${itemName}"]`);
+    if (noteSelect) {
+        noteSelect.value = "";
+    }
+    updateStickyCartBar();
+}
+
+function saveCustomerData() {
+    const data = {
+        name: document.getElementById('cust-name').value,
+        phone: document.getElementById('cust-phone').value,
+        address: document.getElementById('cust-address').value,
+        landmark: document.getElementById('cust-landmark').value
+    };
+    localStorage.setItem('shirbin_customer_info', JSON.stringify(data));
+}
+
+function loadCustomerData() {
+    const saved = localStorage.getItem('shirbin_customer_info');
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            if (data.name) document.getElementById('cust-name').value = data.name;
+            if (data.phone) document.getElementById('cust-phone').value = data.phone;
+            if (data.address) document.getElementById('cust-address').value = data.address;
+            if (data.landmark) document.getElementById('cust-landmark').value = data.landmark;
+        } catch(e) {}
+    }
+}
+
+function saveOrderToHistory(orderItems) {
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
+
+    const newOrder = {
+        date: new Date().toLocaleDateString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        items: orderItems
+    };
+
+    history.unshift(newOrder);
+    if (history.length > 5) history = history.slice(0, 5);
+    localStorage.setItem('shirbin_orders_history', JSON.stringify(history));
+    checkPreviousOrdersCount();
+}
+
+function checkPreviousOrdersCount() {
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
+    const subtext = document.getElementById('repeat-order-subtext');
+    if (!subtext) return;
+    if (history.length === 0) {
+        subtext.textContent = '(لا توجد طلبات سابقة محفوظة)';
+    } else {
+        subtext.textContent = `(لديك ${history.length} طلبات سابقة)`;
+    }
+}
+
+function openRepeatOrdersModal() {
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
+    if (history.length === 0) {
+        alert("لا توجد طلبات سابقة محفوظة على هذا الجهاز بعد.");
+        return;
+    }
+
+    const container = document.getElementById('previous-orders-container');
+    container.innerHTML = history.map((ord, idx) => `
+        <div class="border-2 border-green-200 rounded-xl p-3 bg-green-50/50 hover:bg-green-100/50 transition">
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-bold text-green-800 text-xs">📅 طلب ${ord.date}</span>
+                <button onclick="restoreOrder(${idx})" class="bg-green-600 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-green-700 active:scale-95 transition">
+                    تكرار هذا الطلب 🔄
+                </button>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed">${ord.items.map(i => i.name + (i.note ? ' (' + i.note + ')' : '') + ' (' + i.qText + ')').join(' ، ')}</p>
+        </div>
+    `).join('');
+
+    document.getElementById('repeat-orders-modal').style.display = 'flex';
+}
+
+function closeRepeatOrdersModal() {
+    document.getElementById('repeat-orders-modal').style.display = 'none';
+}
+
+function restoreOrder(index) {
+    if (holidayMode || closeAfterHoursMode) {
+        alert("نعتذر، المتجر مغلق حالياً ولا يمكن استعادة الطلبات.");
+        return;
+    }
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
+    const selected = history[index];
+    if (!selected) return;
+
+    let unavailableCount = 0;
+    document.querySelectorAll('.quantity-select').forEach(s => s.value = "0");
+    document.querySelectorAll('.note-select').forEach(s => s.value = "");
+
+    selected.items.forEach(item => {
+        const product = productsData.find(p => p.name === item.name);
+        if (product && product.available) {
+            const select = document.querySelector(`.quantity-select[data-name="${item.name}"]`);
+            const noteSelect = document.querySelector(`.note-select[data-name="${item.name}"]`);
+            if (select) select.value = item.val;
+            if (noteSelect && item.note) noteSelect.value = item.note;
+        } else {
+            unavailableCount++;
+        }
+    });
+
+    closeRepeatOrdersModal();
+    window.scrollTo(0, 0);
+    updateStickyCartBar();
+
+    if (unavailableCount > 0) {
+        alert(`تم استعادة طلبك بنجاح! ⚠️ ولكن تعذر إضافة ${unavailableCount} صنف لعدم توفرها اليوم.`);
+    } else {
+        alert("تم استعادة جميع أصناف طلبك بنجاح! ✅");
+    }
+}
+
+function generateWhatsAppOrder() {
+    updateWorkSchedule();
+
+    if (holidayMode) { alert("❤️ نحن في إجازتنا الأسبوعية."); return; }
+    if (closeAfterHoursMode) { alert("🚨 انتهت مواعيد استقبال الطلبات اليوم."); return; }
+
+    const selectedItems = getSelectedCartItems();
+    if (selectedItems.length === 0) return alert("من فضلك اختر صنف واحد على الأقل من القائمة!");
+
+    let vegItems = '', fruitItems = '';
+    let currentOrderItems = [];
+
+    selectedItems.forEach(item => {
+        const select = item.selectElement;
+        const quantityText = select.options[select.selectedIndex].text;
+        
+        const noteSelect = document.querySelector(`.note-select[data-name="${item.name}"]`);
+        const noteValue = noteSelect ? noteSelect.value : "";
+        const notePart = noteValue ? ` (${noteValue})` : "";
+
+        const itemLine = `• ${quantityText} ${item.name}${notePart}\n`;
+        
+        const product = productsData.find(p => p.name === item.name);
+        if (product && product.category === 'fruit') {
+            fruitItems += itemLine;
+        } else {
+            vegItems += itemLine;
+        }
+
+        currentOrderItems.push({ name: item.name, val: item.val, qText: quantityText, note: noteValue });
+    });
+
+    saveCustomerData();
+    saveOrderToHistory(currentOrderItems);
+
+    const cName = document.getElementById('cust-name').value;
+    const cPhone = document.getElementById('cust-phone').value;
+    const cAddress = document.getElementById('cust-address').value;
+    const cLandmark = document.getElementById('cust-landmark').value;
+    const cNotes = document.getElementById('notes').value;
+
+    let fullNotesAndAddr = '';
+    if (cName) fullNotesAndAddr += `الاسم: ${cName}\n`;
+    if (cPhone) fullNotesAndAddr += `الموبايل: ${cPhone}\n`;
+    if (cAddress) fullNotesAndAddr += `العنوان: ${cAddress}\n`;
+    if (cLandmark) fullNotesAndAddr += `علامة مميزة: ${cLandmark}\n`;
+    if (cNotes) fullNotesAndAddr += `ملاحظات: ${cNotes}\n`;
+
+    let msg = '📝 *طلب جديد عبر قائمة الأسعار التفاعلية*\n';
+    msg += '-----------------------------\n';
+    
+    if (vegItems) {
+        msg += '🥬 *الخضروات:*\n' + vegItems;
+        msg += '-----------------------------\n';
+    }
+    if (fruitItems) {
+        msg += '🍉 *الفواكه:*\n' + fruitItems;
+        msg += '-----------------------------\n';
+    }
+    
+    msg += `🛒 *عدد الأصناف: ${selectedItems.length}*\n`;
+    msg += '-----------------------------\n';
+
+    msg += '📦 *التوصيل:*\n';
+    msg += '-----------------------------\n';
+    msg += '💰 *الإجمالي:*\n';
+    msg += '-----------------------------\n';
+    msg += '📌 *الملاحظات والعنوان:*\n' + (fullNotesAndAddr || 'لا يوجد');
+
+    window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
+
+    // تفريغ السلة وإعادة الصفحة للقائمة الرئيسية فوراً
+    document.querySelectorAll('.quantity-select').forEach(s => s.value = "0");
+    document.querySelectorAll('.note-select').forEach(s => s.value = "");
+    updateStickyCartBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 function filterProducts() {
     const term = document.getElementById('search-input').value.toLowerCase();
-    const rows = document.querySelectorAll('.flex-row-item');
-
-    rows.forEach(row => {
-        const name = row.querySelector('.item-name-part').innerText.toLowerCase();
-        if (name.includes(term)) {
-            row.style.display = 'flex';
-        } else {
-            row.style.display = 'none';
-        }
+    document.querySelectorAll('.flex-row-item').forEach(row => {
+        const name = row.querySelector('.item-main-title').innerText.toLowerCase();
+        row.style.display = name.includes(term) ? 'flex' : 'none';
     });
 }
-
-const allReviews = [
-    { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
-    { name: "Aml Saad", text: `ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر` },
-    { name: "أ/سارة", text: `ايه تقييم حضرتك لنظام الطلب الجديد؟ جميل جدا جدا بيفكرنى بكل اللى محتاجاه` },
-    { name: "أ.مدحت", text: `السلام عليكم ملاحظه : البطيخه السابقه كانت أحلى بطيخه أكلناها فى حياتنا ، ربنا يوسع عليكم. بطيخه زى بتاعة المره اللى فاتت وشكرا` },
-    { name: "د.ميرفت", text: `السلام عليكم لسه فاتحه البطيخه النهارده سكككككككر تسلم ايدك` },
-    { name: "Om Eslam", text: `تمام الحمد لله أنا دوخت علي رقمك وصفحتك واضطريت اجيب من ناس تانيه بس بصراحه التعامل مع حضرتك حاجه تانيه` },
-    { name: "السيد حسن", text: `جزاك الله خيرا الحاجه ما شاء ممتازة ومتنقيه كويس جدا وأسعارها زي السوق وكل حاجه ما شاء الله تبارك الله أحسن من التانية وكمان المواعيد ممتازة ما شاء الله جزاك الله خيرا 🌹🌹` },
-    { name: "Adam", text: `خدمه اكتر من ممتازه والله والخضار والفاكهه فعلا ع الفرازه كان الواحد هوه بنفسه ال بيشترى وكمان ال بيوصل الاوردر ناس محترمه جدااا من نجاح لنجاح وجزاكم الله خيرا` },
-    { name: "dr. Amira", text: "البطيخ؟ جميل جدا 👏🏻👏🏻👏🏻" },
-    { name: "أ/سارة", text: `ما شاء الله الحاجة جميلة وطازة، ده أول تعامل معاكم وعجبني جدا الحاجة وسرعة التوصيل` },
-    { name: "dr.eman", text: `ربنا يجزيك الحسني و زياده كفايه ان الخضار و الفاكهه بتقيهم كأنهم لبيتك و الله ساعات بيباتوا في اكياسهم و بلاقيهم لسه زي الفل ربنا يبارك لك يا ابني و يجعله في ميزان حسناتك` },
-    { name: "أ/هبه", text: `شكرا لحضرتك الاوردر ممتاز ان شاء الله مش اخر تعامل` },
-    { name: "مدام سالي", text: `الاوردر وصل والحاجه كلها حلوة ما شاء الله تسلم الأيادي يارب تفضل علي نفس المستوي علطول بإذن الله جزاكم الله خيرا` },
-    { name: "", text: `شكرا على حسن معاملتكم والبدنجان والفاكهه جميله جدا` },
-    { name: "مدام سالي", text: `شكرا ع الحاجه جميله جدااااا كالعاده يارب دايما متميزين` },
-    { name: "", text: `شكرا عالحاجة جميلة جدا والبلح نضيف ماشاءالله... كنت برة فمشوار وبناتي اللي استلموا الاوردر.. تسلموا ع امانتكم` },
-    { name: "أ/شيرين", text: `الف شكر عالاوردر كله و عالهدية ماشاءالله تبارك الرحمن روعة تسلم ايدك` },
-    { name: "أوشو", text: `ماشاء الله الفاكهه جميلة جداا والله ومفيش فيها حاجه وحشه وخصوصا الفراولة عجبت مامتي جداا كأنها هي اللي شرياها وفضلت تقول انا بنقيها ومش بتبقى حمرا وجامده كدا، ربنا يزيدكو ياارب وان شاء الله مش اخر مره 💜` },
-    { name: "", text: `الفاكهة جميلة جدا زي كل مرة طبعا ماشاءالله ربنا يزيدك من نعيم الله و دايما جايبلنا الحاجات الحلوة` },
-    { name: "", text: `البطيخ جميل جداً ما شاء الله، والخوخ تحفه، والمشمش ربنا يبارك` }
-];
-
-function loadReviews() {
-    const container = document.getElementById('reviews-container');
-    if(!container) return;
-    
-    container.innerHTML = allReviews.map(rev => `
-        <div class="bg-white p-5 rounded-2xl shadow-sm border-r-4 border-green-500 mb-4">
-            <div class="flex justify-between items-center mb-2">
-                <span class="font-bold text-green-700">${rev.name}</span>
-                <span class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐</span>
-            </div>
-            <p class="text-gray-700 italic">"${rev.text}"</p>
-        </div>
-    `).join('');
-}
-
-window.addEventListener('DOMContentLoaded', loadReviews);
     </script>
 </body>
 </html>
