@@ -1,9 +1,11 @@
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open('shirbin-delivery-v1').then((cache) => {
+    caches.open('tawfeer-delivery-v1').then((cache) => {
       return cache.addAll([
-        '/',
-        '/index.html'
+        './',
+        './index.html',
+        './manifest.json',
+        './icon.png'
       ]);
     })
   );
