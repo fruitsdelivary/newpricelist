@@ -204,7 +204,6 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KV5JX7DJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/45">
         <header class="text-center mb-6">
             <div class="hero-title-box mb-5">
@@ -345,9 +344,13 @@
             </button>
             <a href="https://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg hover:bg-green-600">📨 مراسلة واتساب مباشرة</a>
             <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg hover:bg-blue-800">🔵 زيارة صفحة الفيسبوك</a>
+            
+            <!-- (التعديل 4) حقوق النشر -->
+            <div class="mt-6 pt-4 border-t border-gray-200 text-gray-500 text-xs font-bold">
+                جميع الحقوق محفوظة لمؤسسة عروض التوفير © 2026
+            </div>
         </footer>
     </div>
-
     <!-- فقاعة "شوف رأي الناس" الدائرية العائمة (على اليسار) -->
     <div id="floating-bubble-container">
         <div onclick="toggleReviewsView()" class="floating-reviews-bubble">
@@ -356,7 +359,6 @@
             <span class="text-[9px] font-extrabold leading-tight">شوف رأى<br>الناس</span>
         </div>
     </div>
-
     <!-- فقاعة "حمّل التطبيق" الدائرية العائمة (على اليمين - بنفس حجم وشكل فقاعة اليسار) -->
     <div id="app-install-bubble-container">
         <div onclick="handleAppInstallClick()" class="floating-app-bubble">
@@ -365,7 +367,6 @@
             <span class="text-[9px] font-extrabold leading-tight">حمّل<br>التطبيق</span>
         </div>
     </div>
-
     <!-- نافذة تعليمات التثبيت للآيفون (iOS) -->
     <div id="ios-install-modal" style="display: none;" onclick="closeIosInstallModal()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100002] flex items-center justify-center p-4">
         <div onclick="event.stopPropagation()" class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl border-4 border-green-600 text-center animate-pop-in relative">
@@ -390,7 +391,6 @@
             </button>
         </div>
     </div>
-
     <!-- الشريط السفلي المدمج والمحدث -->
     <div id="sticky-cart-bar" style="display: none;" class="fixed bottom-0 left-0 right-0 bg-green-700 text-white p-3 shadow-2xl z-40 border-t-2 border-yellow-400 flex justify-between items-center px-4 max-w-3xl mx-auto rounded-t-2xl gap-2">
         <button onclick="openCartPreviewModal()" class="flex-1 bg-yellow-400 text-black font-extrabold py-2.5 px-3 rounded-xl text-xs sm:text-sm shadow hover:bg-yellow-300 active:scale-95 transition flex items-center justify-center gap-1.5 whitespace-nowrap">
@@ -403,7 +403,6 @@
             <span>📝</span>
         </button>
     </div>
-
     <!-- نافذة منبثقة لمراجعة وتعديل الكميات -->
     <div id="cart-preview-modal" style="display: none;" class="fixed inset-0 bg-black/60 z-[10000] flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl border-t-4 sm:border-2 border-green-600 relative max-h-[85vh] flex flex-col">
@@ -420,7 +419,6 @@
             </div>
         </div>
     </div>
-
     <div id="repeat-orders-modal" style="display: none;" class="fixed inset-0 bg-black/60 z-[10000] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl border-2 border-green-500 relative">
             <button onclick="closeRepeatOrdersModal()" class="absolute top-3 left-3 bg-gray-200 text-gray-700 w-7 h-7 rounded-full font-bold text-xs hover:bg-gray-300">✕</button>
@@ -428,7 +426,6 @@
             <div id="previous-orders-container" class="space-y-3 max-h-80 overflow-y-auto p-1"></div>
         </div>
     </div>
-
     <!-- النافذة العائمة الترحيبية (النصية) -->
     <div id="welcome-popup-modal" style="display: none;" class="fixed inset-0 bg-black/65 backdrop-blur-sm z-[99999] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border-4 border-green-500 overflow-hidden animate-pop-in relative">
@@ -452,7 +449,6 @@
             </div>
         </div>
     </div>
-
     <!-- النافذة العائمة للصورة الإعلانية (زر الغلق بارز وخارج إطار الصورة تماماً) -->
     <div id="image-popup-modal" style="display: none;" onclick="closeImagePopup()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100001] flex items-center justify-center p-4">
         <div onclick="event.stopPropagation()" class="relative w-full max-w-xs sm:max-w-sm flex flex-col items-center animate-pop-in">
@@ -465,7 +461,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // تسجيل الـ Service Worker لتفعيل التثبيت تلقائياً
         if ('serviceWorker' in navigator) {
@@ -475,7 +470,6 @@
                     .catch(err => console.log('Service Worker registration failed', err));
             });
         }
-
 let staticReviews = [
     { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
     { name: "Aml Saad", text: "ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر" },
@@ -500,8 +494,11 @@ let staticReviews = [
 ];
 let dynamicReviews = [];
 const REVIEWS_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/190JiCNDIszJipXgd1BPPs4Gb6jqa0jmcT8uafwd-l50/export?format=csv';
+
+// (التعديل 1) التوافق مع الأجهزة والمتصفحات القديمة (iOS 12-15)
 async function loadReviewsFromSheet() {
     try {
+        if (typeof window.fetch !== 'function') return;
         const response = await fetch(REVIEWS_SHEET_CSV_URL, { cache: 'no-store' });
         if (!response.ok) return;
         const csvText = await response.text();
@@ -545,6 +542,8 @@ async function renderReviews() {
         </div>
     `).join('');
 }
+
+// (التعديل 3) العودة لأعلى الصفحة تماماً عند غلق المراجعات
 function toggleReviewsView() {
     const rv = document.getElementById('reviews-view');
     if (rv) {
@@ -553,6 +552,8 @@ function toggleReviewsView() {
         if (isHidden) {
             renderReviews();
             window.scrollTo({ top: rv.offsetTop - 20, behavior: 'smooth' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
 }
@@ -560,7 +561,6 @@ function closeFloatingBubble() {
     const bubble = document.getElementById('floating-bubble-container');
     if (bubble) bubble.style.display = 'none';
 }
-
 // دوال فقاعة تحميل التطبيق
 let deferredInstallPrompt = null;
 if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
@@ -598,7 +598,6 @@ async function handleAppInstallClick() {
         alert("لتثبيت التطبيق:\nاضغط على قائمة المتصفح (⋮ أو ⬆️) في الأعلى أو الأسفل، ثم اختر (تثبيت التطبيق) أو (إضافة إلى الشاشة الرئيسية) 📲");
     }
 }
-
 async function shareProject() {
     const shareData = {
         title: 'دليفري الخضار والفاكهة',
@@ -627,6 +626,7 @@ let sheetImagePopupEnabled = false;
 let sheetImagePopupUrl = '';
 let imagePopupShownOnce = false;
 
+// (التعديل 2) تعطيل القوائم بشكل كامل وفعلي في وضع الإغلاق لمنع ظهور الأوزان والتنبيهات المزعجة
 function updateWorkSchedule() {
     if (manualWorkStatus === 'مفتوح') {
         closeAfterHoursMode = false;
@@ -685,14 +685,16 @@ function updateWorkSchedule() {
     const isClosedOrHoliday = holidayMode || closeAfterHoursMode;
     document.querySelectorAll('.quantity-select, .note-select').forEach(sel => {
         if (isClosedOrHoliday) {
+            sel.disabled = true; // منع فتح القائمة نهائياً في وضع الإغلاق
             sel.style.opacity = '0.5';
             sel.style.backgroundColor = '#f3f4f6';
             sel.style.borderColor = '#d1d5db';
-            sel.style.cursor = 'pointer';
+            sel.style.cursor = 'not-allowed';
             if(sel.classList.contains('quantity-select')) {
                 sel.value = '0';
             }
         } else {
+            sel.disabled = false; // تفعيل القوائم بشكل طبيعي وقت العمل
             sel.style.opacity = '1';
             sel.style.backgroundColor = sel.classList.contains('note-select') ? '#eff6ff' : '#fff';
             sel.style.borderColor = sel.classList.contains('note-select') ? '#3b82f6' : '#16a34a';
@@ -705,22 +707,18 @@ function updateWorkSchedule() {
         closeCartPreviewModal();
     }
 }
-
 document.addEventListener('click', function(e) {
     if ((e.target.classList.contains('quantity-select') || e.target.classList.contains('note-select')) && (holidayMode || closeAfterHoursMode)) {
         e.preventDefault();
         e.stopPropagation();
-        alert("انتهى وقت استقبال الطلبات اليوم");
     }
 }, true);
 document.addEventListener('focus', function(e) {
     if ((e.target.classList.contains('quantity-select') || e.target.classList.contains('note-select')) && (holidayMode || closeAfterHoursMode)) {
         e.preventDefault();
         e.target.blur();
-        alert("انتهى وقت استقبال الطلبات اليوم");
     }
 }, true);
-
 setInterval(updateWorkSchedule, 30000);
 function closeWelcomePopup() {
     const popup = document.getElementById('welcome-popup-modal');
@@ -867,6 +865,7 @@ function cleanSheetNumber(value) {
 }
 async function loadPricesFromSheet() {
     try {
+        if (typeof window.fetch !== 'function') return;
         const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' });
         if (!response.ok) throw new Error('تعذر تحميل جدول الأسعار');
         const csvText = await response.text();
