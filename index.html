@@ -42,7 +42,7 @@
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100vw); }
 }
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; padding-bottom: 90px; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; padding-bottom: 110px; }
         
         .flex-row-item {
             display: flex; justify-content: space-between; align-items: center;
@@ -91,14 +91,6 @@
         .special-star {
             font-size: 11px; cursor: pointer; position: relative; display: inline-block; vertical-align: middle; flex-shrink: 0;
         }
-        .special-star::after {
-            content: attr(data-tooltip);
-            position: absolute; bottom: 130%; right: 50%; transform: translateX(50%);
-            background-color: #333; color: #fff; text-align: center; padding: 3px 8px;
-            border-radius: 6px; font-size: 10px; font-weight: bold; white-space: nowrap;
-            opacity: 0; visibility: hidden; z-index: 10;
-        }
-        .special-star:hover::after { opacity: 1; visibility: visible; }
         .product-img {
             width: 38px; height: 38px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb; flex-shrink: 0; background-color: #f9fafb;
         }
@@ -127,54 +119,47 @@
         .animate-pop-in {
             animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+        /* تعديل مكان الفقاعات العائمة لتكون مرتفعة وآمنة تماماً ولا تتداخل مع الشاشة في الأجهزة القديمة */
         .floating-reviews-bubble {
             position: fixed;
-            bottom: 95px;
+            bottom: 120px;
             left: 15px;
-            width: 62px;
-            height: 62px;
+            width: 58px;
+            height: 58px;
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: white;
             border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
-            z-index: 35;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.5);
+            z-index: 99999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            animation: bounceSlow 3s infinite;
             border: 2px solid white;
             text-align: center;
-        }
-        .floating-reviews-bubble:hover {
-            transform: scale(1.1);
+            -webkit-tap-highlight-color: transparent;
         }
         .floating-app-bubble {
             position: fixed;
-            bottom: 95px;
+            bottom: 120px;
             right: 15px;
-            width: 62px;
-            height: 62px;
+            width: 58px;
+            height: 58px;
             background: linear-gradient(135deg, #16a34a, #15803d);
             color: white;
             border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.45);
-            z-index: 35;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.5);
+            z-index: 99999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s;
-            animation: bounceSlow 3s infinite;
             border: 2px solid white;
             text-align: center;
             padding: 2px;
-        }
-        .floating-app-bubble:hover {
-            transform: scale(1.1);
+            -webkit-tap-highlight-color: transparent;
         }
         .floating-close-btn {
             position: absolute;
@@ -182,20 +167,15 @@
             right: -4px;
             background: #ef4444;
             color: white;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1.5px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        @keyframes bounceSlow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
         }
     </style>
 </head>
@@ -351,20 +331,16 @@
         </footer>
     </div>
     <!-- فقاعة "شوف رأي الناس" الدائرية العائمة (على اليسار) -->
-    <div id="floating-bubble-container">
-        <div onclick="toggleReviewsView()" class="floating-reviews-bubble">
-            <div onclick="event.stopPropagation(); closeFloatingBubble();" class="floating-close-btn" title="إغلاق">✕</div>
-            <span class="text-base">💬</span>
-            <span class="text-[9px] font-extrabold leading-tight">شوف رأى<br>الناس</span>
-        </div>
+    <div id="floating-bubble-container" onclick="toggleReviewsView()" ontouchend="event.preventDefault(); toggleReviewsView();" class="floating-reviews-bubble">
+        <div onclick="event.stopPropagation(); ontouchend='event.stopPropagation(); closeFloatingBubble();'; closeFloatingBubble();" class="floating-close-btn" title="إغلاق">✕</div>
+        <span class="text-sm">💬</span>
+        <span class="text-[8px] font-extrabold leading-tight">شوف رأى<br>الناس</span>
     </div>
-    <!-- فقاعة "حمّل التطبيق" الدائرية العائمة (على اليمين - بنفس حجم وشكل فقاعة اليسار) -->
-    <div id="app-install-bubble-container">
-        <div onclick="handleAppInstallClick()" class="floating-app-bubble">
-            <div onclick="event.stopPropagation(); closeAppInstallBubble();" class="floating-close-btn" title="إغلاق">✕</div>
-            <span class="text-sm">📲</span>
-            <span class="text-[9px] font-extrabold leading-tight">حمّل<br>التطبيق</span>
-        </div>
+    <!-- فقاعة "حمّل التطبيق" الدائرية العائمة (على اليمين) -->
+    <div id="app-install-bubble-container" onclick="handleAppInstallClick()" ontouchend="event.preventDefault(); handleAppInstallClick();" class="floating-app-bubble">
+        <div onclick="event.stopPropagation(); closeAppInstallBubble();" class="floating-close-btn" title="إغلاق">✕</div>
+        <span class="text-xs">📲</span>
+        <span class="text-[8px] font-extrabold leading-tight">حمّل<br>التطبيق</span>
     </div>
     <!-- نافذة تعليمات التثبيت للآيفون (iOS) -->
     <div id="ios-install-modal" style="display: none;" onclick="closeIosInstallModal()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100002] flex items-center justify-center p-4">
@@ -559,10 +535,6 @@ function closeFloatingBubble() {
     if (bubble) bubble.style.display = 'none';
 }
 let deferredInstallPrompt = null;
-if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-    const appBubble = document.getElementById('app-install-bubble-container');
-    if (appBubble) appBubble.style.display = 'none';
-}
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
@@ -622,7 +594,6 @@ let sheetImagePopupEnabled = false;
 let sheetImagePopupUrl = '';
 let imagePopupShownOnce = false;
 
-// دالة فحص مواعيد العمل (شاملة الإغلاق اليومي والإجازة الأسبوعية وتوافق آيفون القديم)
 function updateWorkSchedule() {
     if (manualWorkStatus === 'مفتوح') {
         closeAfterHoursMode = false;
@@ -646,9 +617,7 @@ function updateWorkSchedule() {
         const hour = Number(getPart('hour'));
         const minute = Number(getPart('minute'));
         const currentTime = hour * 60 + minute;
-        // الإغلاق اليومي: بعد 4:15 عصراً وحتى 7 صباحاً
         closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
-        // الإجازة الأسبوعية: من خميس 4:15 عصراً حتى سبت 7 صباحاً
         holidayMode =
             (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
             day === 'Friday' ||
@@ -684,7 +653,6 @@ function updateWorkSchedule() {
         }
     }
 
-    // التعامل مع مظهر القوائم في وضع الإغلاق أو الإجازة (متوافق مع آيفون القديم)
     document.querySelectorAll('.quantity-select, .note-select').forEach(sel => {
         if (isClosedOrHoliday) {
             sel.style.opacity = '0.5';
@@ -707,14 +675,13 @@ function updateWorkSchedule() {
     }
 }
 
-// منع فتح القوائم وإظهار تنبيه واحد نظيف ومناسب لمتصفح سفاري القديم (آيفون 6)
 let lastAlertTime = 0;
 document.addEventListener('click', function(e) {
     if ((e.target.classList.contains('quantity-select') || e.target.classList.contains('note-select')) && (holidayMode || closeAfterHoursMode)) {
         e.preventDefault();
         e.stopPropagation();
         const now = Date.now();
-        if (now - lastAlertTime > 4000) { // منع تكرار التنبيه المزعج
+        if (now - lastAlertTime > 4000) {
             lastAlertTime = now;
             alert(holidayMode ? "❤️ نحن في إجازتنا الأسبوعية حالياً." : "🚨 انتهت مواعيد استقبال الطلبات اليوم.");
         }
@@ -1418,7 +1385,7 @@ function generateWhatsAppOrder() {
         address: cAddress + (cLandmark ? ' - علامة مميزة: ' + cLandmark : ''),
         orderDetails: orderDetailsText
     };
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyVIhcTZF7hwab0C8C9IBDi1WKeTv6EsEAnaEP84wEkzpn4vh7rUvg39JDDgFtmSOf1aQ/exec"; 
+    const WEB_APP_URL = "https://script.codes/macros/s/AKfycbyVIhcTZF7hwab0C8C9IBDi1WKeTv6EsEAnaEP84wEkzpn4vh7rUvg39JDDgFtmSOf1aQ/exec"; 
     fetch(WEB_APP_URL, {
         method: "POST",
         mode: "no-cors",
