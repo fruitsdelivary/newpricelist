@@ -42,7 +42,7 @@
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100vw); }
 }
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; padding-bottom: 110px; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fb; -webkit-font-smoothing: antialiased; padding-bottom: 90px; }
         
         .flex-row-item {
             display: flex; justify-content: space-between; align-items: center;
@@ -119,63 +119,71 @@
         .animate-pop-in {
             animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        /* تعديل مكان الفقاعات العائمة لتكون مرتفعة وآمنة تماماً ولا تتداخل مع الشاشة في الأجهزة القديمة */
         .floating-reviews-bubble {
             position: fixed;
-            bottom: 120px;
+            bottom: 95px;
             left: 15px;
-            width: 58px;
-            height: 58px;
+            width: 62px;
+            height: 62px;
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: white;
             border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.5);
-            z-index: 99999;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+            z-index: 35;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            animation: bounceSlow 3s infinite;
             border: 2px solid white;
             text-align: center;
-            -webkit-tap-highlight-color: transparent;
         }
+        .floating-reviews-bubble:hover { transform: scale(1.1); }
         .floating-app-bubble {
             position: fixed;
-            bottom: 120px;
+            bottom: 95px;
             right: 15px;
-            width: 58px;
-            height: 58px;
+            width: 62px;
+            height: 62px;
             background: linear-gradient(135deg, #16a34a, #15803d);
             color: white;
             border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.5);
-            z-index: 99999;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.45);
+            z-index: 35;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: transform 0.2s;
+            animation: bounceSlow 3s infinite;
             border: 2px solid white;
             text-align: center;
             padding: 2px;
-            -webkit-tap-highlight-color: transparent;
         }
+        .floating-app-bubble:hover { transform: scale(1.1); }
         .floating-close-btn {
             position: absolute;
             top: -4px;
             right: -4px;
             background: #ef4444;
             color: white;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1.5px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
     </style>
 </head>
@@ -252,7 +260,7 @@
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
         <section class="border rounded-xl overflow-hidden shadow-lg mb-8">
-            <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 الخضروات 🌶️🥦</h2>
+            <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
             <div id="vegetables-list-interactive"></div>
         </section>
         <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
@@ -331,16 +339,20 @@
         </footer>
     </div>
     <!-- فقاعة "شوف رأي الناس" الدائرية العائمة (على اليسار) -->
-    <div id="floating-bubble-container" onclick="toggleReviewsView()" ontouchend="event.preventDefault(); toggleReviewsView();" class="floating-reviews-bubble">
-        <div onclick="event.stopPropagation(); ontouchend='event.stopPropagation(); closeFloatingBubble();'; closeFloatingBubble();" class="floating-close-btn" title="إغلاق">✕</div>
-        <span class="text-sm">💬</span>
-        <span class="text-[8px] font-extrabold leading-tight">شوف رأى<br>الناس</span>
+    <div id="floating-bubble-container">
+        <div onclick="toggleReviewsView()" class="floating-reviews-bubble">
+            <div onclick="event.stopPropagation(); closeFloatingBubble();" class="floating-close-btn" title="إغلاق">✕</div>
+            <span class="text-base">💬</span>
+            <span class="text-[9px] font-extrabold leading-tight">شوف رأى<br>الناس</span>
+        </div>
     </div>
     <!-- فقاعة "حمّل التطبيق" الدائرية العائمة (على اليمين) -->
-    <div id="app-install-bubble-container" onclick="handleAppInstallClick()" ontouchend="event.preventDefault(); handleAppInstallClick();" class="floating-app-bubble">
-        <div onclick="event.stopPropagation(); closeAppInstallBubble();" class="floating-close-btn" title="إغلاق">✕</div>
-        <span class="text-xs">📲</span>
-        <span class="text-[8px] font-extrabold leading-tight">حمّل<br>التطبيق</span>
+    <div id="app-install-bubble-container">
+        <div onclick="handleAppInstallClick()" class="floating-app-bubble">
+            <div onclick="event.stopPropagation(); closeAppInstallBubble();" class="floating-close-btn" title="إغلاق">✕</div>
+            <span class="text-sm">📲</span>
+            <span class="text-[9px] font-extrabold leading-tight">حمّل<br>التطبيق</span>
+        </div>
     </div>
     <!-- نافذة تعليمات التثبيت للآيفون (iOS) -->
     <div id="ios-install-modal" style="display: none;" onclick="closeIosInstallModal()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100002] flex items-center justify-center p-4">
@@ -424,30 +436,21 @@
             </div>
         </div>
     </div>
-    <!-- النافذة العائمة للصورة الإعلانية -->
+    <!-- النافذة العائمة للصورة الإعلانية القابلة للضغط لتحميل التطبيق -->
     <div id="image-popup-modal" style="display: none;" onclick="closeImagePopup()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100001] flex items-center justify-center p-4">
         <div onclick="event.stopPropagation()" class="relative w-full max-w-xs sm:max-w-sm flex flex-col items-center animate-pop-in">
             <button onclick="closeImagePopup()" title="إغلاق" class="mb-3 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-full font-extrabold text-sm shadow-xl border-2 border-white active:scale-90 transition flex items-center gap-2">
                 <span>إغلاق الإعلان</span>
                 <span class="text-base font-black">✕</span>
             </button>
-            <div class="w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-white">
-                <img id="popup-promo-image" src="" alt="إعلان" class="w-full h-auto max-h-[70vh] object-contain block mx-auto">
+            <div class="w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-white p-2">
+                <!-- صورة الإعلان تعمل كزر لتحميل التطبيق عند النقر عليها -->
+                <img id="popup-promo-image" src="" alt="إعلان" onclick="handleAppInstallClick()" class="w-full h-auto max-h-[70vh] object-contain block mx-auto cursor-pointer rounded-xl">
             </div>
         </div>
     </div>
-
-<div class="w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-white p-3 text-center">
-    <img id="popup-promo-image" src="" alt="إعلان" class="w-full h-auto max-h-[60vh] object-contain block mx-auto mb-3">
-    <!-- زر تحميل التطبيق يظهر هنا بجانب الإعلان -->
-    <button onclick="closeImagePopup(); handleAppInstallClick();" class="w-full bg-green-600 hover:bg-green-700 text-white font-extrabold py-2.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm">
-        <span>📲</span>
-        <span>حمّل التطبيق الآن</span>
-    </button>
-</div>
-
     <script>
-        // تسجيل الـ Service Worker لتفعيل التثبيت تلقائياً
+        // تسجيل الـ Service Worker لتفعيل التحديث الفوري
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
@@ -545,6 +548,10 @@ function closeFloatingBubble() {
     if (bubble) bubble.style.display = 'none';
 }
 let deferredInstallPrompt = null;
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+    const appBubble = document.getElementById('app-install-bubble-container');
+    if (appBubble) appBubble.style.display = 'none';
+}
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
@@ -1395,7 +1402,7 @@ function generateWhatsAppOrder() {
         address: cAddress + (cLandmark ? ' - علامة مميزة: ' + cLandmark : ''),
         orderDetails: orderDetailsText
     };
-    const WEB_APP_URL = "https://script.codes/macros/s/AKfycbyVIhcTZF7hwab0C8C9IBDi1WKeTv6EsEAnaEP84wEkzpn4vh7rUvg39JDDgFtmSOf1aQ/exec"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyVIhcTZF7hwab0C8C9IBDi1WKeTv6EsEAnaEP84wEkzpn4vh7rUvg39JDDgFtmSOf1aQ/exec"; 
     fetch(WEB_APP_URL, {
         method: "POST",
         mode: "no-cors",
