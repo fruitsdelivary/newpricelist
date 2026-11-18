@@ -151,7 +151,6 @@
         .floating-reviews-bubble:hover {
             transform: scale(1.1);
         }
-        /* فقاعة تحميل التطبيق العائمة (على اليمين - بنفس حجم وشكل فقاعة التقييمات) */
         .floating-app-bubble {
             position: fixed;
             bottom: 95px;
@@ -345,7 +344,7 @@
             <a href="https://wa.me/201032872750" class="w-full bg-green-500 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-4 text-lg hover:bg-green-600">📨 مراسلة واتساب مباشرة</a>
             <a href="https://www.facebook.com/share/1HkZeEoRr3/" class="w-full bg-blue-700 text-white font-bold py-4 rounded-2xl inline-block shadow-md mb-8 text-lg hover:bg-blue-800">🔵 زيارة صفحة الفيسبوك</a>
             
-            <!-- (التعديل 4) حقوق النشر -->
+            <!-- حقوق النشر -->
             <div class="mt-6 pt-4 border-t border-gray-200 text-gray-500 text-xs font-bold">
                 جميع الحقوق محفوظة لمؤسسة عروض التوفير © 2026
             </div>
@@ -449,7 +448,7 @@
             </div>
         </div>
     </div>
-    <!-- النافذة العائمة للصورة الإعلانية (زر الغلق بارز وخارج إطار الصورة تماماً) -->
+    <!-- النافذة العائمة للصورة الإعلانية -->
     <div id="image-popup-modal" style="display: none;" onclick="closeImagePopup()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100001] flex items-center justify-center p-4">
         <div onclick="event.stopPropagation()" class="relative w-full max-w-xs sm:max-w-sm flex flex-col items-center animate-pop-in">
             <button onclick="closeImagePopup()" title="إغلاق" class="mb-3 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-full font-extrabold text-sm shadow-xl border-2 border-white active:scale-90 transition flex items-center gap-2">
@@ -472,7 +471,7 @@
         }
 let staticReviews = [
     { name: "م/محمد", text: "ايه رأيكم في ورق العنب؟ حلو جداً والله ❤️❤️ تسلم ايدك بجد" },
-    { name: "Aml Saad", text: "ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر" },
+    { name: "Aml", text: "ماشاء الله تبارك الله والله العظيم لو اعرف انو ورق العنب هيبقي نضيف وجميل كدة كنت طلبت ٢ ك كمان .ربنا يبارك فيكم الف شكر" },
     { name: "أ/سارة", text: "ايه تقييم حضرتك لنظام الطلب الجديد؟ جميل جدا جدا بيفكرنى بكل اللى محتاجاه" },
     { name: "أ.مدحت", text: "السلام عليكم\nملاحظه :\nالبطيخه السابقه كانت أحلى بطيخه أكلناها فى حياتنا ، ربنا يوسع عليكم.\nبطيخه زى بتاعة المره اللي فاتت\nوشكرا" },
     { name: "د.ميرفت", text: "السلام عليكم\nلسه فاتحه البطيخه النهارده\nسكككككككر\nتسلم ايدك" },
@@ -495,7 +494,6 @@ let staticReviews = [
 let dynamicReviews = [];
 const REVIEWS_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/190JiCNDIszJipXgd1BPPs4Gb6jqa0jmcT8uafwd-l50/export?format=csv';
 
-// (التعديل 1) التوافق مع الأجهزة والمتصفحات القديمة (iOS 12-15)
 async function loadReviewsFromSheet() {
     try {
         if (typeof window.fetch !== 'function') return;
@@ -543,7 +541,6 @@ async function renderReviews() {
     `).join('');
 }
 
-// (التعديل 3) العودة لأعلى الصفحة تماماً عند غلق المراجعات
 function toggleReviewsView() {
     const rv = document.getElementById('reviews-view');
     if (rv) {
@@ -561,7 +558,6 @@ function closeFloatingBubble() {
     const bubble = document.getElementById('floating-bubble-container');
     if (bubble) bubble.style.display = 'none';
 }
-// دوال فقاعة تحميل التطبيق
 let deferredInstallPrompt = null;
 if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
     const appBubble = document.getElementById('app-install-bubble-container');
@@ -626,7 +622,7 @@ let sheetImagePopupEnabled = false;
 let sheetImagePopupUrl = '';
 let imagePopupShownOnce = false;
 
-// (التعديل 2) تعطيل القوائم بشكل كامل وفعلي في وضع الإغلاق لمنع ظهور الأوزان والتنبيهات المزعجة
+// دالة فحص مواعيد العمل (شاملة الإغلاق اليومي والإجازة الأسبوعية وتوافق آيفون القديم)
 function updateWorkSchedule() {
     if (manualWorkStatus === 'مفتوح') {
         closeAfterHoursMode = false;
@@ -650,12 +646,17 @@ function updateWorkSchedule() {
         const hour = Number(getPart('hour'));
         const minute = Number(getPart('minute'));
         const currentTime = hour * 60 + minute;
+        // الإغلاق اليومي: بعد 4:15 عصراً وحتى 7 صباحاً
         closeAfterHoursMode = currentTime >= 16 * 60 + 15 || currentTime < 7 * 60;
+        // الإجازة الأسبوعية: من خميس 4:15 عصراً حتى سبت 7 صباحاً
         holidayMode =
             (day === 'Thursday' && currentTime >= 16 * 60 + 15) ||
             day === 'Friday' ||
             (day === 'Saturday' && currentTime < 7 * 60);
     }
+
+    const isClosedOrHoliday = holidayMode || closeAfterHoursMode;
+
     if (holidayMode) {
         if (!scheduleOverlay) {
             scheduleOverlay = document.createElement('div');
@@ -682,43 +683,51 @@ function updateWorkSchedule() {
             scheduleOverlay = null;
         }
     }
-    const isClosedOrHoliday = holidayMode || closeAfterHoursMode;
+
+    // التعامل مع مظهر القوائم في وضع الإغلاق أو الإجازة (متوافق مع آيفون القديم)
     document.querySelectorAll('.quantity-select, .note-select').forEach(sel => {
         if (isClosedOrHoliday) {
-            sel.disabled = true; // منع فتح القائمة نهائياً في وضع الإغلاق
             sel.style.opacity = '0.5';
             sel.style.backgroundColor = '#f3f4f6';
             sel.style.borderColor = '#d1d5db';
-            sel.style.cursor = 'not-allowed';
             if(sel.classList.contains('quantity-select')) {
                 sel.value = '0';
             }
         } else {
-            sel.disabled = false; // تفعيل القوائم بشكل طبيعي وقت العمل
             sel.style.opacity = '1';
             sel.style.backgroundColor = sel.classList.contains('note-select') ? '#eff6ff' : '#fff';
             sel.style.borderColor = sel.classList.contains('note-select') ? '#3b82f6' : '#16a34a';
-            sel.style.cursor = 'pointer';
         }
     });
+
     if (isClosedOrHoliday) {
         const stickyBar = document.getElementById('sticky-cart-bar');
         if (stickyBar) stickyBar.style.display = 'none';
         closeCartPreviewModal();
     }
 }
+
+// منع فتح القوائم وإظهار تنبيه واحد نظيف ومناسب لمتصفح سفاري القديم (آيفون 6)
+let lastAlertTime = 0;
 document.addEventListener('click', function(e) {
     if ((e.target.classList.contains('quantity-select') || e.target.classList.contains('note-select')) && (holidayMode || closeAfterHoursMode)) {
         e.preventDefault();
         e.stopPropagation();
+        const now = Date.now();
+        if (now - lastAlertTime > 4000) { // منع تكرار التنبيه المزعج
+            lastAlertTime = now;
+            alert(holidayMode ? "❤️ نحن في إجازتنا الأسبوعية حالياً." : "🚨 انتهت مواعيد استقبال الطلبات اليوم.");
+        }
     }
 }, true);
+
 document.addEventListener('focus', function(e) {
     if ((e.target.classList.contains('quantity-select') || e.target.classList.contains('note-select')) && (holidayMode || closeAfterHoursMode)) {
         e.preventDefault();
         e.target.blur();
     }
 }, true);
+
 setInterval(updateWorkSchedule, 30000);
 function closeWelcomePopup() {
     const popup = document.getElementById('welcome-popup-modal');
