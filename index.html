@@ -378,7 +378,7 @@
             </button>
         </div>
     </div>
-    <!-- نافذة تعليمات التثبيت العامة (للأندرويد وباقي الأجهزة) -->
+    <!-- نافذة تعليمات التثبيت للأندرويد -->
     <div id="android-install-modal" style="display: none;" onclick="closeAndroidInstallModal()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100002] flex items-center justify-center p-4">
         <div onclick="event.stopPropagation()" class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl border-4 border-green-600 text-center animate-pop-in relative">
             <button onclick="closeAndroidInstallModal()" class="absolute top-3 left-3 bg-gray-200 text-gray-700 w-8 h-8 rounded-full font-bold text-sm hover:bg-gray-300">✕</button>
@@ -1465,7 +1465,7 @@ function generateWhatsAppOrder() {
     window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
     
     document.querySelectorAll('.quantity-select').forEach(s => s.value = "0");
-    document.querySelectorAll('.note-select').forEach(s => s.value = "";
+    document.querySelectorAll('.note-select').forEach(s => s.value = "");
     updateStickyCartBar();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
