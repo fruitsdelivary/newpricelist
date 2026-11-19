@@ -73,6 +73,14 @@
         .old-price { color: #9ca3af; text-decoration: line-through; font-size: 0.65rem; white-space: nowrap; }
         .current-price { color: #dc2626; font-weight: 800; font-size: 0.95rem; white-space: nowrap; }
         .item-action-container { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; }
+        .item-action-row { position: relative; display: inline-block; }
+        .select-blocker-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            cursor: not-allowed;
+            display: none;
+        }
         .quantity-select { 
             height: 32px; width: 84px; border: 2px solid #16a34a; border-radius: 8px; 
             font-weight: bold; background-color: #fff; font-size: 0.75rem; text-align: center; cursor: pointer;
@@ -80,6 +88,13 @@
         .note-select {
             height: 30px; width: 84px; border: 1.5px solid #3b82f6; border-radius: 8px; 
             font-weight: 600; background-color: #eff6ff; font-size: 0.7rem; text-align: center; color: #1e40af; cursor: pointer;
+        }
+        .quantity-select:disabled, .note-select:disabled {
+            opacity: 0.55;
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
         }
         .not-available { opacity: 0.4; pointer-events: none; background-color: #fafafa; }
         
@@ -639,6 +654,17 @@ let sheetImagePopupEnabled = false;
 let sheetImagePopupUrl = '';
 let imagePopupShownOnce = false;
 
+let lastAlertTime = 0;
+function triggerClosedAlert() {
+    const now = Date.now();
+    if (now - lastAlertTime > 1500) {
+        lastAlertTime = now;
+        alert(holidayMode
+            ? "❤️ نحن في إجازتنا الأسبوعية حالياً."
+            : "🚨 انتهت مواعيد استقبال الطلبات اليوم.\nمواعيد العمل من 7 صباحاً حتى 4:15 مساءً.");
+    }
+}
+
 function updateWorkSchedule() {
     if (manualWorkStatus === 'مفتوح') {
         closeAfterHoursMode = false;
@@ -700,17 +726,19 @@ function updateWorkSchedule() {
 
     document.querySelectorAll('.quantity-select, .note-select').forEach(sel => {
         if (isClosedOrHoliday) {
-            sel.style.opacity = '0.5';
-            sel.style.backgroundColor = '#f3f4f6';
-            sel.style.borderColor = '#d1d5db';
-            if(sel.classList.contains('quantity-select')) {
+            sel.disabled = true;
+            if (sel.classList.contains('quantity-select')) {
                 sel.value = '0';
+            } else {
+                sel.value = '';
             }
         } else {
-            sel.style.opacity = '1';
-            sel.style.backgroundColor = sel.classList.contains('note-select') ? '#eff6ff' : '#fff';
-            sel.style.borderColor = sel.classList.contains('note-select') ? '#3b82f6' : '#16a34a';
+            sel.disabled = false;
         }
+    });
+
+    document.querySelectorAll('.select-blocker-overlay').forEach(overlay => {
+        overlay.style.display = isClosedOrHoliday ? 'block' : 'none';
     });
 
     if (isClosedOrHoliday) {
@@ -720,25 +748,21 @@ function updateWorkSchedule() {
     }
 }
 
-let lastAlertTime = 0;
-document.addEventListener('click', function(e) {
-    if ((e.target.classList.contains('quantity-select') || e.target.classList.contains('note-select')) && (holidayMode || closeAfterHoursMode)) {
-        e.preventDefault();
-        e.stopPropagation();
-        const now = Date.now();
-        if (now - lastAlertTime > 4000) {
-            lastAlertTime = now;
-            alert(holidayMode ? "❤️ نحن في إجازتنا الأسبوعية حالياً." : "🚨 انتهت مواعيد استقبال الطلبات اليوم.");
+['mousedown', 'touchstart', 'pointerdown', 'click', 'keydown'].forEach(evtType => {
+    document.addEventListener(evtType, function(e) {
+        if (!(holidayMode || closeAfterHoursMode)) return;
+        const isTargetSelect = e.target.classList.contains('quantity-select') ||
+                               e.target.classList.contains('note-select') ||
+                               e.target.classList.contains('select-blocker-overlay');
+        if (isTargetSelect) {
+            if (evtType === 'keydown' && !['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(e.key)) return;
+            e.preventDefault();
+            e.stopPropagation();
+            if (document.activeElement) document.activeElement.blur();
+            triggerClosedAlert();
         }
-    }
-}, true);
-
-document.addEventListener('focus', function(e) {
-    if ((e.target.classList.contains('quantity-select') || e.target.classList.contains('note-select')) && (holidayMode || closeAfterHoursMode)) {
-        e.preventDefault();
-        e.target.blur();
-    }
-}, true);
+    }, true);
+});
 
 setInterval(updateWorkSchedule, 30000);
 function closeWelcomePopup() {
@@ -1037,6 +1061,7 @@ function init(preserveCart = false) {
                 </div>`;
             const sizeSelectHTML = p.hasSize ? `
                 <div class="item-action-row">
+                    <div class="select-blocker-overlay" onclick="triggerClosedAlert()"></div>
                     <select class="note-select" onchange="updateStickyCartBar()" data-name="${p.name}">
                         <option value="">-- الحجم --</option>
                         <option value="صغير">صغير</option>
@@ -1048,6 +1073,7 @@ function init(preserveCart = false) {
             const actionPart = p.available ? `
                 <div class="item-action-container">
                     <div class="item-action-row">
+                        <div class="select-blocker-overlay" onclick="triggerClosedAlert()"></div>
                         <select class="quantity-select" onchange="updateStickyCartBar()" data-unit="${p.unit}" data-name="${p.name}">
                             <option value="0">-- الكمية --</option>
                         </select>
