@@ -349,7 +349,7 @@
             
             <!-- حقوق النشر -->
             <div class="mt-6 pt-4 border-t border-gray-200 text-gray-500 text-xs font-bold">
-                جميع الحقوق محفوظة لمؤسسة عروض التوفير © 2026
+                جميع الحقوق محفوظة لـ عروض التوفير بشربين © 2026
             </div>
         </footer>
     </div>
@@ -657,11 +657,11 @@ let imagePopupShownOnce = false;
 let lastAlertTime = 0;
 function triggerClosedAlert() {
     const now = Date.now();
-    if (now - lastAlertTime > 1500) {
+    if (now - lastAlertTime > 3500) {
         lastAlertTime = now;
         alert(holidayMode
             ? "❤️ نحن في إجازتنا الأسبوعية حالياً."
-            : "🚨 انتهت مواعيد استقبال الطلبات اليوم.\nمواعيد العمل من 7 صباحاً حتى 4:15 مساءً.");
+            : "🚨 انتهت مواعيد استقبال الطلبات اليوم.");
     }
 }
 
@@ -748,17 +748,24 @@ function updateWorkSchedule() {
     }
 }
 
-['mousedown', 'touchstart', 'pointerdown', 'click', 'keydown'].forEach(evtType => {
+['pointerdown', 'touchstart', 'mousedown', 'click', 'keydown'].forEach(evtType => {
     document.addEventListener(evtType, function(e) {
         if (!(holidayMode || closeAfterHoursMode)) return;
         const isTargetSelect = e.target.classList.contains('quantity-select') ||
                                e.target.classList.contains('note-select') ||
                                e.target.classList.contains('select-blocker-overlay');
-        if (isTargetSelect) {
-            if (evtType === 'keydown' && !['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(e.key)) return;
-            e.preventDefault();
-            e.stopPropagation();
-            if (document.activeElement) document.activeElement.blur();
+        if (!isTargetSelect) return;
+
+        if (evtType === 'keydown' && !['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(e.key)) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') {
+            e.stopImmediatePropagation();
+        }
+        if (document.activeElement) document.activeElement.blur();
+
+        if (evtType === 'pointerdown' || evtType === 'touchstart' || evtType === 'keydown') {
             triggerClosedAlert();
         }
     }, true);
@@ -1061,7 +1068,7 @@ function init(preserveCart = false) {
                 </div>`;
             const sizeSelectHTML = p.hasSize ? `
                 <div class="item-action-row">
-                    <div class="select-blocker-overlay" onclick="triggerClosedAlert()"></div>
+                    <div class="select-blocker-overlay"></div>
                     <select class="note-select" onchange="updateStickyCartBar()" data-name="${p.name}">
                         <option value="">-- الحجم --</option>
                         <option value="صغير">صغير</option>
@@ -1073,7 +1080,7 @@ function init(preserveCart = false) {
             const actionPart = p.available ? `
                 <div class="item-action-container">
                     <div class="item-action-row">
-                        <div class="select-blocker-overlay" onclick="triggerClosedAlert()"></div>
+                        <div class="select-blocker-overlay"></div>
                         <select class="quantity-select" onchange="updateStickyCartBar()" data-unit="${p.unit}" data-name="${p.name}">
                             <option value="0">-- الكمية --</option>
                         </select>
