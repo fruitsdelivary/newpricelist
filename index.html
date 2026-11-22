@@ -1046,7 +1046,7 @@ function init(preserveCart = false) {
         productsData.forEach(p => {
             const specialBadge = p.isSpecial ? `<span class="special-star" data-tooltip="مميز">⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
-            const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين 🧊</span>` : '';
+            const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين ❄️ </span>` : '';
             
             const imgTag = p.img ? `<img src="${p.img}" alt="${p.name}" class="product-img">` : `<div class="product-img-placeholder">🛒</div>`;
             let trendArrow = '';
