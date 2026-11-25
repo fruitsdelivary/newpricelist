@@ -237,37 +237,52 @@
             -webkit-backdrop-filter: blur(6px);
             border: 1px solid #e5e7eb;
             border-radius: 12px;
-            padding: 7px 10px;
+            padding: 7px 8px;
             margin: 12px 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .payment-single-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            white-space: nowrap;
+            font-size: 12px;
+            line-height: 1.35;
+        }
+        .payment-prefix-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #4b5563;
         }
         .payment-plain-btn {
             background: transparent;
             border: none;
-            padding: 0 2px;
+            padding: 0 1px;
             font-weight: 800;
+            font-size: 12px;
             cursor: pointer;
             display: inline;
+            white-space: nowrap;
         }
         .payment-plain-btn:active {
             opacity: 0.7;
         }
-        .copy-toast-banner {
+        .copy-toast-near-bar {
             position: fixed;
-            top: 56px;
-            left: 50%;
-            transform: translateX(-50%);
             z-index: 100005;
-            background: #14532d;
-            color: #ffffff;
-            border: 1px solid #4ade80;
-            font-size: 12px;
-            font-weight: 800;
-            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: #15803d;
+            font-size: 11.5px;
+            font-weight: 900;
+            padding: 3px 10px;
             border-radius: 999px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
             pointer-events: none;
             white-space: nowrap;
+            transform: translateX(-50%);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
         }
     </style>
 </head>
@@ -276,7 +291,7 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KV5JX7DJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <span id="payment-copy-number" dir="ltr" style="display:none;">01016980880</span>
-    <div id="payment-toast" class="copy-toast-banner" style="display: none;">تم نسخ الرقم ✓</div>
+    <div id="payment-toast" class="copy-toast-near-bar" style="display: none;">تم نسخ الرقم ✓</div>
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/45">
         <header class="text-center mb-6">
             <div class="hero-title-box mb-5">
@@ -322,13 +337,13 @@
                 </svg>
             </button>
         </div>
-        <div class="sticky-payment-bar text-center">
-            <div class="text-xs sm:text-sm font-bold text-gray-700 leading-snug">
-                <span>متاح الدفع عبر:</span>
+        <div id="sticky-payment-bar" class="sticky-payment-bar text-center">
+            <div class="payment-single-line">
+                <span class="payment-prefix-label">متاح الدفع عبر:</span>
                 <button type="button" onclick="copyPaymentDirect('فودافون كاش')" class="payment-plain-btn text-red-600 hover:underline">فودافون كاش</button>
-                <span class="text-gray-400 mx-0.5">|</span>
+                <span class="text-gray-400">|</span>
                 <button type="button" onclick="copyPaymentDirect('انستاباي')" class="payment-plain-btn text-purple-700 hover:underline">انستاباي</button>
-                <span class="text-gray-400 mx-0.5">|</span>
+                <span class="text-gray-400">|</span>
                 <span class="text-green-700 font-extrabold">أو عند الاستلام</span>
             </div>
             <div class="text-[11px] text-gray-500 font-semibold mt-0.5">
@@ -624,16 +639,36 @@
 
         let toastHideTimer = null;
 
+        function positionToastNearPaymentBar() {
+            const toast = document.getElementById('payment-toast');
+            const bar = document.getElementById('sticky-payment-bar');
+            if (!toast || !bar) return;
+            const rect = bar.getBoundingClientRect();
+            const halfW = toast.offsetWidth / 2 || 55;
+            const centerX = Math.min(window.innerWidth - halfW - 8, Math.max(halfW + 8, rect.left + rect.width / 2));
+            const topY = Math.min(window.innerHeight - 36, Math.max(8, rect.bottom + 2));
+            toast.style.left = `${centerX}px`;
+            toast.style.top = `${topY}px`;
+        }
+
         function showCopyToast(message = 'تم نسخ الرقم ✓') {
             const toast = document.getElementById('payment-toast');
             if (!toast) return;
             toast.textContent = message;
             toast.style.display = 'block';
+            positionToastNearPaymentBar();
             if (toastHideTimer) clearTimeout(toastHideTimer);
             toastHideTimer = setTimeout(() => {
                 toast.style.display = 'none';
             }, 2000);
         }
+
+        window.addEventListener('scroll', () => {
+            const toast = document.getElementById('payment-toast');
+            if (toast && toast.style.display === 'block') {
+                positionToastNearPaymentBar();
+            }
+        }, { passive: true });
 
         function copyPaymentDirect(methodLabel) {
             const numEl = document.getElementById('payment-copy-number');
