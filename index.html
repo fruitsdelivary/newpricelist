@@ -200,6 +200,12 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
         }
+        .tabs-scroll-container {
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+            scroll-behavior: smooth;
+            scroll-padding-inline: 12px;
+        }
         .category-tab-btn {
             padding: 8px 12px;
             border-radius: 12px;
@@ -211,6 +217,7 @@
             background-color: #ffffff;
             color: #374151;
             flex-shrink: 0;
+            scroll-snap-align: center;
         }
         .category-tab-btn.active {
             background-color: #16a34a;
@@ -295,12 +302,12 @@
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
         <!-- شريط التبويبات السريع -->
-        <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar">
-            <button type="button" onclick="setActiveCategoryTab('all')" data-tab="all" class="category-tab-btn active">📋 الكل</button>
-            <button type="button" onclick="setActiveCategoryTab('veg')" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
-            <button type="button" onclick="setActiveCategoryTab('fruit')" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
-            <button type="button" onclick="setActiveCategoryTab('offers')" data-tab="offers" class="category-tab-btn">🔥 العروض والمميز</button>
-            <button type="button" onclick="scrollToCheckout()" class="category-tab-btn bg-amber-50 border-amber-300 text-amber-900">📝 بيانات التوصيل</button>
+        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 px-1 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
+            <button type="button" onclick="setActiveCategoryTab('all', this)" data-tab="all" class="category-tab-btn active">📋 الكل</button>
+            <button type="button" onclick="setActiveCategoryTab('veg', this)" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
+            <button type="button" onclick="setActiveCategoryTab('fruit', this)" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
+            <button type="button" onclick="setActiveCategoryTab('offers', this)" data-tab="offers" class="category-tab-btn">🔥 العروض والمميز</button>
+            <button type="button" onclick="centerTabButton(this); scrollToCheckout();" class="category-tab-btn bg-amber-50 border-amber-300 text-amber-900">📝 بيانات التوصيل</button>
         </div>
         <section id="veg-section-wrapper" class="border rounded-xl overflow-hidden shadow-lg mb-8">
             <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
@@ -1482,15 +1489,27 @@ function restoreDraftCart() {
 
 let activeCategoryTab = 'all';
 
-function setActiveCategoryTab(tab) {
+function centerTabButton(btnEl) {
+    const container = document.getElementById('category-tabs-bar');
+    if (!container || !btnEl) return;
+    const targetLeft = btnEl.offsetLeft - (container.clientWidth / 2) + (btnEl.clientWidth / 2);
+    container.scrollTo({
+        left: targetLeft,
+        behavior: 'smooth'
+    });
+}
+
+function setActiveCategoryTab(tab, btnEl = null) {
     activeCategoryTab = tab;
     document.querySelectorAll('.category-tab-btn[data-tab]').forEach(btn => {
         if (btn.dataset.tab === tab) {
             btn.classList.add('active');
+            if (!btnEl) btnEl = btn;
         } else {
             btn.classList.remove('active');
         }
     });
+    if (btnEl) centerTabButton(btnEl);
     filterProducts(false);
 }
 
