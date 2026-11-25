@@ -228,13 +228,9 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .sticky-payment-bar {
-            position: sticky;
-            top: 0;
-            z-index: 35;
-            background-color: rgba(249, 250, 251, 0.96);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+        .payment-info-bar {
+            position: static;
+            background-color: #f9fafb;
             border: 1px solid #e5e7eb;
             border-radius: 12px;
             padding: 7px 8px;
@@ -271,18 +267,17 @@
         .copy-toast-near-bar {
             position: fixed;
             z-index: 100005;
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             color: #15803d;
             font-size: 11.5px;
             font-weight: 900;
-            padding: 3px 10px;
+            padding: 3px 11px;
             border-radius: 999px;
             pointer-events: none;
             white-space: nowrap;
             transform: translateX(-50%);
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
         }
     </style>
 </head>
@@ -337,7 +332,7 @@
                 </svg>
             </button>
         </div>
-        <div id="sticky-payment-bar" class="sticky-payment-bar text-center">
+        <div id="payment-info-bar" class="payment-info-bar text-center">
             <div class="payment-single-line">
                 <span class="payment-prefix-label">متاح الدفع عبر:</span>
                 <button type="button" onclick="copyPaymentDirect('فودافون كاش', '#dc2626')" class="payment-plain-btn text-red-600 hover:underline">فودافون كاش</button>
@@ -360,7 +355,7 @@
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
         <!-- شريط التبويبات السريع -->
-        <div id="category-tabs-bar" class="sticky top-[56px] z-30 bg-white/95 backdrop-blur-sm py-2 px-1 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
+        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 px-1 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
             <button type="button" onclick="setActiveCategoryTab('all', this)" data-tab="all" class="category-tab-btn active">📋 الكل</button>
             <button type="button" onclick="setActiveCategoryTab('veg', this)" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
             <button type="button" onclick="setActiveCategoryTab('fruit', this)" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
@@ -641,7 +636,7 @@
 
         function positionToastNearPaymentBar() {
             const toast = document.getElementById('payment-toast');
-            const bar = document.getElementById('sticky-payment-bar');
+            const bar = document.getElementById('payment-info-bar');
             if (!toast || !bar) return;
             const rect = bar.getBoundingClientRect();
             const halfW = toast.offsetWidth / 2 || 55;
