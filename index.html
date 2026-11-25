@@ -1684,6 +1684,33 @@ function setActiveCategoryTab(tab, btnEl = null) {
     });
     if (btnEl) centerTabButton(btnEl);
     filterProducts(false);
+
+    const tabsBar = document.getElementById('category-tabs-bar');
+    const vegSec = document.getElementById('veg-section-wrapper');
+    const fruitSec = document.getElementById('fruit-section-wrapper');
+    const searchInput = document.getElementById('search-input');
+
+    let targetEl = searchInput;
+    if (tab === 'fruit' && fruitSec) {
+        targetEl = fruitSec;
+    } else if (tab === 'veg' && vegSec) {
+        targetEl = vegSec;
+    } else if (tab === 'offers') {
+        const vegVisible = vegSec && vegSec.style.display !== 'none';
+        const fruitVisible = fruitSec && fruitSec.style.display !== 'none';
+        targetEl = vegVisible ? vegSec : (fruitVisible ? fruitSec : searchInput);
+    } else if (tab === 'all' && vegSec) {
+        targetEl = vegSec;
+    }
+
+    if (targetEl) {
+        const tabsHeight = tabsBar ? tabsBar.offsetHeight : 52;
+        const targetTop = targetEl.getBoundingClientRect().top + window.scrollY - tabsHeight - 8;
+        window.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior: 'smooth'
+        });
+    }
 }
 
 function saveOrderToHistory(orderItems) {
