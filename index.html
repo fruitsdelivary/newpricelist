@@ -202,10 +202,7 @@
         }
         .tabs-scroll-container {
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x;
-            scroll-behavior: smooth;
-            scroll-snap-type: x proximity;
-            scroll-padding-inline: 12px;
+            padding-inline: 10px;
         }
         .category-tab-btn {
             padding: 8px 12px;
@@ -213,12 +210,11 @@
             font-size: 0.8rem;
             font-weight: 800;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
             border: 1.5px solid #e5e7eb;
             background-color: #ffffff;
             color: #374151;
             flex-shrink: 0;
-            scroll-snap-align: center;
         }
         .category-tab-btn.active {
             background-color: #16a34a;
@@ -303,13 +299,12 @@
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
         <!-- شريط التبويبات السريع -->
-        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 px-2 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
+        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
             <button type="button" onclick="setActiveCategoryTab('all', this)" data-tab="all" class="category-tab-btn active">📋 الكل</button>
             <button type="button" onclick="setActiveCategoryTab('veg', this)" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
             <button type="button" onclick="setActiveCategoryTab('fruit', this)" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
             <button type="button" onclick="setActiveCategoryTab('offers', this)" data-tab="offers" class="category-tab-btn">🔥 العروض والمميز</button>
             <button type="button" onclick="centerTabButton(this); scrollToCheckout();" class="category-tab-btn bg-amber-50 border-amber-300 text-amber-900">📝 بيانات التوصيل</button>
-            <span class="w-2 shrink-0" aria-hidden="true"></span>
         </div>
         <section id="veg-section-wrapper" class="border rounded-xl overflow-hidden shadow-lg mb-8">
             <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
@@ -1492,15 +1487,16 @@ function restoreDraftCart() {
 let activeCategoryTab = 'all';
 
 function centerTabButton(btnEl) {
-    const container = document.getElementById('category-tabs-bar');
-    if (!container || !btnEl) return;
-    const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
-    const rawTarget = btnEl.offsetLeft - (container.clientWidth / 2) + (btnEl.clientWidth / 2);
-    const targetLeft = Math.max(0, Math.min(rawTarget, maxScroll));
-    container.scrollTo({
-        left: targetLeft,
-        behavior: 'smooth'
-    });
+    if (!btnEl || typeof btnEl.scrollIntoView !== 'function') return;
+    try {
+        btnEl.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest'
+        });
+    } catch (e) {
+        btnEl.scrollIntoView(false);
+    }
 }
 
 function setActiveCategoryTab(tab, btnEl = null) {
