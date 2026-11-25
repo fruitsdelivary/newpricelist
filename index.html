@@ -278,19 +278,20 @@
                 </svg>
             </button>
         </div>
-        <div class="bg-red-50 text-red-700 font-bold p-2 rounded-xl border-2 border-red-200 mb-8 flex items-center justify-center gap-2 animate-pulse">
-            <span class="text-sm md:text-base whitespace-nowrap">🔴 يُرجى تحديث الصفحة قبل الطلب</span>
-            <button onclick="window.location.reload();" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-700 active:scale-95 transition shadow-sm">تحديث الآن 🔄</button>
-        </div>
-        <div style="text-align: center; padding: 8px 6px; background: #fdfdfd; border-radius: 10px; margin: 10px auto; border: 1px solid #e5e7eb; width: 95%; overflow: hidden;">
-            <div style="white-space: nowrap; font-family: sans-serif; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap;">
-                <span style="color: #888; font-size: 10px;">متاح الدفع عبر:</span>
-                <button type="button" onclick="openPaymentInfoModal('vodafone')" style="color: #e60000; font-size: 10px; font-weight: 800; background: #fef2f2; border: 1px solid #fecaca; padding: 2px 7px; border-radius: 6px; cursor: pointer;">Vodafone Cash</button>
-                <span style="color: #ddd;">|</span>
-                <button type="button" onclick="openPaymentInfoModal('instapay')" style="color: #5b2d82; font-size: 10px; font-weight: 800; background: #f5f3ff; border: 1px solid #ddd6fe; padding: 2px 7px; border-radius: 6px; cursor: pointer;">InstaPay</button>
-            </div>
-            <div style="color: #6b7280; font-size: 9px; font-weight: 600; margin-top: 4px;">
-                اضغط على الوسيلة لعرض الرقم ونسخه بسهولة
+        <div class="text-center py-2 px-2.5 bg-gray-50 rounded-xl my-4 border border-gray-200 w-[96%] mx-auto overflow-x-auto no-scrollbar">
+            <div class="flex items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-bold">
+                <span class="text-gray-500 font-semibold">متاح الدفع عبر:</span>
+                <button type="button" onclick="openPaymentInfoModal('vodafone')" class="text-red-600 font-extrabold bg-red-50 border border-red-200 px-2 py-0.5 rounded-md cursor-pointer">
+                    فودافون كاش
+                </button>
+                <span class="text-gray-300">|</span>
+                <button type="button" onclick="openPaymentInfoModal('instapay')" class="text-purple-700 font-extrabold bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md cursor-pointer">
+                    انستاباي
+                </button>
+                <span class="text-gray-300">|</span>
+                <button type="button" onclick="copyPaymentText('vf-cash-number', this)" class="text-green-700 font-extrabold bg-green-50 border border-green-200 px-2 py-0.5 rounded-md cursor-pointer">
+                    نسخ الرقم
+                </button>
             </div>
         </div>
         <div id="marquee-bar-container" class="new-arrival-bar" style="overflow: hidden; direction: ltr;">
@@ -564,6 +565,59 @@
         </div>
     </div>
     <script>
+        const RESET_ON_RETURN_MS = 10 * 60 * 1000; // 10 دقائق
+        let lastBackgroundTime = null;
+
+        function resetToTopOnReturn() {
+            const rv = document.getElementById('reviews-view');
+            if (rv && rv.style.display !== 'none') {
+                rv.style.display = 'none';
+            }
+            const searchEl = document.getElementById('search-input');
+            if (searchEl && searchEl.value) {
+                searchEl.value = '';
+            }
+            if (activeCategoryTab !== 'all') {
+                activeCategoryTab = 'all';
+                document.querySelectorAll('.category-tab-btn[data-tab]').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === 'all');
+                });
+            }
+            filterProducts(false);
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        }
+
+        function markAwayTime() {
+            if (lastBackgroundTime === null) {
+                lastBackgroundTime = Date.now();
+            }
+        }
+
+        function checkReturnAfterAway() {
+            if (lastBackgroundTime !== null) {
+                const elapsed = Date.now() - lastBackgroundTime;
+                lastBackgroundTime = null;
+                if (elapsed >= RESET_ON_RETURN_MS) {
+                    resetToTopOnReturn();
+                }
+            }
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                markAwayTime();
+            } else {
+                checkReturnAfterAway();
+            }
+        });
+
+        window.addEventListener('pagehide', markAwayTime);
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                checkReturnAfterAway();
+            }
+        });
+
         function openPaymentInfoModal(focusType = null) {
             const modal = document.getElementById('payment-info-modal');
             const vfCard = document.getElementById('payment-card-vodafone');
