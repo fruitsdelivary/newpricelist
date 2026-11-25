@@ -202,19 +202,22 @@
         }
         .tabs-scroll-container {
             -webkit-overflow-scrolling: touch;
-            padding-inline: 8px;
+            touch-action: pan-x;
+            scroll-behavior: smooth;
+            scroll-padding-inline: 12px;
         }
         .category-tab-btn {
-            padding: 7px 11px;
+            padding: 8px 12px;
             border-radius: 12px;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 800;
             white-space: nowrap;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            transition: all 0.2s;
             border: 1.5px solid #e5e7eb;
             background-color: #ffffff;
             color: #374151;
             flex-shrink: 0;
+            scroll-snap-align: center;
         }
         .category-tab-btn.active {
             background-color: #16a34a;
@@ -299,7 +302,7 @@
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
         <!-- شريط التبويبات السريع -->
-        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
+        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 px-1 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
             <button type="button" onclick="setActiveCategoryTab('all', this)" data-tab="all" class="category-tab-btn active">📋 الكل</button>
             <button type="button" onclick="setActiveCategoryTab('veg', this)" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
             <button type="button" onclick="setActiveCategoryTab('fruit', this)" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
@@ -1487,16 +1490,13 @@ function restoreDraftCart() {
 let activeCategoryTab = 'all';
 
 function centerTabButton(btnEl) {
-    if (!btnEl || typeof btnEl.scrollIntoView !== 'function') return;
-    try {
-        btnEl.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'nearest'
-        });
-    } catch (e) {
-        btnEl.scrollIntoView(false);
-    }
+    const container = document.getElementById('category-tabs-bar');
+    if (!container || !btnEl) return;
+    const targetLeft = btnEl.offsetLeft - (container.clientWidth / 2) + (btnEl.clientWidth / 2);
+    container.scrollTo({
+        left: targetLeft,
+        behavior: 'smooth'
+    });
 }
 
 function setActiveCategoryTab(tab, btnEl = null) {
