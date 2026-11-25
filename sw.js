@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tawfeer-delivery-v2'; // قم بتغيير رقم الإصدار (v2, v3...) مع كل تحديث جديد ترفعه
+const CACHE_NAME = 'tawfeer-delivery-v3'; // قم بتغيير رقم الإصدار (v2, v3...) مع كل تحديث جديد ترفعه
 const FILES_TO_CACHE = [
   './',
   './index.html',
