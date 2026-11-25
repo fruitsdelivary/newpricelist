@@ -200,6 +200,26 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
         }
+        .category-tab-btn {
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border: 1.5px solid #e5e7eb;
+            background-color: #ffffff;
+            color: #374151;
+            flex-shrink: 0;
+        }
+        .category-tab-btn.active {
+            background-color: #16a34a;
+            color: #ffffff;
+            border-color: #16a34a;
+            box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="p-2 md:p-8 text-right" dir="rtl">
@@ -270,15 +290,23 @@
              ✨اللهم صلِّ وسلم وبارك على نبينا محمد ﷺ✨ 
            </div>
         </div> 
-        <div class="relative mb-6">
-            <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
+        <div class="relative mb-3">
+            <input type="text" id="search-input" onkeyup="filterProducts(true)" placeholder="🔍 ابحث عن صنف (طماطم، موز، بصل...)" 
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
-        <section class="border rounded-xl overflow-hidden shadow-lg mb-8">
+        <!-- شريط التبويبات السريع -->
+        <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <button type="button" onclick="setActiveCategoryTab('all')" data-tab="all" class="category-tab-btn active">📋 الكل</button>
+            <button type="button" onclick="setActiveCategoryTab('veg')" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
+            <button type="button" onclick="setActiveCategoryTab('fruit')" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
+            <button type="button" onclick="setActiveCategoryTab('offers')" data-tab="offers" class="category-tab-btn">🔥 العروض والمميز</button>
+            <button type="button" onclick="scrollToCheckout()" class="category-tab-btn bg-amber-50 border-amber-300 text-amber-900">📝 بيانات التوصيل</button>
+        </div>
+        <section id="veg-section-wrapper" class="border rounded-xl overflow-hidden shadow-lg mb-8">
             <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
             <div id="vegetables-list-interactive"></div>
         </section>
-        <section class="border rounded-xl overflow-hidden shadow-lg mb-10">
+        <section id="fruit-section-wrapper" class="border rounded-xl overflow-hidden shadow-lg mb-10">
             <h2 class="bg-yellow-500 text-white text-2xl font-bold p-3 text-center">🍎🥝 فواكه 🍉🍒</h2>
             <div id="fruits-list-interactive"></div>
         </section>
@@ -288,15 +316,15 @@
             <form id="order-form" onsubmit="event.preventDefault(); generateWhatsAppOrder();">
                 <div class="space-y-4 mb-6">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">الاسم :</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">الاسم <span class="text-red-600">*</span> :</label>
                         <input type="text" id="cust-name" oninput="saveCustomerData()" placeholder="اكتب اسمك..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">رقم الموبايل للتواصل:</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">رقم الموبايل للتواصل <span class="text-red-600">*</span> :</label>
                         <input type="tel" id="cust-phone" oninput="saveCustomerData()" placeholder="010xxxxxxxx" class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">العنوان بالتفصيل:</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">العنوان بالتفصيل <span class="text-red-600">*</span> :</label>
                         <input type="text" id="cust-address" oninput="saveCustomerData()" placeholder="اسم الشارع / الشارع الجانبي / رقم العمائر أو الدور..." class="w-full p-3 border border-gray-300 rounded-xl text-right focus:ring-2 focus:ring-green-500 outline-none text-sm bg-white">
                     </div>
                     <div>
@@ -1047,6 +1075,7 @@ function init(preserveCart = false) {
             const specialBadge = p.isSpecial ? `<span class="special-star" data-tooltip="مميز">⭐</span>` : '';
             const offerBadge = p.oldPrice ? `<span class="offer-badge">عرض 🔥</span>` : '';
             const storageBadge = p.isStorage ? `<span class="storage-badge">مناسب للتخزين ❄️ </span>` : '';
+            const isOfferOrSpecial = (p.oldPrice || p.isSpecial) ? 'true' : 'false';
             
             const imgTag = p.img ? `<img src="${p.img}" alt="${p.name}" class="product-img">` : `<div class="product-img-placeholder">🛒</div>`;
             let trendArrow = '';
@@ -1087,7 +1116,7 @@ function init(preserveCart = false) {
                     </div>
                     ${sizeSelectHTML}
                 </div>` : '';
-            const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}">
+            const iRow = `<div class="flex-row-item ${p.available ? '' : 'not-available'}" data-category="${p.category}" data-offer="${isOfferOrSpecial}">
                 <div class="item-right-group">
                     ${imgTag}
                     <div class="item-text-content">
@@ -1149,18 +1178,20 @@ function init(preserveCart = false) {
                 s.value = savedQuantities[s.dataset.name];
             }
         });
+        updateWorkSchedule();
         if (preserveCart) {
             document.querySelectorAll('.note-select').forEach(s => {
                 if (savedNotes[s.dataset.name]) {
                     s.value = savedNotes[s.dataset.name];
                 }
             });
-            filterProducts();
+            filterProducts(false);
         } else {
             loadCustomerData();
             checkPreviousOrdersCount();
+            restoreDraftCart();
+            filterProducts(false);
         }
-        updateWorkSchedule();
         applySheetUIControls();
         if (preserveCart) updateStickyCartBar();
     } catch (e) { console.error(e); }
@@ -1225,6 +1256,7 @@ function updateStickyCartBar() {
     if (modal.style.display === 'flex') {
         renderCartPreviewItems();
     }
+    saveDraftCart();
 }
 function generateModalQuantityOptions(unit, selectedVal, productName) {
     let opts = '<option value="0">حذف</option>';
@@ -1344,6 +1376,116 @@ function loadCustomerData() {
         } catch(e) {}
     }
 }
+
+// ==========================================
+// 1. حفظ واستعادة السلة المؤقتة لنفس اليوم
+// ==========================================
+const DRAFT_CART_KEY = 'shirbin_draft_cart_v1';
+
+function getTodayKey() {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Africa/Cairo',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).formatToParts(new Date());
+    const y = parts.find(p => p.type === 'year').value;
+    const m = parts.find(p => p.type === 'month').value;
+    const d = parts.find(p => p.type === 'day').value;
+    return `${y}-${m}-${d}`;
+}
+
+function saveDraftCart() {
+    if (holidayMode || closeAfterHoursMode) return;
+    try {
+        const items = [];
+        document.querySelectorAll('.quantity-select').forEach(sel => {
+            const name = sel.dataset.name;
+            const val = sel.value;
+            if (name && val && val !== '0') {
+                const noteSel = document.querySelector(`.note-select[data-name="${name}"]`);
+                items.push({
+                    name: name,
+                    val: val,
+                    note: noteSel ? noteSel.value : ''
+                });
+            }
+        });
+        if (items.length === 0) {
+            localStorage.removeItem(DRAFT_CART_KEY);
+            return;
+        }
+        localStorage.setItem(DRAFT_CART_KEY, JSON.stringify({
+            date: getTodayKey(),
+            items: items
+        }));
+    } catch (e) {
+        console.warn('تعذر حفظ السلة المؤقتة:', e);
+    }
+}
+
+function clearDraftCart() {
+    try {
+        localStorage.removeItem(DRAFT_CART_KEY);
+    } catch (e) {}
+}
+
+function restoreDraftCart() {
+    if (holidayMode || closeAfterHoursMode) {
+        clearDraftCart();
+        return;
+    }
+    try {
+        const raw = localStorage.getItem(DRAFT_CART_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!parsed || parsed.date !== getTodayKey() || !Array.isArray(parsed.items)) {
+            clearDraftCart();
+            return;
+        }
+        let restoredAny = false;
+        parsed.items.forEach(item => {
+            const product = productsData.find(p => p.name.trim() === String(item.name).trim());
+            if (!product || !product.available) return;
+            const qtySel = document.querySelector(`.quantity-select[data-name="${product.name}"]`);
+            if (!qtySel) return;
+            const hasOption = Array.from(qtySel.options).some(opt => opt.value === String(item.val));
+            if (hasOption) {
+                qtySel.value = String(item.val);
+                restoredAny = true;
+                const noteSel = document.querySelector(`.note-select[data-name="${product.name}"]`);
+                if (noteSel && item.note) {
+                    noteSel.value = item.note;
+                }
+            }
+        });
+        if (restoredAny) {
+            updateStickyCartBar();
+        } else {
+            clearDraftCart();
+        }
+    } catch (e) {
+        console.warn('تعذر استعادة السلة المؤقتة:', e);
+    }
+}
+
+// ==========================================
+// 2. التبويبات والفلترة السريعة
+// ==========================================
+let activeCategoryTab = 'all';
+
+function setActiveCategoryTab(tab) {
+    activeCategoryTab = tab;
+    document.querySelectorAll('.category-tab-btn[data-tab]').forEach(btn => {
+        if (btn.dataset.tab === tab) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    filterProducts(false);
+}
+
 function saveOrderToHistory(orderItems) {
     let history = [];
     try { history = JSON.parse(localStorage.getItem('shirbin_orders_history')) || []; } catch(e) {}
@@ -1429,6 +1571,40 @@ function generateWhatsAppOrder() {
     if (closeAfterHoursMode) { alert("🚨 انتهت مواعيد استقبال الطلبات اليوم."); return; }
     const selectedItems = getSelectedCartItems();
     if (selectedItems.length === 0) return alert("من فضلك اختر صنف واحد على الأقل من القائمة!");
+
+    // 3. التحقق من البيانات الأساسية قبل الإرسال
+    const nameInput = document.getElementById('cust-name');
+    const phoneInput = document.getElementById('cust-phone');
+    const addressInput = document.getElementById('cust-address');
+
+    const cName = (nameInput.value || '').trim();
+    const cPhone = (phoneInput.value || '').trim();
+    const cAddress = (addressInput.value || '').trim();
+    const cLandmark = (document.getElementById('cust-landmark').value || '').trim();
+    const cNotes = (document.getElementById('notes').value || '').trim();
+
+    if (!cName) {
+        alert("من فضلك اكتب الاسم أولاً.");
+        nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        nameInput.focus();
+        return;
+    }
+
+    const cleanPhone = cPhone.replace(/\s+/g, '');
+    if (!cleanPhone || !/^01[0125][0-9]{8}$/.test(cleanPhone)) {
+        alert("من فضلك اكتب رقم موبايل صحيح مكون من 11 رقماً (مثل 010xxxxxxxx).");
+        phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        phoneInput.focus();
+        return;
+    }
+
+    if (!cAddress) {
+        alert("من فضلك اكتب العنوان بالتفصيل حتى نتمكن من التوصيل.");
+        addressInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        addressInput.focus();
+        return;
+    }
+
     let vegItems = '', fruitItems = '';
     let currentOrderItems = [];
     let orderDetailsText = '';
@@ -1452,14 +1628,9 @@ function generateWhatsAppOrder() {
     });
     saveCustomerData();
     saveOrderToHistory(currentOrderItems);
-    const cName = document.getElementById('cust-name').value || 'بدون اسم';
-    const cPhone = document.getElementById('cust-phone').value || '';
-    const cAddress = document.getElementById('cust-address').value || '';
-    const cLandmark = document.getElementById('cust-landmark').value || '';
-    const cNotes = document.getElementById('notes').value || '';
     const formData = {
         name: cName,
-        phone: cPhone,
+        phone: cleanPhone,
         address: cAddress + (cLandmark ? ' - علامة مميزة: ' + cLandmark : ''),
         orderDetails: orderDetailsText
     };
@@ -1472,7 +1643,7 @@ function generateWhatsAppOrder() {
     }).catch(err => console.log("خطأ في حفظ الشيت:", err));
     let fullNotesAndAddr = '';
     if (cName) fullNotesAndAddr += `الاسم: ${cName}\n`;
-    if (cPhone) fullNotesAndAddr += `الموبايل: ${cPhone}\n`;
+    if (cleanPhone) fullNotesAndAddr += `الموبايل: ${cleanPhone}\n`;
     if (cAddress) fullNotesAndAddr += `العنوان: ${cAddress}\n`;
     if (cLandmark) fullNotesAndAddr += `علامة مميزة: ${cLandmark}\n`;
     if (cNotes) fullNotesAndAddr += `ملاحظات: ${cNotes}\n`;
@@ -1497,17 +1668,50 @@ function generateWhatsAppOrder() {
     msg += '📌 *الملاحظات والعنوان:*\n' + (fullNotesAndAddr || 'لا يوجد');
     window.open(`https://wa.me/201032872750?text=${encodeURIComponent(msg)}`);
     
+    clearDraftCart();
     document.querySelectorAll('.quantity-select').forEach(s => s.value = "0");
     document.querySelectorAll('.note-select').forEach(s => s.value = "");
     updateStickyCartBar();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function filterProducts() {
-    const term = document.getElementById('search-input').value.toLowerCase();
+function filterProducts(fromSearchInput = false) {
+    const searchEl = document.getElementById('search-input');
+    const term = searchEl ? searchEl.value.toLowerCase().trim() : '';
+
+    if (fromSearchInput && term !== '' && activeCategoryTab !== 'all') {
+        activeCategoryTab = 'all';
+        document.querySelectorAll('.category-tab-btn[data-tab]').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === 'all');
+        });
+    }
+
+    let visibleVegCount = 0;
+    let visibleFruitCount = 0;
+
     document.querySelectorAll('.flex-row-item').forEach(row => {
         const name = row.querySelector('.item-main-title').innerText.toLowerCase();
-        row.style.display = name.includes(term) ? 'flex' : 'none';
+        const cat = row.dataset.category;
+        const isOffer = row.dataset.offer === 'true';
+
+        const matchesSearch = name.includes(term);
+        let matchesTab = true;
+        if (activeCategoryTab === 'veg') matchesTab = (cat === 'veg');
+        else if (activeCategoryTab === 'fruit') matchesTab = (cat === 'fruit');
+        else if (activeCategoryTab === 'offers') matchesTab = isOffer;
+
+        const show = matchesSearch && matchesTab;
+        row.style.display = show ? 'flex' : 'none';
+
+        if (show) {
+            if (cat === 'fruit') visibleFruitCount++;
+            else visibleVegCount++;
+        }
     });
+
+    const vegSec = document.getElementById('veg-section-wrapper');
+    const fruitSec = document.getElementById('fruit-section-wrapper');
+    if (vegSec) vegSec.style.display = (activeCategoryTab === 'fruit' || (activeCategoryTab === 'offers' && visibleVegCount === 0)) ? 'none' : 'block';
+    if (fruitSec) fruitSec.style.display = (activeCategoryTab === 'veg' || (activeCategoryTab === 'offers' && visibleFruitCount === 0)) ? 'none' : 'block';
 }
     </script>
 </body>
