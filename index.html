@@ -340,9 +340,9 @@
         <div id="sticky-payment-bar" class="sticky-payment-bar text-center">
             <div class="payment-single-line">
                 <span class="payment-prefix-label">متاح الدفع عبر:</span>
-                <button type="button" onclick="copyPaymentDirect('فودافون كاش')" class="payment-plain-btn text-red-600 hover:underline">فودافون كاش</button>
+                <button type="button" onclick="copyPaymentDirect('فودافون كاش', '#dc2626')" class="payment-plain-btn text-red-600 hover:underline">فودافون كاش</button>
                 <span class="text-gray-400">|</span>
-                <button type="button" onclick="copyPaymentDirect('انستاباي')" class="payment-plain-btn text-purple-700 hover:underline">انستاباي</button>
+                <button type="button" onclick="copyPaymentDirect('انستاباي', '#6d28d9')" class="payment-plain-btn text-purple-700 hover:underline">انستاباي</button>
                 <span class="text-gray-400">|</span>
                 <span class="text-green-700 font-extrabold">أو عند الاستلام</span>
             </div>
@@ -651,10 +651,11 @@
             toast.style.top = `${topY}px`;
         }
 
-        function showCopyToast(message = 'تم نسخ الرقم ✓') {
+        function showCopyToast(message = 'تم نسخ الرقم ✓', color = '#15803d') {
             const toast = document.getElementById('payment-toast');
             if (!toast) return;
             toast.textContent = message;
+            toast.style.color = color;
             toast.style.display = 'block';
             positionToastNearPaymentBar();
             if (toastHideTimer) clearTimeout(toastHideTimer);
@@ -670,13 +671,13 @@
             }
         }, { passive: true });
 
-        function copyPaymentDirect(methodLabel) {
+        function copyPaymentDirect(methodLabel, color = '#15803d') {
             const numEl = document.getElementById('payment-copy-number');
             const textToCopy = numEl ? (numEl.textContent || '').trim() : '01016980880';
             if (!textToCopy) return;
 
             const onCopied = () => {
-                showCopyToast(`تم نسخ رقم ${methodLabel} ✓`);
+                showCopyToast(`تم نسخ رقم ${methodLabel} ✓`, color);
             };
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
