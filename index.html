@@ -204,6 +204,7 @@
             -webkit-overflow-scrolling: touch;
             touch-action: pan-x;
             scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
             scroll-padding-inline: 12px;
         }
         .category-tab-btn {
@@ -302,12 +303,13 @@
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
         <!-- شريط التبويبات السريع -->
-        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 px-1 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
+        <div id="category-tabs-bar" class="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 px-2 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
             <button type="button" onclick="setActiveCategoryTab('all', this)" data-tab="all" class="category-tab-btn active">📋 الكل</button>
             <button type="button" onclick="setActiveCategoryTab('veg', this)" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
             <button type="button" onclick="setActiveCategoryTab('fruit', this)" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
             <button type="button" onclick="setActiveCategoryTab('offers', this)" data-tab="offers" class="category-tab-btn">🔥 العروض والمميز</button>
             <button type="button" onclick="centerTabButton(this); scrollToCheckout();" class="category-tab-btn bg-amber-50 border-amber-300 text-amber-900">📝 بيانات التوصيل</button>
+            <span class="w-2 shrink-0" aria-hidden="true"></span>
         </div>
         <section id="veg-section-wrapper" class="border rounded-xl overflow-hidden shadow-lg mb-8">
             <h2 class="bg-green-600 text-white text-2xl font-bold p-3 text-center">🥬🍅 خضروات 🌶️🥦</h2>
@@ -1492,7 +1494,9 @@ let activeCategoryTab = 'all';
 function centerTabButton(btnEl) {
     const container = document.getElementById('category-tabs-bar');
     if (!container || !btnEl) return;
-    const targetLeft = btnEl.offsetLeft - (container.clientWidth / 2) + (btnEl.clientWidth / 2);
+    const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+    const rawTarget = btnEl.offsetLeft - (container.clientWidth / 2) + (btnEl.clientWidth / 2);
+    const targetLeft = Math.max(0, Math.min(rawTarget, maxScroll));
     container.scrollTo({
         left: targetLeft,
         behavior: 'smooth'
