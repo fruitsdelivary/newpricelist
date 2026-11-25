@@ -235,36 +235,39 @@
             background-color: rgba(249, 250, 251, 0.96);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
-            border: 1px solid #d1d5db;
+            border: 1px solid #e5e7eb;
             border-radius: 12px;
-            padding: 6px 8px;
-            margin: 10px 0 12px 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 7px 10px;
+            margin: 12px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        .copy-hint-bubble {
-            position: fixed;
-            z-index: 100005;
-            background: #111827;
-            color: #ffffff;
-            font-size: 11px;
+        .payment-plain-btn {
+            background: transparent;
+            border: none;
+            padding: 0 2px;
             font-weight: 800;
-            padding: 5px 10px;
-            border-radius: 999px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
-            pointer-events: none;
-            white-space: nowrap;
-            transform: translate(-50%, -100%);
-            transition: opacity 0.15s ease;
+            cursor: pointer;
+            display: inline;
         }
-        .copy-hint-bubble::after {
-            content: '';
-            position: absolute;
-            top: 100%;
+        .payment-plain-btn:active {
+            opacity: 0.7;
+        }
+        .copy-toast-banner {
+            position: fixed;
+            top: 56px;
             left: 50%;
             transform: translateX(-50%);
-            border-width: 5px;
-            border-style: solid;
-            border-color: #111827 transparent transparent transparent;
+            z-index: 100005;
+            background: #14532d;
+            color: #ffffff;
+            border: 1px solid #4ade80;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 999px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -272,7 +275,8 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KV5JX7DJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <div id="payment-copy-bubble" class="copy-hint-bubble" style="display: none;">اضغط لنسخ الرقم</div>
+    <span id="payment-copy-number" dir="ltr" style="display:none;">01016980880</span>
+    <div id="payment-toast" class="copy-toast-banner" style="display: none;">تم نسخ الرقم ✓</div>
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-4 md:p-10 border-4 border-green-500/45">
         <header class="text-center mb-6">
             <div class="hero-title-box mb-5">
@@ -319,27 +323,16 @@
             </button>
         </div>
         <div class="sticky-payment-bar text-center">
-            <div class="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold">
-                <span class="text-gray-600 font-semibold shrink-0">متاح الدفع عبر:</span>
-                <button type="button"
-                        data-payment-type="vodafone"
-                        onpointerenter="handlePaymentHover(this)"
-                        onpointerleave="hidePaymentBubble()"
-                        onpointerdown="handlePaymentPress(this)"
-                        onclick="handlePaymentClick('vodafone', this)"
-                        class="text-red-600 font-extrabold bg-red-50 border border-red-200 px-1.5 py-0.5 rounded-md cursor-pointer shrink-0">
-                    فودافون كاش
-                </button>
-                <span class="text-gray-300 shrink-0">|</span>
-                <button type="button"
-                        data-payment-type="instapay"
-                        onpointerenter="handlePaymentHover(this)"
-                        onpointerleave="hidePaymentBubble()"
-                        onpointerdown="handlePaymentPress(this)"
-                        onclick="handlePaymentClick('instapay', this)"
-                        class="text-purple-700 font-extrabold bg-purple-50 border border-purple-200 px-1.5 py-0.5 rounded-md cursor-pointer shrink-0">
-                    انستاباي
-                </button>
+            <div class="text-xs sm:text-sm font-bold text-gray-700 leading-snug">
+                <span>متاح الدفع عبر:</span>
+                <button type="button" onclick="copyPaymentDirect('فودافون كاش')" class="payment-plain-btn text-red-600 hover:underline">فودافون كاش</button>
+                <span class="text-gray-400 mx-0.5">|</span>
+                <button type="button" onclick="copyPaymentDirect('انستاباي')" class="payment-plain-btn text-purple-700 hover:underline">انستاباي</button>
+                <span class="text-gray-400 mx-0.5">|</span>
+                <span class="text-green-700 font-extrabold">أو عند الاستلام</span>
+            </div>
+            <div class="text-[11px] text-gray-500 font-semibold mt-0.5">
+                اضغط على الوسيلة المناسبة لنسخ الرقم
             </div>
         </div>
         <div id="marquee-bar-container" class="new-arrival-bar" style="overflow: hidden; direction: ltr;">
@@ -352,7 +345,7 @@
             class="w-full p-3 pr-10 border-2 border-green-500 rounded-xl text-right focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm">
         </div>
         <!-- شريط التبويبات السريع -->
-        <div id="category-tabs-bar" class="sticky top-[44px] z-30 bg-white/95 backdrop-blur-sm py-2 px-1 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
+        <div id="category-tabs-bar" class="sticky top-[56px] z-30 bg-white/95 backdrop-blur-sm py-2 px-1 mb-5 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar tabs-scroll-container">
             <button type="button" onclick="setActiveCategoryTab('all', this)" data-tab="all" class="category-tab-btn active">📋 الكل</button>
             <button type="button" onclick="setActiveCategoryTab('veg', this)" data-tab="veg" class="category-tab-btn">🥬 خضروات</button>
             <button type="button" onclick="setActiveCategoryTab('fruit', this)" data-tab="fruit" class="category-tab-btn">🍎 فواكه</button>
@@ -439,43 +432,6 @@
                 جميع الحقوق محفوظة لـ عروض التوفير بشربين © 2026
             </div>
         </footer>
-    </div>
-    <!-- نافذة بيانات التحويل (فودافون كاش وإنستاباي) -->
-    <div id="payment-info-modal" style="display: none;" onclick="closePaymentInfoModal()" class="fixed inset-0 bg-black/65 backdrop-blur-sm z-[100003] flex items-center justify-center p-4">
-        <div onclick="event.stopPropagation()" class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl border-4 border-green-600 text-right animate-pop-in relative">
-            <button type="button" onclick="closePaymentInfoModal()" class="absolute top-3 left-3 bg-gray-200 text-gray-700 w-8 h-8 rounded-full font-bold text-sm hover:bg-gray-300 flex items-center justify-center">✕</button>
-            <h3 class="text-lg font-extrabold text-green-800 mb-3 text-center">💳 بيانات الدفع الإلكتروني</h3>
-
-            <div class="space-y-3 mb-4">
-                <div id="payment-card-vodafone" class="bg-red-50 border border-red-200 rounded-2xl p-3 transition">
-                    <div class="flex items-center justify-between gap-2">
-                        <div>
-                            <div class="text-xs font-extrabold text-red-700">فودافون كاش (Vodafone Cash)</div>
-                            <div id="vf-cash-number" dir="ltr" class="text-base font-black text-gray-900 text-right mt-0.5">01016980880</div>
-                        </div>
-                        <button type="button" onclick="copyPaymentText('vf-cash-number', this)" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-2 rounded-xl active:scale-95 transition">نسخ</button>
-                    </div>
-                </div>
-
-                <div id="payment-card-instapay" class="bg-purple-50 border border-purple-200 rounded-2xl p-3 transition">
-                    <div class="flex items-center justify-between gap-2">
-                        <div>
-                            <div class="text-xs font-extrabold text-purple-800">إنستاباي (InstaPay)</div>
-                            <div id="instapay-target" dir="ltr" class="text-base font-black text-gray-900 text-right mt-0.5">01016980880</div>
-                        </div>
-                        <button type="button" onclick="copyPaymentText('instapay-target', this)" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold px-3 py-2 rounded-xl active:scale-95 transition">نسخ</button>
-                    </div>
-                </div>
-            </div>
-
-            <p class="bg-yellow-50 border border-yellow-300 text-yellow-900 text-xs font-bold rounded-xl p-3 mb-4 leading-relaxed">
-                ⚠️ يُفضّل التحويل بعد تجهيز الطلب وتأكيد الوزن والإجمالي النهائي معك.
-            </p>
-
-            <button type="button" onclick="closePaymentInfoModal()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition text-sm">
-                تم 👍
-            </button>
-        </div>
     </div>
     <!-- فقاعة "شوف رأي الناس" الدائرية العائمة (على اليسار) -->
     <div id="floating-bubble-container">
@@ -666,104 +622,38 @@
             }
         });
 
-        let bubbleHideTimer = null;
+        let toastHideTimer = null;
 
-        function showPaymentBubble(targetEl, customText = 'اضغط لنسخ الرقم', durationMs = 2200) {
-            const bubble = document.getElementById('payment-copy-bubble');
-            if (!bubble || !targetEl) return;
-            bubble.textContent = customText;
-            bubble.style.display = 'block';
-            const rect = targetEl.getBoundingClientRect();
-            const halfW = bubble.offsetWidth / 2 || 55;
-            const leftPos = Math.min(window.innerWidth - halfW - 8, Math.max(halfW + 8, rect.left + rect.width / 2));
-            const topPos = Math.max(36, rect.top - 8);
-            bubble.style.left = `${leftPos}px`;
-            bubble.style.top = `${topPos}px`;
-
-            if (bubbleHideTimer) clearTimeout(bubbleHideTimer);
-            bubbleHideTimer = setTimeout(() => {
-                hidePaymentBubble();
-            }, durationMs);
+        function showCopyToast(message = 'تم نسخ الرقم ✓') {
+            const toast = document.getElementById('payment-toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.style.display = 'block';
+            if (toastHideTimer) clearTimeout(toastHideTimer);
+            toastHideTimer = setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
         }
 
-        function hidePaymentBubble() {
-            const bubble = document.getElementById('payment-copy-bubble');
-            if (bubble) bubble.style.display = 'none';
-            if (bubbleHideTimer) {
-                clearTimeout(bubbleHideTimer);
-                bubbleHideTimer = null;
-            }
-        }
-
-        function handlePaymentHover(btnEl) {
-            if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
-                showPaymentBubble(btnEl, 'اضغط لنسخ الرقم', 2500);
-            }
-        }
-
-        function handlePaymentPress(btnEl) {
-            showPaymentBubble(btnEl, 'اضغط لنسخ الرقم', 2000);
-        }
-
-        function handlePaymentClick(focusType, btnEl) {
-            const targetId = focusType === 'instapay' ? 'instapay-target' : 'vf-cash-number';
-            const el = document.getElementById(targetId);
-            const numberText = el ? (el.textContent || '').trim() : '01016980880';
-
-            const afterCopy = () => {
-                showPaymentBubble(btnEl, 'تم نسخ الرقم ✓', 1800);
-                openPaymentInfoModal(focusType);
-            };
-
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(numberText).then(afterCopy).catch(() => {
-                    fallbackCopy(numberText, afterCopy);
-                });
-            } else {
-                fallbackCopy(numberText, afterCopy);
-            }
-        }
-
-        function openPaymentInfoModal(focusType = null) {
-            const modal = document.getElementById('payment-info-modal');
-            const vfCard = document.getElementById('payment-card-vodafone');
-            const ipCard = document.getElementById('payment-card-instapay');
-            if (vfCard) vfCard.classList.remove('ring-2', 'ring-red-500');
-            if (ipCard) ipCard.classList.remove('ring-2', 'ring-purple-600');
-            if (focusType === 'vodafone' && vfCard) {
-                vfCard.classList.add('ring-2', 'ring-red-500');
-            } else if (focusType === 'instapay' && ipCard) {
-                ipCard.classList.add('ring-2', 'ring-purple-600');
-            }
-            if (modal) modal.style.display = 'flex';
-        }
-
-        function closePaymentInfoModal() {
-            const modal = document.getElementById('payment-info-modal');
-            if (modal) modal.style.display = 'none';
-        }
-
-        function copyPaymentText(elementId, btnEl) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            const textToCopy = (el.textContent || '').trim();
+        function copyPaymentDirect(methodLabel) {
+            const numEl = document.getElementById('payment-copy-number');
+            const textToCopy = numEl ? (numEl.textContent || '').trim() : '01016980880';
             if (!textToCopy) return;
 
-            const onSuccess = () => {
-                if (!btnEl) return;
-                const oldText = btnEl.textContent;
-                btnEl.textContent = 'تم النسخ ✓';
-                setTimeout(() => { btnEl.textContent = oldText; }, 1800);
+            const onCopied = () => {
+                showCopyToast(`تم نسخ رقم ${methodLabel} ✓`);
             };
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(textToCopy).then(onSuccess).catch(() => fallbackCopy(textToCopy, onSuccess));
+                navigator.clipboard.writeText(textToCopy).then(onCopied).catch(() => {
+                    fallbackCopyText(textToCopy, onCopied);
+                });
             } else {
-                fallbackCopy(textToCopy, onSuccess);
+                fallbackCopyText(textToCopy, onCopied);
             }
         }
 
-        function fallbackCopy(text, cb) {
+        function fallbackCopyText(text, onDone) {
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.style.position = 'fixed';
@@ -773,11 +663,9 @@
             ta.select();
             try {
                 document.execCommand('copy');
-                if (cb) cb();
-            } catch (e) {
-                if (cb) cb();
-            }
+            } catch (e) {}
             document.body.removeChild(ta);
+            if (onDone) onDone();
         }
 
         // تسجيل الـ Service Worker لتفعيل التحديث الفوري
